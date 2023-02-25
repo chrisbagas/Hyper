@@ -1,0 +1,172 @@
+Project hyper {
+  database_type: 'PostgreSQL'
+  Note: 'The Social Media Platform for Gamers'
+}
+
+table User {
+  id string [primary key]
+  username string
+  name string
+  bio  string
+  profileImage string
+  country string
+  languages string[]
+  
+
+  Note: "Stores core user data"
+}
+
+Ref: User.country > Country.localeCode
+
+table Country {
+  localeCode string [pk]
+  name       string
+  flagUrl    string
+}
+
+table Account {
+  id string [primary key]
+  userId string [not null]
+  type string [not null]
+  provider string [not null]
+  providerAccountId string [not null]
+  refresh_token stringusername
+  access_token string
+  expires_at int
+  token_type string
+  scope string
+  id_token string
+  session_state string
+
+  Note: "Stores Discord (or other providers) account data"
+}
+
+Ref: Account.userId > User.id
+
+table Game {
+  id string [pk]
+  name string [not null]
+
+  Note: "Stores game data. Should be pre-filled with data for VALORANT and Apex/CSGO in MVP"
+}
+
+table GameAccount {
+  userId string [not null]
+  gameId string [not null]
+  
+  gameIdentifier string [not null]
+  
+  statisticsData Json [null]
+  statisticsLastUpdatedAt datetime [null]
+
+  createdAt datetime [default: "now()"]
+  indexes {
+    (userId, gameId) [pk]
+    gameIdentifier [unique]
+  }
+
+  Note: "Stores integrated user game accounts"
+}
+
+Ref: GameAccount.gameId > Game.id
+Ref: GameAccount.userId > User.id
+
+table Party {
+  id string [pk]
+  gameId string
+
+  Note: "Stores party metadata"
+}
+
+Ref: Party.gameId > Game.id
+
+table PartyMember {
+  userId string
+  partyId string
+  gameId string
+  level PartyMemberLevel
+  indexes {
+    (userId, partyId) [pk]
+  }
+
+  Note: "Stores details about a joined PartyMember"
+}
+
+enum PartyMemberLevel {
+  member
+  leader
+}
+
+Ref: PartyMember.(userId, gameId) > GameAccount.(userId, gameId)
+Ref: PartyMember.partyId > Party.id
+
+table CommunityPost {
+  id string [pk]
+  type CommunityPostType [not null]
+  createdAt datetime [not null]
+  updatedAt datetime [not null]
+  title string [not null]
+  content string [note: "This will store markdown string if content type is Guide"]
+
+  authorId string [not null]
+}
+
+table CommunityPostTag {
+  id string [pk]
+  postId string
+  tagId string
+  indexes {
+    (postId, tagId) [unique]
+  }
+}
+
+Ref: CommunityPostTag.postId > CommunityPost.id
+Ref: CommunityPostTag.tagId > CommunityTag.id
+
+enum ContentType {
+  image
+  video
+}
+
+Ref: CommunityPost.authorId > User.id
+
+table CommunityPostHeader {
+  id string [pk, unique]
+  type ContentType
+}
+
+enum CommunityPostType {
+  clip
+  guide
+}
+
+Ref: CommunityPostHeader.id > CommunityPost.id
+
+table CommunityTag {
+  id string [pk]
+  slug string [unique]
+  name string
+}
+
+TableGroup authentication {
+  User
+  Account
+  Country
+}
+
+TableGroup community_post {
+  CommunityPost
+  CommunityPostHeader
+  CommunityPostTag
+  CommunityTag
+}
+
+TableGroup game_data {
+  Game
+  GameAccount
+}
+
+TableGroup party {
+  Party
+  PartyMember
+}

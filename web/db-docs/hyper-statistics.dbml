@@ -1,0 +1,51 @@
+Project hyper_statistics {
+  database_type: 'PostgreSQL'
+  Note: 'The Social Media Platform for Gamers'
+}
+
+table User {
+  id string [primary key]
+  username string
+  name string
+  bio  string
+  profileImage string
+  country string
+  languages string[]
+  
+
+  Note: "Stores core user data"
+}
+
+Ref: User.country > Country.localeCode
+
+table Country {
+  localeCode string [pk]
+  name       string
+  flagUrl    string
+}
+
+table Game {
+  id string [pk]
+  name string [not null]
+
+  Note: "Stores game data. Should be pre-filled with data for VALORANT and Apex/CSGO in MVP"
+}
+
+table GameAccount {
+  userId string [not null]
+  gameId string [not null]
+  
+  gameIdentifier string [not null]
+
+  createdAt datetime [default: "now()"]
+  indexes {
+    (userId, gameId) [pk]
+    gameIdentifier [unique]
+  }
+
+  Note: "Stores integrated user game accounts"
+}
+
+Ref: GameAccount.gameId > Game.id
+Ref: GameAccount.userId > User.id
+

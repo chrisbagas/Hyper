@@ -1,0 +1,52 @@
+Project hyper_authentication_system {
+  database_type: 'PostgreSQL'
+  Note: 'The Social Media Platform for Gamers'
+}
+
+table User {
+  id string [primary key]
+  name string
+  profileImage string
+  
+  Note: "Stores core user data"
+}
+
+table Account {
+  id string [primary key]
+  userId string [not null]
+  type string [not null]
+  provider string [not null]
+  providerAccountId string [not null]
+  refresh_token string
+  access_token string
+  expires_at int
+  token_type string
+  scope string
+  id_token string
+  session_state string
+
+  Note: "Stores Discord (or other providers) account data"
+}
+
+Ref: Account.userId > User.id
+
+table Session {
+  id string [primary key]
+  sessionToken string [not null, unique]
+  userId string [not null]
+  expires string [not null]
+
+  Note: "Stores session data for Session-based auth (not needed for JWT)"
+}
+
+Ref: Session.userId > User.id
+
+table VerificationToken {
+  identifier string [not null]
+  token string [not null]
+  expires datetime [not null]
+  indexes {
+    (identifier, token) [unique]
+  }
+}
+
