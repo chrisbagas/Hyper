@@ -10,9 +10,9 @@ deploy_preview_web:
   cache:
     - key:
         files:
-          - yarn.lock
+          - web/yarn.lock
       paths:
-        - .yarn-cache/
+        - web/.yarn-cache/
   only:
     - staging
   script:
@@ -28,9 +28,9 @@ deploy_production_web:
   cache:
     - key:
         files:
-          - yarn.lock
+          - web/yarn.lock
       paths:
-        - .yarn-cache/
+        - web/.yarn-cache/
   only:
     - main
   script:
