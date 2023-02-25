@@ -5,7 +5,7 @@ stages:
   - deploy
   - sonarqube
 
-deploy_preview:
+deploy_preview_web:
   stage: deploy
   cache:
     - key:
@@ -23,7 +23,7 @@ deploy_preview:
     - vercel deploy --prebuilt --token=$VERCEL_TOKEN > domain.txt
     - vercel alias --token=$VERCEL_TOKEN set `cat domain.txt` staging-hyper-gg
 
-deploy_production:
+deploy_production_web:
   stage: deploy
   cache:
     - key:
@@ -34,6 +34,7 @@ deploy_production:
   only:
     - main
   script:
+    - cd web/
     - npm install --global vercel
     - vercel pull --yes --environment=production --token=$VERCEL_TOKEN
     - yarn install --cache-folder .yarn-cache
