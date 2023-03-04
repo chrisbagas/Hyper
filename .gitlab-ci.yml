@@ -2,9 +2,29 @@ default:
   image: node:16.16.0
 
 stages:
+  - cache
   - test
   - sonarqube
   - deploy
+
+cache-web-packages:
+  stage: cache
+  image: node:12.9
+  cache:
+    - key:
+        files:
+          - web/yarn.lock
+      paths:
+        - web/.yarn-cache/
+      policy: push
+  script:
+    - cd web/
+    - yarn
+  only:
+    refs:
+      - push
+    changes:
+      - "**/yarn.lock"
 
 test_web:
   stage: test
@@ -14,6 +34,7 @@ test_web:
           - web/yarn.lock
       paths:
         - web/.yarn-cache/
+      policy: pull
   artifacts:
     paths:
       - web/coverage/
