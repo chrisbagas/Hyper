@@ -15,6 +15,7 @@ test_web:
         paths:
           - web/.yarn-cache/
   script:
+    - cd web/
     - yarn install --cache-folder .yarn-cache
     - yarn test:no-watch
 
@@ -29,6 +30,7 @@ deploy_preview_web:
   only:
     - staging
   script:
+    - cd web/
     - npm install --global vercel 
     - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
     - yarn install --cache-folder .yarn-cache
