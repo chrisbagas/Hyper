@@ -72,6 +72,6 @@ sonarqube_prod:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
-    - sonar-scanner -X -Dsonar.sources=. -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=$SONAR_PROJECT_KEY
+  script:
+    - sonar-scanner -Dsonar.login=$SONAR_TOKEN
   allow_failure: true
