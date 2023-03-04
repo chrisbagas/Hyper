@@ -3,8 +3,8 @@ default:
 
 stages:
   - test
-  - deploy
   - sonarqube
+  - deploy
 
 test_web:
   stage: test
@@ -14,10 +14,34 @@ test_web:
           - web/yarn.lock
       paths:
         - web/.yarn-cache/
+  artifacts:
+    paths:
+      - web/coverage/
+    expire_in: 1 day
   script:
     - cd web/
     - yarn install --cache-folder .yarn-cache
     - yarn test:no-watch
+
+sonarqube_prod:
+  stage: sonarqube
+  only:
+    - staging
+    - merge_requests
+    - main
+  image: 
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [ "" ]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - sonar-scanner -Dsonar.login=$SONAR_TOKEN
+  allow_failure: true
 
 deploy_preview_web:
   stage: deploy
@@ -56,22 +80,3 @@ deploy_production_web:
     - vercel build --prod --token=$VERCEL_TOKEN
     - vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
 
-sonarqube_prod:
-  stage: sonarqube
-  only:
-    - staging
-    - merge_requests
-    - main
-  image: 
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [ "" ]
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - sonar-scanner -Dsonar.login=$SONAR_TOKEN
-  allow_failure: true
