@@ -12,8 +12,8 @@ test_web:
     - key:
         files:
           - web/yarn.lock
-        paths:
-          - web/.yarn-cache/
+      paths:
+        - web/.yarn-cache/
   script:
     - cd web/
     - yarn install --cache-folder .yarn-cache
