@@ -1,5 +1,0 @@
-<testExecutions version="1">
-  <file path="__tests__/routers/game.test.ts">
-    <testCase name="Game RPC - getAll should return all games" duration="3" />
-  </file>
-</testExecutions>

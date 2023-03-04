@@ -3,8 +3,9 @@ import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    reporters: "vitest-sonar-reporter",
-    outputFile: "sonar-report.xml",
+    coverage: {
+      reporter: ["text", "lcov"]
+    },
     exclude: [...configDefaults.exclude, "**/e2e/**"],
     alias: {
       "~/": fileURLToPath(new URL("./src/", import.meta.url)),
