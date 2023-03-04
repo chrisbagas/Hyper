@@ -2,8 +2,21 @@ default:
   image: node:16.16.0
 
 stages:
+  - test
   - deploy
   - sonarqube
+
+test_web:
+  stage: test
+  cache:
+    - key:
+        files:
+          - web/yarn.lock
+        paths:
+          - web/.yarn-cache/
+  script:
+    - yarn install --cache-folder .yarn-cache
+    - yarn test:no-watch
 
 deploy_preview_web:
   stage: deploy
