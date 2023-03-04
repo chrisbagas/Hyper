@@ -9,7 +9,6 @@ stages:
 
 cache-web-packages:
   stage: cache
-  image: node:12.9
   cache:
     - key:
         files:
