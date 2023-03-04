@@ -51,6 +51,7 @@ deploy_preview_web:
           - web/yarn.lock
       paths:
         - web/.yarn-cache/
+      policy: pull
   only:
     - staging
   script:
@@ -69,6 +70,7 @@ deploy_production_web:
           - web/yarn.lock
       paths:
         - web/.yarn-cache/
+      policy: pull
   only:
     - main
   script:
