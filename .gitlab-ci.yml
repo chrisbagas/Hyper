@@ -55,12 +55,11 @@ deploy_preview_web:
     - staging
   script:
     - cd web/
-    - npm install --global vercel 
-    - vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
     - yarn install --cache-folder .yarn-cache
-    - vercel build --token=$VERCEL_TOKEN
-    - vercel deploy --prebuilt --token=$VERCEL_TOKEN > domain.txt
-    - vercel alias --token=$VERCEL_TOKEN set `cat domain.txt` staging-hyper-gg
+    - npx vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
+    - npx vercel build --token=$VERCEL_TOKEN
+    - npx vercel deploy --prebuilt --token=$VERCEL_TOKEN > domain.txt
+    - npx vercel alias --token=$VERCEL_TOKEN set `cat domain.txt` staging-hyper-gg
 
 deploy_production_web:
   stage: deploy
@@ -74,9 +73,8 @@ deploy_production_web:
     - main
   script:
     - cd web/
-    - npm install --global vercel
-    - vercel pull --yes --environment=production --token=$VERCEL_TOKEN
     - yarn install --cache-folder .yarn-cache
-    - vercel build --prod --token=$VERCEL_TOKEN
-    - vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+    - npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+    - npx vercel build --prod --token=$VERCEL_TOKEN
+    - npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
 
