@@ -40,7 +40,7 @@ describe("Profile Service", () => {
         const expectedProfile: Profile = {
             id: "TEST-1",
             username: "Asyraf#6942",
-            bio: "Hello, World!",
+            bio: "No information provided",
             countryCode: "id-ID",
             games: [mockGameAccount.game]
         }
