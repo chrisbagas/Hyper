@@ -51,13 +51,13 @@ model VerificationToken {
 }
 
 model User {
-  id             String        @id @default(cuid())
-  username       String?       @unique
+  id             String          @id @default(cuid())
+  username       String?         @unique
   name           String?
   bio            String?
   profileImage   String?
   countryCode    String
-  country        Country       @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
+  country        Country         @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
   accounts       Account[]
   sessions       Session[]
   GameAccount    GameAccount[]
@@ -94,6 +94,7 @@ model GameAccount {
 model CommunityPost {
   id        String               @id @default(cuid())
   type      CommunityPostType
+  status    CommunityPostStatus  @default(DRAFT)
   createdAt DateTime             @default(now())
   UpdatedAt DateTime             @updatedAt
   title     String
@@ -140,4 +141,9 @@ enum CommunityPostType {
 enum ContentType {
   IMAGE
   VIDEO
+}
+
+enum CommunityPostStatus {
+  DRAFT
+  PUBLISHED
 }
