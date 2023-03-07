@@ -14,7 +14,7 @@ const SidebarContent: React.FC = () => {
   return (
     <div className="drawer-side">
       <label htmlFor="my-drawer" className="drawer-overlay"></label>
-      <ul className="menu px-4 py-6 w-80 bg-base-1 text-base-content space-y-8">
+      <ul className="menu px-6 py-6 w-80 bg-base-1 text-base-content space-y-8">
         <HyperLogo />
         <UserDetail />
         <SidebarMenu />
