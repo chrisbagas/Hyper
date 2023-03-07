@@ -1,9 +1,17 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
-import { signIn, useSession } from "next-auth/react"
-import { UserCircleIcon } from "@heroicons/react/24/solid"
+import { signIn, signOut, useSession } from "next-auth/react"
+import { EllipsisVerticalIcon, UserCircleIcon } from "@heroicons/react/24/solid"
+import { api } from "../../../utils/api"
 
 const AuthorizedUserDetail: React.FC = () => {
+  const { data, refetch } = api.users.getProfile.useQuery()
+  const session = useSession()
+
+  useEffect(() => {
+    refetch()
+  }, [session])
+
   return (
     <>
       <div className="text-other-discord flex space-x-2 items-center">
@@ -14,16 +22,37 @@ const AuthorizedUserDetail: React.FC = () => {
           Discord Connected
         </span>
       </div>
-      <div className="bg-base-2 w-full rounded-lg p-4">
-        <div className="flex items-center space-x-2 text-xl">
+      <div className="bg-base-2 w-full rounded-lg p-4 space-y-4">
+        <div className="flex justify-between items-center space-x-2 text-xl">
           <div className="avatar">
             <div className="w-12 text-white">
               <UserCircleIcon />
             </div>
           </div>
           <h1 className="text-white font-bold">
-            Meta
+            {data?.name}
           </h1>
+          <div className="dropdown dropdown-hover dropdown-bottom dropdown-end">
+            <label tabIndex={0} className="btn btn-ghost text-white">
+              <EllipsisVerticalIcon className="h-6" />
+            </label>
+            <ul tabIndex={0} className="dropdown-content menu !bg-base-2 border border-base-3 shadow-xl p-2 shadow bg-base-100 rounded-box w-60">
+              <li className="text-error-main">
+                <button onClick={() => signOut()}>Sign Out</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <h1 className="text-base-4">Connected Accounts</h1>
+          {data?.connectedGames.length === 0 ? (
+            <div className="text-base-5">
+              No game accounts connected
+            </div>
+          ) : (
+            <div></div>
+          )}
         </div>
       </div>
     </>
