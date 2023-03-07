@@ -40,7 +40,7 @@ export const SidebarMenu: React.FC = () => {
         VALORANT
       </SidebarMenuButton>
       <SidebarMenuButton path="/games/csgo">
-        <img className="bg-white rounded-md w-6 h-6" src="/csgo.png" />
+        <img className="bg-white rounded-md w-6 h-6" src="/csgo.webp" />
         CSGO
       </SidebarMenuButton>
     </div>
