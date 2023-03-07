@@ -10,7 +10,6 @@ export interface NavWrapperProps {
   className?: string
 }
 
-
 const SidebarContent: React.FC = () => {
   return (
     <div className="drawer-side">
