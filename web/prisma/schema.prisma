@@ -61,6 +61,7 @@ model User {
   accounts     Account[]
   sessions     Session[]
   GameAccount  GameAccount[]
+  partyMember  PartyMember?
 }
 
 model Country {
@@ -70,10 +71,11 @@ model Country {
 }
 
 model Game {
-  id          String        @id @default(cuid())
-  name        String
-  logoUrl     String
-  GameAccount GameAccount[]
+  id           String        @id @default(cuid())
+  name         String
+  logoUrl      String
+  GameAccount  GameAccount[]
+  partyMembers PartyMember[]
 }
 
 model GameAccount {
@@ -87,4 +89,28 @@ model GameAccount {
   user                    User      @relation(fields: [userId], references: [id])
 
   @@id([userId, gameId])
+}
+
+model Party {
+  id                String        @id @default(cuid())
+  gameId            String
+  discordInviteLink String?
+  partyMembers      PartyMember[]
+}
+
+model PartyMember {
+  userId  String           @unique
+  partyId String
+  gameId  String
+  level   PartyMemberLevel
+  user    User             @relation(fields: [userId], references: [id])
+  party   Party            @relation(fields: [partyId], references: [id])
+  game    Game             @relation(fields: [gameId], references: [id])
+  
+  @@id([userId, gameId])
+}
+
+enum PartyMemberLevel {
+  member
+  leader
 }
