@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { api } from "../utils/api";
 
 import "../styles/globals.css";
+import NavWrapper from "../components/shared/Navbar";
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -12,7 +13,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <NavWrapper className="bg-base-0 min-h-screen w-full">
+        <Component {...pageProps} />
+      </NavWrapper>
     </SessionProvider>
   );
 };
