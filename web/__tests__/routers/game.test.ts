@@ -6,17 +6,22 @@ import prisma from "../../src/server/__mocks__/db";
 
 vi.mock("../../src/server/db")
 
-describe("Game RPC", () => {
+describe("Game Data RPC", () => {
   it("getAll should return all games", async () => {
-    const mockedDota = {
-      id: "test",
-      name: "DOTA2",
-      logoUrl: "Hello, World!",
+    const mockedValorant = {
+      id: "testGame1",
+      name: "Valorant",
+      logoURL: "logoLink01",
+    }
+    const mockedCSGO = {
+      id: "testGame2",
+      name: "CS:GO",
+      logoURL: "logoLink02",
     }
 
     prisma.game.findMany.mockResolvedValue([
-      mockedDota,
-      mockedDota,
+      mockedValorant,
+      mockedCSGO,
     ])
 
     const ctx = {
@@ -28,6 +33,6 @@ describe("Game RPC", () => {
     const games = await caller.games.getAll()
 
     expect(games).toHaveLength(2)
-    expect(games[0]).toStrictEqual(mockedDota)
+    expect(games[0]).toStrictEqual(mockedValorant)
   })
 })

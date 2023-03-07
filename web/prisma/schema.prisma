@@ -74,7 +74,7 @@ model Country {
 model Game {
   id          String        @id @default(cuid())
   name        String
-  logoUrl     String
+  logoURL     String
   GameAccount GameAccount[]
 }
 
