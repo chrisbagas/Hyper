@@ -1,14 +1,18 @@
-import { PrismaClient } from "@prisma/client";
-
+import { PrismaClient} from "@prisma/client";
 
 export class GuideService {
-    public static async getAllbyGame(id: string, prisma: PrismaClient): Promise<any> {
+    public static async getAllbyGame(id: string, prisma: PrismaClient) {
         const guides = await prisma.game.findUnique({
             where: {
                 id:id
             },
             select:{
-                communityPosts:true
+                communityPosts:{
+                    include:{
+                        author:true,
+                        header:true
+                    }
+                }
             }
         })
         
@@ -16,6 +20,6 @@ export class GuideService {
             throw Error("Game not found")
         }
 
-        return guides
+        return guides.communityPosts
     }
 }
