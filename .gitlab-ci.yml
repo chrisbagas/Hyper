@@ -34,6 +34,10 @@ test_web:
       paths:
         - web/.yarn-cache/
       policy: pull
+  only:
+    - staging
+    - merge_requests
+    - main
   artifacts:
     paths:
       - web/coverage/
