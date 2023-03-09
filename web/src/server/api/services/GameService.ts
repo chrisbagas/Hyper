@@ -1,7 +1,7 @@
 import type { Game, PrismaClient } from "@prisma/client";
 
 export class GameService {
-  static getAllGames(prisma: PrismaClient): Promise<Game[]> {
+  static getAllGames(prisma: PrismaClient) {
     return prisma.game.findMany({
       include: {
         communityPosts: true,
