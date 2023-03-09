@@ -8,12 +8,10 @@ export interface PartyCreateData {
 }
 
 export class PartyService {
-    public static async getParties(prisma: PrismaClient, gameId: String): Promise<Party[]> {
-        // todo: get party using prisma
+    public static async getParties(prisma: PrismaClient, gameId: string): Promise<Party[]> {
         return [];
     }
     public static async createParty(prisma: PrismaClient, data: PartyCreateData): Promise<Party[]> {
-        // todo: create party using prisma
         const discordLink = getDiscordLink()
         return []
     }

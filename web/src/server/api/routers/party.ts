@@ -1,7 +1,5 @@
 import { createTRPCRouter, publicProcedure} from "../trpc";
 import z from "zod";
-import { PartyService } from "../services/PartyService";
-import { contextProps } from "@trpc/react-query/shared";
 import { PartyType, PartyVisibility } from "@prisma/client";
 
 
@@ -11,7 +9,6 @@ export const partyRouter = createTRPCRouter({
         id: z.string()
     }))
     .query(async ({ ctx, input }) => {
-        // todo: get party using party service
         return []
     }),
   
@@ -24,7 +21,6 @@ export const partyRouter = createTRPCRouter({
         ,
       }))
       .mutation(async ({ input }) => {
-        // todo: create party using party service
         return [];
       }),
 })
