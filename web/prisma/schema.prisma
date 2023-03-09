@@ -94,8 +94,21 @@ model GameAccount {
 model Party {
   id                String        @id @default(cuid())
   gameId            String
+  partyTitle        String
+  partyType         PartyType?
+  partyVisibility   PartyVisibility?
   discordInviteLink String?
   partyMembers      PartyMember[]
+}
+
+enum PartyType {
+  Competitive
+  Casual
+}
+
+enum PartyVisibility {
+  Public
+  Private
 }
 
 model PartyMember {

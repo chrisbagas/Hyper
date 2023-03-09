@@ -1,14 +1,10 @@
-import "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
-import { appRouter } from "../../src/server/api/root";
-import { Party, PartyType, PartyVisibility } from "@prisma/client"
 import prisma from "../../src/server/__mocks__/db";
+import { PartyService } from "../../src/server/api/services/PartyService";
+import { PartyVisibility, PartyType } from "@prisma/client";
 
-
-vi.mock("../../src/server/db")
-
-describe("Party RPC", () => {
-    it("getByGame should return parties of a game", async () => {
+describe("Party Service", () => {
+    it("getParties positive test", async () => {
         const mockParty = {
             id: "1", 
             gameId: "Valorant",
@@ -23,18 +19,13 @@ describe("Party RPC", () => {
             [mockParty]
         )
         
-        const ctx = {
-            session: null,
-            prisma
-        }
-        const caller = appRouter.createCaller(ctx)
-        const parties = await caller.party.getByGame({id: "Valorant"})
+        const parties = await PartyService.getParties(prisma, "Valorant")
 
         expect(parties).toHaveLength(1)
         expect(parties[0]).toStrictEqual(mockParty)
     })
-    
-    it("negative test: getByGame should not return different game", async () => {
+
+    it("getParties negative test", async () => {
         const mockParty = {
             id: "1", 
             gameId: "Valorant",
@@ -44,17 +35,13 @@ describe("Party RPC", () => {
             discordInviteLink: "www.discord.com",
             partyMembers: []
         }
-        
+
         prisma.party.findMany.mockResolvedValue(
             []
         )
         
-        const ctx = {
-            session: null,
-            prisma
-        }
-        const caller = appRouter.createCaller(ctx)
-        const parties = await caller.party.getByGame({id: "CSGO"})
+        
+        const parties = await PartyService.getParties(prisma, "CSGO")
 
         expect(parties).toHaveLength(0)
     })
