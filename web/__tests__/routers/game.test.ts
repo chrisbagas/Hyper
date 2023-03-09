@@ -2,6 +2,7 @@ import "@testing-library/react"
 import { randomUUID } from "crypto"
 import { describe, expect, it, vi } from "vitest"
 import { appRouter } from "../../src/server/api/root";
+import { PrismaClientUnknownRequestError } from "@prisma/client/runtime";
 
 import prisma from "../../src/server/__mocks__/db";
 
@@ -73,6 +74,39 @@ describe("Game Data RPC", () => {
     await expect(caller.games.getById(randomId)).resolves.toBeNull()
 
   })
+
+  it("getAll should return error when exist Prisma relater error", async () => {
+
+    const ctx = {
+      session: null,
+      prisma
+    }
+
+    prisma.game.findMany.mockRejectedValue(new PrismaClientUnknownRequestError("Unknown Error", {clientVersion: "4.9.0"}))
+
+    const caller = appRouter.createCaller(ctx)
+
+    await expect(caller.games.getAll()).rejects.toThrowError()
+
+  })
+
+  it("getById should return error when exist Prisma relater error", async () => {
+
+    const randomId = randomUUID()
+
+    const ctx = {
+      session: null,
+      prisma
+    }
+
+    prisma.game.findUnique.mockRejectedValue(new PrismaClientUnknownRequestError("Unknown Error", {clientVersion: "4.9.0"}))
+
+    const caller = appRouter.createCaller(ctx)
+
+    await expect(caller.games.getById(randomId)).rejects.toThrowError()
+
+  })
+
 })
 
 
