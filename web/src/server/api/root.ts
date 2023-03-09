@@ -1,5 +1,5 @@
 import { gameRouter } from "./routers/game";
-import guideRouter from "./routers/guide";
+import guideRouter from "./routers/guideRouter";
 import { userRouter } from "./routers/user";
 import { createTRPCRouter } from "./trpc";
 
