@@ -12,12 +12,12 @@ describe("Game Data RPC", () => {
     const mockedValorant = {
       id: "testGame1",
       name: "Valorant",
-      logoURL: "logoLink01",
+      logoUrl: "logoLink01",
     }
     const mockedCSGO = {
       id: "testGame2",
       name: "CS:GO",
-      logoURL: "logoLink02",
+      logoUrl: "logoLink02",
     }
 
     prisma.game.findMany.mockResolvedValue([
@@ -42,7 +42,7 @@ describe("Game Data RPC", () => {
     const mockedValorant = {
       id: "testGame1",
       name: "Valorant",
-      logoURL: "logoLink01",
+      logoUrl: "logoLink01",
     }
 
     prisma.game.findUnique.mockResolvedValue(mockedValorant)

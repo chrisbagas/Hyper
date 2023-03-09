@@ -20,7 +20,7 @@ const Home: NextPage = () => {
         {games?.data?.map(game => 
 
           <div key={game.id} className="card w-96 bg-base-100 shadow-xl m-4">
-          <figure><img className="bg-white rounded-md w-6 h-6" src={game.logoURL} /></figure>
+          <figure><img className="bg-white rounded-md w-6 h-6" src={game.logoUrl} /></figure>
           <div className="card-body">
             <h2 className="card-title">{game.name}</h2>
             <p>Description</p>
