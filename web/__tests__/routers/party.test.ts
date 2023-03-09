@@ -16,6 +16,9 @@ describe("Party RPC", () => {
             partyType: PartyType.Casual,
             partyVisibility: PartyVisibility.Public,
             discordInviteLink: "www.discord.com",
+            game: {
+                id: "Valorant"
+            },
             partyMembers: []
         }
 
@@ -42,6 +45,9 @@ describe("Party RPC", () => {
             partyType: PartyType.Casual,
             partyVisibility: PartyVisibility.Public,
             discordInviteLink: "www.discord.com",
+            game: {
+                id: "Valorant"
+            },
             partyMembers: []
         }
         

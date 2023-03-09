@@ -75,7 +75,7 @@ model Game {
   name         String
   logoUrl      String
   GameAccount  GameAccount[]
-  partyMembers PartyMember[]
+  parties      Party[]
 }
 
 model GameAccount {
@@ -92,12 +92,13 @@ model GameAccount {
 }
 
 model Party {
-  id                String        @id @default(cuid())
+  id                String           @id @default(cuid())
   gameId            String
   partyTitle        String
   partyType         PartyType?
   partyVisibility   PartyVisibility?
   discordInviteLink String?
+  game              Game             @relation(fields: [gameId], references: [id])
   partyMembers      PartyMember[]
 }
 
@@ -118,7 +119,6 @@ model PartyMember {
   level   PartyMemberLevel
   user    User             @relation(fields: [userId], references: [id])
   party   Party            @relation(fields: [partyId], references: [id])
-  game    Game             @relation(fields: [gameId], references: [id])
   
   @@id([userId, gameId])
 }

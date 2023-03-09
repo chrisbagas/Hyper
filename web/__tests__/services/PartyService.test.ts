@@ -33,6 +33,9 @@ describe("Party Service", () => {
             partyType: PartyType.Casual,
             partyVisibility: PartyVisibility.Public,
             discordInviteLink: "www.discord.com",
+            game: {
+                id: "Valorant"
+            },
             partyMembers: []
         }
 
