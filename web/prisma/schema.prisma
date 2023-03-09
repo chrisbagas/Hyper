@@ -96,8 +96,9 @@ model GameAccount {
 model CommunityPost {
   id        String               @id @default(cuid())
   type      CommunityPostType
+  status    CommunityPostStatus  @default(DRAFT)
   createdAt DateTime             @default(now())
-  UpdatedAt DateTime             @updatedAt
+  updatedAt DateTime             @updatedAt
   title     String
   content   String?
   authorId  String
@@ -142,4 +143,9 @@ enum CommunityPostType {
 enum ContentType {
   IMAGE
   VIDEO
+}
+
+enum CommunityPostStatus {
+  DRAFT
+  PUBLISHED
 }
