@@ -51,18 +51,19 @@ model VerificationToken {
 }
 
 model User {
-  id            String        @id @default(cuid())
-  username      String?       @unique
-  email         String        @unique
+  id            String           @id @default(cuid())
+  username      String?          @unique
+  email         String           @unique
   image         String
   emailVerified Boolean?
   name          String?
   bio           String?
   countryCode   String?
-  country       Country?      @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
+  country       Country?         @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
   accounts      Account[]
   sessions      Session[]
   GameAccount   GameAccount[]
+  communityPosts CommunityPost[]
 }
 
 model Country {
@@ -72,10 +73,11 @@ model Country {
 }
 
 model Game {
-  id          String        @id @default(cuid())
-  name        String
-  logoURL     String
-  GameAccount GameAccount[]
+  id             String          @id @default(cuid())
+  name           String
+  logoUrl        String
+  GameAccount    GameAccount[]
+  communityPosts CommunityPost[]
 }
 
 model GameAccount {
@@ -89,4 +91,61 @@ model GameAccount {
   user                    User      @relation(fields: [userId], references: [id])
 
   @@id([userId, gameId])
+}
+
+model CommunityPost {
+  id        String               @id @default(cuid())
+  type      CommunityPostType
+  status    CommunityPostStatus  @default(DRAFT)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  title     String
+  content   String?
+  authorId  String
+  gameId    String
+  author    User                 @relation(fields: [authorId], references: [id])
+  game      Game                 @relation(fields: [gameId], references: [id])
+  header    CommunityPostHeader?
+  tags      CommunityPostTag[]
+}
+
+model CommunityPostHeader {
+  postId String     
+  type   ContentType
+  url    String
+  post   CommunityPost @relation(fields: [postId], references: [id])
+
+  @@id([postId])
+}
+
+model CommunityPostTag {
+  id     String        @id @default(cuid())
+  postId String
+  tagId  String
+  post   CommunityPost @relation(fields: [postId], references: [id])
+  tag    CommunityTag  @relation(fields: [tagId], references: [id])
+
+  @@unique([postId, tagId])
+}
+
+model CommunityTag {
+  id       String             @id @default(cuid())
+  slug     String             @unique
+  name     String
+  postTags CommunityPostTag[]
+}
+
+enum CommunityPostType {
+  CLIP
+  GUIDE
+}
+
+enum ContentType {
+  IMAGE
+  VIDEO
+}
+
+enum CommunityPostStatus {
+  DRAFT
+  PUBLISHED
 }
