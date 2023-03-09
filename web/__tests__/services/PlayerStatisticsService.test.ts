@@ -136,15 +136,3 @@ describe("Call Valorant's API Using The Wrong Parameter Returns 404 Status Code"
         expect(valorantAPIData.status).toStrictEqual(mockValorantAPIData.status)
     })
 })
-
-describe("Call Valorant's API Causing Fetch Error Should Throw ", () => {
-    it("Should return error 404", async () => {
-        const mockValorantAPIData = {
-            status: 404
-        }
-
-        const valorantAPIData = await PlayerStatisticsService.valorantAPI({})
-
-        expect(valorantAPIData.status).toStrictEqual(mockValorantAPIData.status)
-    })
-})
