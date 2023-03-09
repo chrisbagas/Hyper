@@ -5,7 +5,11 @@ import { SessionProvider } from "next-auth/react";
 import { api } from "../utils/api";
 
 import "../styles/globals.css";
-import NavWrapper from "../components/shared/Navbar";
+import dynamic from "next/dynamic";
+
+const NavWrapper = dynamic(() => import("../components/shared/Navbar"), {
+  ssr: false,
+})
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,

@@ -51,16 +51,18 @@ model VerificationToken {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  username       String?         @unique
-  name           String?
-  bio            String?
-  profileImage   String?
-  countryCode    String
-  country        Country         @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
-  accounts       Account[]
-  sessions       Session[]
-  GameAccount    GameAccount[]
+  id            String           @id @default(cuid())
+  username      String?          @unique
+  email         String           @unique
+  image         String
+  emailVerified Boolean?
+  name          String?
+  bio           String?
+  countryCode   String?
+  country       Country?         @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
+  accounts      Account[]
+  sessions      Session[]
+  GameAccount   GameAccount[]
   communityPosts CommunityPost[]
 }
 
@@ -96,7 +98,7 @@ model CommunityPost {
   type      CommunityPostType
   status    CommunityPostStatus  @default(DRAFT)
   createdAt DateTime             @default(now())
-  UpdatedAt DateTime             @updatedAt
+  updatedAt DateTime             @updatedAt
   title     String
   content   String?
   authorId  String
