@@ -249,7 +249,7 @@ describe("Community Post RPC", () => {
     await expect(caller.guides.updatePostById(input)).rejects.toThrowError()
   })
 
-  it("updatePostById should throw error when trying to update a published post", async () => {
+  it("updatePostById should throw error when prisma related error has occured", async () => {
     const input = {
       id: "post-1",
       type: CommunityPostType.GUIDE,
