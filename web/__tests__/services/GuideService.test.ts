@@ -13,6 +13,39 @@ describe("Community Post RPC", () => {
         const mockPrisma = prisma
 
         const mockedPost = {
+            id: "1",
+            name: "CSGO",
+            logoUrl: "TEST",
+            communityPosts:
+            {
+                id: "post-1",
+                type: CommunityPostType.CLIP,
+                status: CommunityPostStatus.DRAFT,
+                createdAt: date,
+                updatedAt: date,
+                title: "a",
+                content: "a",
+                authorId: "user-1",
+                gameId: "1",
+                header: {
+                    postId: "clf16d8u90000j7c49filreet",
+                    type: "IMAGE",
+                    url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
+                },
+                author: {
+                    id: "clf16bxcf0000j7is93ycwemx",
+                    email: "bagaslpt.2@gmail.com",
+                    image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
+                    bio: null,
+                    countryCode: null,
+                    emailVerified: null,
+                    name: "ChrisXTRM",
+                    username: null
+                }
+            }
+        }
+
+        const expectedData = {
             id: "post-1",
             type: CommunityPostType.CLIP,
             status: CommunityPostStatus.DRAFT,
@@ -22,18 +55,21 @@ describe("Community Post RPC", () => {
             content: "a",
             authorId: "user-1",
             gameId: "1",
-        }
-
-        const expectedData = {
-            authorId: "user-1",
-            id: "post-1",
-            type: CommunityPostType.CLIP,
-            status: CommunityPostStatus.DRAFT,
-            createdAt: date,
-            updatedAt: date,
-            title: "a",
-            content: "a",
-            gameId: "1"
+            header: {
+                postId: "clf16d8u90000j7c49filreet",
+                type: "IMAGE",
+                url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
+            },
+            author: {
+                id: "clf16bxcf0000j7is93ycwemx",
+                email: "bagaslpt.2@gmail.com",
+                image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
+                bio: null,
+                countryCode: null,
+                emailVerified: null,
+                name: "ChrisXTRM",
+                username: null
+            }
         }
 
         const input = "1"
