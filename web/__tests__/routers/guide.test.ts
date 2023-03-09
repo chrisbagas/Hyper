@@ -211,7 +211,70 @@ describe("Community Post RPC", () => {
       prisma,
     }
 
-    prisma.communityPost.findUnique.mockResolvedValue({type: CommunityPostStatus.PUBLISHED})
+    prisma.communityPost.findUnique.mockResolvedValue({
+      id: "post-1",
+      status: CommunityPostStatus.PUBLISHED
+    })
+
+    const caller = appRouter.createCaller(ctx)
+    
+    await expect(caller.guides.updatePostById(input)).rejects.toThrowError()
+  })
+
+  it("updatePostById should throw error when trying to update a non exist post", async () => {
+    const input = {
+      id: "post-1",
+      type: CommunityPostType.GUIDE,
+      status: CommunityPostStatus.DRAFT,
+      title: "title new",
+      content: "guide new",
+      headerType: ContentType.VIDEO,
+      headerUrl: "url new",
+      gameId: "game-1"
+    }
+
+    const ctx = {
+      session: {
+        user: {
+          id: "1"
+        }
+      },
+      prisma,
+    }
+
+    prisma.communityPost.findUnique.mockResolvedValue(null)
+
+    const caller = appRouter.createCaller(ctx)
+    
+    await expect(caller.guides.updatePostById(input)).rejects.toThrowError()
+  })
+
+  it("updatePostById should throw error when trying to update a published post", async () => {
+    const input = {
+      id: "post-1",
+      type: CommunityPostType.GUIDE,
+      status: CommunityPostStatus.DRAFT,
+      title: "title new",
+      content: "guide new",
+      headerType: ContentType.VIDEO,
+      headerUrl: "url new",
+      gameId: "game-1"
+    }
+
+    const ctx = {
+      session: {
+        user: {
+          id: "1"
+        }
+      },
+      prisma,
+    }
+
+    prisma.communityPost.findUnique.mockResolvedValue({
+      id: "post-1",
+      status: CommunityPostStatus.DRAFT
+    })
+    prisma.communityPost.update.mockRejectedValue(new PrismaClientUnknownRequestError("Unknown Error", {clientVersion: "4.9.0"}))
 
     const caller = appRouter.createCaller(ctx)
     
