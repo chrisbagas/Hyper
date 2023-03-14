@@ -4,7 +4,8 @@ export interface Profile {
     id: string
     username: string | null
     bio: string
-    countryCode: string
+    image: string
+    countryCode: string | null
     games: Game[]
 }
 
@@ -30,12 +31,41 @@ export class ProfileService {
 
         return {
             id: user.id,
-            username: user.username,
+            username: user.username ?? user.name,
             bio: user.bio ?? "No information provided",
+            image: user.image ,
             countryCode: user.countryCode,
             games: user.GameAccount.map((item) => {
                 return item.game
             })
         }
+    }
+    
+    public static async updateProfile(id: string, data: Partial<Profile>, prisma: PrismaClient): Promise<Profile> {
+        const user = await prisma.user.update({
+            where: { id },
+            data: {
+                username: data.username,
+                bio: data.bio,
+                countryCode: data.countryCode,
+            },
+        });
+
+        if (!user) {
+            throw Error("User not found");
+        }
+
+
+    }
+    // TODO: get auth token from database
+    public static async getConnectionAccount() {
+        const res = await fetch(
+            "https://discord.com/api/users/@me/connections", {
+                headers: {
+                    "Authorization": `Bearer YxDUXxV8qtvOPZp95wuPIpzorzYINk`
+                }
+            }
+        );
+        return res.json();
     }
 }
