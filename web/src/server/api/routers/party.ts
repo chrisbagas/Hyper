@@ -1,6 +1,7 @@
 import { createTRPCRouter, publicProcedure} from "../trpc";
 import z from "zod";
 import { PartyType, PartyVisibility } from "@prisma/client";
+import { PartyService } from "../services/PartyService";
 
 
 export const partyRouter = createTRPCRouter({
@@ -9,7 +10,8 @@ export const partyRouter = createTRPCRouter({
         id: z.string()
     }))
     .query(async ({ ctx, input }) => {
-        return []
+        const parties = PartyService.getParties(ctx.prisma, input.id)
+        return parties
     }),
   
     createParty: publicProcedure
@@ -20,7 +22,8 @@ export const partyRouter = createTRPCRouter({
         partyVisibility: z.nativeEnum(PartyVisibility)
         ,
       }))
-      .mutation(async ({ input }) => {
-        return [];
+      .mutation(async ({ ctx, input }) => {
+        const party = PartyService.createParty(ctx.prisma, input)
+        return party;
       }),
 })
