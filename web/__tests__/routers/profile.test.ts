@@ -29,13 +29,21 @@ describe("Profile RPC", () => {
             logoUrl: "lala"
         }
     }
+    const ctx = {
+      session: {
+        user: {
+          id: "TEST-1"
+        }
+      },
+      prisma,
+    }
 
     const mockedUser: UserMock = {
         id: "TEST-1",
         username: "Asyraf#6942",
         name: "Muhammad Asyraf",
         bio: null,
-        profileImage: "https://google.com/",
+        image: "https://google.com/",
         countryCode: "id-ID",
         accounts: [],
         GameAccount: [mockGameAccount]
@@ -44,6 +52,7 @@ describe("Profile RPC", () => {
         id: "TEST-1",
         username: "Asyraf#6942",
         bio: "No information provided",
+        image: "https://google.com/",
         countryCode: "id-ID",
         games: [mockGameAccount.game]
     }
@@ -51,16 +60,69 @@ describe("Profile RPC", () => {
     const input = { id: "TEST-1" };
     prisma.user.findUnique.mockResolvedValue(mockedUser)
 
-    const ctx = {
-      session: null,
-      prisma
-    }
 
     const caller = appRouter.createCaller(ctx)
-    const profile = await caller.profiles.getProfile(input)
+    const profile = await caller.profiles.getProfile()
 
     expect(profile).toStrictEqual(expectedProfile)
     expect(profile.games.length).toBe(1)
     expect(profile.games[0]).toStrictEqual(mockGameAccount.game)
   })
+
+  it("updateProfile should update the user's profile information", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "TEST-1"
+        }
+      },
+      prisma,
+    }
+
+    const input = {
+      username: "Asyraf#6942",
+      bio: "Updated bio",
+      countryCode: "us-US"
+    };
+
+    const expectedUser = {
+      id: "TEST-1",
+      username: "Asyraf#6942",
+      name: "Muhammad Asyraf",
+      bio: "Updated bio",
+      image: "https://google.com/",
+      countryCode: "us-US",
+      accounts: [],
+      GameAccount: []
+    };
+
+    prisma.user.update.mockResolvedValue(expectedUser);
+
+    const caller = appRouter.createCaller(ctx);
+    await caller.profiles.updateProfile(input);
+
+    expect(prisma.user.update).toHaveBeenCalledWith({
+      where: { id: ctx.session.user.id },
+      data: {
+        username: input.username,
+        bio: input.bio,
+        countryCode: input.countryCode
+      },
+    });
+  });
+
+  it("getConnectionAccount should return connection account" , async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "TEST-1"
+        }
+      },
+      prisma,
+    }
+    const caller = appRouter.createCaller(ctx);
+    await expect(caller.profiles.getConnectionAccount()).rejects.toThrow()
+   
+  })
+
 })
