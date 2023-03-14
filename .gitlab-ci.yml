@@ -1,102 +1,107 @@
+# You can override the included template(s) by including variable overrides
+# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
+# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
+# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
+# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
+# Note that environment variables can be set in several places
+# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 default:
   image: node:16.16.0
-
 stages:
-  - cache
-  - test
-  - sonarqube
-  - deploy
-
+- cache
+- test
+- sonarqube
+- deploy
 cache-web-packages:
   stage: cache
   cache:
-    - key:
-        files:
-          - web/yarn.lock
-      paths:
-        - web/.yarn-cache/
-      policy: push
+  - key:
+      files:
+      - web/yarn.lock
+    paths:
+    - web/.yarn-cache/
+    policy: push
   script:
-    - cd web/
-    - yarn
+  - cd web/
+  - yarn
   only:
     refs:
-      - push
+    - push
     changes:
-      - "**/yarn.lock"
-
+    - "**/yarn.lock"
 test_web:
   stage: test
   cache:
-    - key:
-        files:
-          - web/yarn.lock
-      paths:
-        - web/.yarn-cache/
-      policy: pull
+  - key:
+      files:
+      - web/yarn.lock
+    paths:
+    - web/.yarn-cache/
+    policy: pull
   artifacts:
     paths:
-      - web/coverage/
+    - web/coverage/
     expire_in: 1 day
   script:
-    - cd web/
-    - yarn install --cache-folder .yarn-cache
-    - yarn test:no-watch
-
+  - cd web/
+  - yarn install --cache-folder .yarn-cache
+  - yarn test:no-watch
 sonarqube_prod:
   stage: sonarqube
   only:
-    - staging
-    - merge_requests
-    - main
-  image: 
+  - staging
+  - merge_requests
+  - main
+  image:
     name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [ "" ]
+    entrypoint:
+    - ''
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+    GIT_DEPTH: '0'
   cache:
     key: "${CI_JOB_NAME}"
     paths:
-      - .sonar/cache
+    - ".sonar/cache"
   script:
-    - sonar-scanner -Dsonar.login=$SONAR_TOKEN
+  - sonar-scanner -Dsonar.login=$SONAR_TOKEN
   allow_failure: true
-
 deploy_preview_web:
   stage: deploy
   cache:
-    - key:
-        files:
-          - web/yarn.lock
-      paths:
-        - web/.yarn-cache/
-      policy: pull
+  - key:
+      files:
+      - web/yarn.lock
+    paths:
+    - web/.yarn-cache/
+    policy: pull
   only:
-    - staging
+  - staging
   script:
-    - cd web/
-    - yarn install --cache-folder .yarn-cache
-    - npx vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
-    - npx vercel build --token=$VERCEL_TOKEN
-    - npx vercel deploy --prebuilt --token=$VERCEL_TOKEN > domain.txt
-    - npx vercel alias --token=$VERCEL_TOKEN set `cat domain.txt` staging-hyper-gg
-
+  - cd web/
+  - yarn install --cache-folder .yarn-cache
+  - npx vercel pull --yes --environment=preview --token=$VERCEL_TOKEN
+  - npx vercel build --token=$VERCEL_TOKEN
+  - npx vercel deploy --prebuilt --token=$VERCEL_TOKEN > domain.txt
+  - npx vercel alias --token=$VERCEL_TOKEN set `cat domain.txt` staging-hyper-gg
 deploy_production_web:
   stage: deploy
   cache:
-    - key:
-        files:
-          - web/yarn.lock
-      paths:
-        - web/.yarn-cache/
-      policy: pull
+  - key:
+      files:
+      - web/yarn.lock
+    paths:
+    - web/.yarn-cache/
+    policy: pull
   only:
-    - main
+  - main
   script:
-    - cd web/
-    - yarn install --cache-folder .yarn-cache
-    - npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-    - npx vercel build --prod --token=$VERCEL_TOKEN
-    - npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
-
+  - cd web/
+  - yarn install --cache-folder .yarn-cache
+  - npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+  - npx vercel build --prod --token=$VERCEL_TOKEN
+  - npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+sast:
+  stage: test
+include:
+- template: Security/SAST.gitlab-ci.yml
