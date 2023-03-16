@@ -51,19 +51,19 @@ model VerificationToken {
 }
 
 model User {
-  id            String           @id @default(cuid())
-  username      String?          @unique
-  email         String           @unique
-  image         String
-  emailVerified Boolean?
-  name          String?
-  bio           String?
-  countryCode   String?
-  country       Country?         @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
-  partyMember  PartyMember?
-  accounts      Account[]
-  sessions      Session[]
-  GameAccount   GameAccount[]
+  id             String           @id @default(cuid())
+  username       String?          @unique
+  email          String           @unique
+  image          String
+  emailVerified  Boolean?
+  name           String?
+  bio            String?
+  countryCode    String?
+  country        Country?         @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
+  partyMember    PartyMember?
+  accounts       Account[]
+  sessions       Session[]
+  GameAccount    GameAccount[]
   communityPosts CommunityPost[]
 }
 

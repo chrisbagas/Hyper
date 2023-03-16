@@ -10,8 +10,7 @@ export const partyRouter = createTRPCRouter({
         id: z.string()
     }))
     .query(async ({ ctx, input }) => {
-        const parties = PartyService.getParties(ctx.prisma, input.id)
-        return parties
+        return PartyService.getParties(ctx.prisma, input.id);
     }),
   
     createParty: publicProcedure
@@ -23,7 +22,6 @@ export const partyRouter = createTRPCRouter({
         partyVisibility: z.nativeEnum(PartyVisibility)
       }))
       .mutation(async ({ ctx, input }) => {
-        const party = PartyService.createParty(ctx.prisma, input)
-        return party;
+        return PartyService.createParty(ctx.prisma, input);
       }),
 })
