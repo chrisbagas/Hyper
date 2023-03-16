@@ -78,6 +78,5 @@ typings/
 #DynamoDB Local files 
 .dynamodb/ 
 
-#sonarqube
 sonar-project.properties
 .scannerwork
