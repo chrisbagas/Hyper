@@ -18,9 +18,9 @@ export const partyRouter = createTRPCRouter({
       .input(z.object({
         gameId: z.string(),
         partyTitle: z.string(),
+        minimumRank: z.string(),
         partyType: z.nativeEnum(PartyType),
         partyVisibility: z.nativeEnum(PartyVisibility)
-        ,
       }))
       .mutation(async ({ ctx, input }) => {
         const party = PartyService.createParty(ctx.prisma, input)

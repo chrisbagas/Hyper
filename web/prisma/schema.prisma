@@ -99,6 +99,7 @@ model Party {
   id                String           @id @default(cuid())
   gameId            String
   partyTitle        String
+  minimumRank       String
   partyType         PartyType?
   partyVisibility   PartyVisibility?
   discordInviteLink String?
@@ -131,6 +132,7 @@ enum PartyMemberLevel {
   member
   leader
 }
+
 model CommunityPost {
   id        String               @id @default(cuid())
   type      CommunityPostType

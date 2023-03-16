@@ -1,15 +1,20 @@
 import React from "react"
+import { PartyPlayerData } from "./PartyPlayer"
 
-const PartyPlayerList = (props: any) => {
+export interface PartyPlayerListData {
+    partyPlayers: PartyPlayerData[]
+}
+
+const PartyPlayerList = (props: PartyPlayerListData) => {
     return (
         <>
-            <div className="flex flex-col justify-start w-full max-w-4xl p-8 bg-gray-700 text-white">
+            <div className="flex flex-col justify-start w-full max-w-4xl h-full p-8 bg-gray-700 text-white">
             <div className="flex flex-row">
                 <div className="text-4xl font-bold">
                 Player List
                 </div>
                 <div className="bg-gray-500 p-2 ml-10 rounded-lg font-bold">
-                4/5
+                {props.partyPlayers.length}/5
                 </div>
             </div>
             <div className="flex flex-row max-w-full justify-between bg-gray-500 p-4 my-4 rounded-xl align-bottom">

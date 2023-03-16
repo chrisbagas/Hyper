@@ -3,6 +3,7 @@ import { PrismaClient, Party, PartyType, PartyVisibility } from "@prisma/client"
 export interface PartyCreateData {
     gameId: string,
     partyTitle: string,
+    minimumRank: string,
     partyType: PartyType,
     partyVisibility: PartyVisibility
 }

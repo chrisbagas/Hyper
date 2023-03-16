@@ -1,9 +1,8 @@
 import "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import { appRouter } from "../../src/server/api/root";
-import { Party, PartyType, PartyVisibility } from "@prisma/client"
+import { PartyType, PartyVisibility } from "@prisma/client"
 import prisma from "../../src/server/__mocks__/db";
-import { ZodStringDef } from "zod";
 
 
 vi.mock("../../src/server/db")
@@ -13,6 +12,7 @@ describe("Party RPC", () => {
         id: "1", 
         gameId: "Valorant",
         partyTitle: "gaming",
+        minimumRank: "iron",
         partyType: PartyType.Casual,
         partyVisibility: PartyVisibility.Public,
         discordInviteLink: "www.discord.com",
@@ -30,6 +30,7 @@ describe("Party RPC", () => {
 
     const gameId: string = "Valorant";
     const partyTitle: string = "gaming";
+    const minimumRank: string = "iron";
     const partyType: PartyType = PartyType.Casual;
     const partyVisibility: PartyVisibility = PartyVisibility.Public;
 
@@ -63,6 +64,7 @@ describe("Party RPC", () => {
         const party = await caller.party.createParty({
             gameId: gameId,
             partyTitle: partyTitle,
+            minimumRank: minimumRank,
             partyType: partyType,
             partyVisibility: partyVisibility
         })
@@ -78,6 +80,7 @@ describe("Party RPC", () => {
         expect(caller.party.createParty({
             gameId: gameId,
             partyTitle: partyTitle,
+            minimumRank: minimumRank,
             partyType: partyType,
             partyVisibility: partyVisibility
         })).rejects.toThrowError("duplicate")
