@@ -39,7 +39,7 @@ declare module "next-auth" {
  **/
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user, token }) {
+    session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
         // session.user.role = user.role; <-- put other properties on the session here
@@ -65,7 +65,6 @@ export const authOptions: NextAuthOptions = {
   ],
   events: {
     signIn: async ({ user, account, isNewUser }) => {
-      console.log(user, account, isNewUser)
       if (user && account && !isNewUser) {
         const dbAccount = await prisma.account.findFirst({
           where: {
