@@ -63,7 +63,7 @@ export const guideRouter = createTRPCRouter({
   )
   .mutation(async ({ ctx, input }) => {
     try {
-      await ctx.prisma.communityPost.create({
+      const post = await ctx.prisma.communityPost.create({
         data: {
           type: input.type,
           status: input.status,
@@ -83,15 +83,17 @@ export const guideRouter = createTRPCRouter({
           },
         }
       })
+      return {
+        message: "Post created successfully",
+        id: post.id,
+      }
     } catch(e) {
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Failed to create new post, try again later.'
       })
     }
-    return {
-      message: "Post created successfully"
-    }
+    
   }),
   updatePostById: publicProcedure
   .input(
