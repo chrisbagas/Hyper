@@ -6,14 +6,12 @@ export const gameRouter = createTRPCRouter({
   
   getAll: publicProcedure
     .query(async ({ ctx }) => {
-        const games = await GameService.getAllGames(ctx.prisma)
-        return games
+        return await GameService.getAllGames(ctx.prisma)
     }),
 
   getById: publicProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
-        const game = await GameService.getById(input, ctx.prisma)
-      return game
+        return await GameService.getById(input, ctx.prisma)
     })
 })
