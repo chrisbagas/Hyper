@@ -72,7 +72,7 @@ describe("Community Post RPC", () => {
     await expect(caller.guides.getPostById(input)).rejects.toThrowError("not found")
   })
 
-  it("create should return a success message if post is successfully created", async () => {
+  it("create should return a success message and the post id if post is successfully created", async () => {
     const input = {
       type: CommunityPostType.GUIDE,
       status: CommunityPostStatus.DRAFT,
@@ -97,7 +97,8 @@ describe("Community Post RPC", () => {
     }
 
     const expectedOutput = {
-      message: "Post created successfully"
+      message: "Post created successfully",
+      id: mockPrismaOutput.id
     }
 
     const ctx = {
@@ -115,6 +116,7 @@ describe("Community Post RPC", () => {
     const value = await caller.guides.create(input)
     
     expect(value.message).toBe(expectedOutput.message)
+    expect(value.id).toBe(expectedOutput.id)
   })
 
   it("create should throw error when prisma related error has occured", async () => {
