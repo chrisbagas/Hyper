@@ -136,3 +136,53 @@ describe("Call Valorant's API Using The Wrong Parameter Returns 404 Status Code"
         expect(valorantAPIData.status).toStrictEqual(mockValorantAPIData.status)
     })
 })
+
+describe("Get Combined Valorant Data Successfully", () => {
+    it("Should return combined Valorant data successfully", async () => {
+        const mockValorantAPIData = {
+            status: -1,
+            accountData: {
+                region: "ap",
+                account_level: 34,
+                name: "iRakaZet",
+                tag: "5407"
+            },
+            mmrData: {
+                current_rank: "Ascendant 1",
+                elo: 1877,
+                rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png"
+            },
+            mmrHistory: [
+                {
+                    rank: "Ascendant 1",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
+                    elo_change: 27
+                },
+                {
+                    rank: "Ascendant 1",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
+                    elo_change: 18
+                },
+                {
+                    rank: "Ascendant 1",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
+                    elo_change: 20
+                },
+                {
+                    rank: "Ascendant 1",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
+                    elo_change: 22
+                },
+                {
+                    rank: "Diamond 3",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/20/largeicon.png",
+                    elo_change: 23
+                },
+            ]
+        }
+
+        const valorantAPIData = await PlayerStatisticsService.getValorantData("iRakaZet", "5407")
+
+        expect(valorantAPIData).toStrictEqual(mockValorantAPIData)
+    }, 20000)
+})
