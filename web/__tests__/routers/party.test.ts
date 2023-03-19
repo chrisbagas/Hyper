@@ -72,7 +72,7 @@ describe("Party RPC", () => {
         expect(party).toStrictEqual(mockParty)
     })
 
-    it ("createParty negative test", async () => {
+    it("createParty negative test", async () => {
         prisma.party.create.mockRejectedValue(
             new Error("duplicate error: same ID already exists")
         )
@@ -84,5 +84,41 @@ describe("Party RPC", () => {
             partyType: partyType,
             partyVisibility: partyVisibility
         })).rejects.toThrowError("duplicate")
+    })
+
+    const mockPartyMember = {
+        userId: "1",
+        partyId: "1",
+        gameId: "valorant",
+    }
+
+    it("joinParty positive test", async () => {
+        prisma.party.findUnique.mockResolvedValue(
+            mockParty
+        )
+
+        prisma.partyMember.create.mockResolvedValue(
+            mockPartyMember
+        )
+
+        const partyMember = await caller.party.joinParty({
+            mockPartyMember
+        })
+
+        expect(partyMember).toStrictEqual(mockPartyMember)
+    })
+
+    it("joinParty negative test", async () => {
+        prisma.party.findUnique.mockResolvedValue(
+            mockParty
+        )
+
+        prisma.partyMember.create.mockRejectedValue(
+            new Error("Error: Party not found")
+        )
+
+        expect(caller.party.joinParty(
+            mockPartyMember
+        )).rejects.toThrowError("not found")
     })
 })

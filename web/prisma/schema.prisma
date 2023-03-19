@@ -121,7 +121,7 @@ model PartyMember {
   userId  String           @unique
   partyId String
   gameId  String
-  level   PartyMemberLevel
+  level   PartyMemberLevel @default(member)
   user    User             @relation(fields: [userId], references: [id])
   party   Party            @relation(fields: [partyId], references: [id])
   
