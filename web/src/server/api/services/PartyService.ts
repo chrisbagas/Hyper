@@ -1,6 +1,7 @@
 import { PrismaClient, Party, PartyType, PartyVisibility, PartyMember, GameAccount, PartyMemberLevel } from "@prisma/client"
 
 export interface CreatePartyData {
+    userId: string,
     gameId: string,
     partyTitle: string,
     partyType: PartyType,
@@ -28,9 +29,19 @@ export class PartyService {
     }
 
     public static async createParty(prisma: PrismaClient, data: CreatePartyData): Promise<Party> {
-        return prisma.party.create({
+        const newParty = await prisma.party.create({
             data: data
         })
+        
+        await prisma.partyMember.create({
+            data: {
+                userId: data.userId,
+                partyId: newParty.id,
+                level: PartyMemberLevel.leader
+            }
+        })
+
+        return newParty
     }
 
     public static async joinParty(prisma: PrismaClient, data: JoinPartyData): Promise<PartyMember> {

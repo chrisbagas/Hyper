@@ -112,10 +112,10 @@ describe("Party Service", () => {
         ]
     }
 
-    const data = {
+    const createPartyData = {
+        userId: "1",
         gameId: "Valorant",
         partyTitle: "gaming",
-        minimumRank: "iron",
         partyType: PartyType.Casual,
         partyVisibility: PartyVisibility.Public
     }
@@ -148,7 +148,7 @@ describe("Party Service", () => {
 
         const party = await PartyService.createParty(
             prisma,
-            data
+            createPartyData
         )
 
         expect(party).toStrictEqual(mockParty)
@@ -161,7 +161,7 @@ describe("Party Service", () => {
         
         expect(PartyService.createParty(
             prisma,
-            data
+            createPartyData
         )).rejects.toThrowError("duplicate")
     })
 

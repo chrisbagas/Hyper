@@ -15,6 +15,7 @@ export const partyRouter = createTRPCRouter({
   
     createParty: publicProcedure
       .input(z.object({
+        userId: z.string(),
         gameId: z.string(),
         partyTitle: z.string(),
         partyType: z.nativeEnum(PartyType),

@@ -26,6 +26,7 @@ const PartyCreate = (props: PartyCreateData) => {
         e.preventDefault()
 
         const createPartyDTO = {
+            userId: props.userId,
             gameId: props.gameId,
             partyTitle: name,
             partyType: type,
