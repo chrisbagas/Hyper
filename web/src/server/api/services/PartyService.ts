@@ -30,6 +30,25 @@ export class PartyService {
     }
 
     public static async joinParty(prisma: PrismaClient, data: JoinPartyData): Promise<PartyMember> {
-        return {} as any;
+        const party = await prisma.party.findUnique({
+            where: {
+                id: data.partyId
+            },
+            include: {
+                partyMembers: true
+            }
+        })
+
+        if (party == null) {
+            throw Error("Error: Party not found")
+        }
+
+        if (party?.partyMembers.length >= 5) {
+            throw Error("Error: Party already full")
+        }
+
+        return prisma.partyMember.create({
+            data: data
+        })
     }
 }

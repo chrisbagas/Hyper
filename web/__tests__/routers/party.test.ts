@@ -101,9 +101,9 @@ describe("Party RPC", () => {
             mockPartyMember
         )
 
-        const partyMember = await caller.party.joinParty({
+        const partyMember = await caller.party.joinParty(
             mockPartyMember
-        })
+        )
 
         expect(partyMember).toStrictEqual(mockPartyMember)
     })
