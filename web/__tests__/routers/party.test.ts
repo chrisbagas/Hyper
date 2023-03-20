@@ -92,9 +92,20 @@ describe("Party RPC", () => {
         gameId: "valorant",
     }
 
+    const mockUser = {
+        id: "1",
+        email: "google@gmail.com",
+        image: "amogus.png",
+
+    }
+
     it("joinParty positive test", async () => {
         prisma.party.findUnique.mockResolvedValue(
             mockParty
+        )
+
+        prisma.user.findUnique.mockResolvedValue(
+            mockUser
         )
 
         prisma.partyMember.create.mockResolvedValue(
@@ -111,6 +122,10 @@ describe("Party RPC", () => {
     it("joinParty negative test", async () => {
         prisma.party.findUnique.mockResolvedValue(
             mockParty
+        )
+
+        prisma.user.findUnique.mockResolvedValue(
+            mockUser
         )
 
         prisma.partyMember.create.mockRejectedValue(

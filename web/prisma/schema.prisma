@@ -120,12 +120,11 @@ enum PartyVisibility {
 model PartyMember {
   userId  String           @unique
   partyId String
-  gameId  String
   level   PartyMemberLevel @default(member)
   user    User             @relation(fields: [userId], references: [id])
   party   Party            @relation(fields: [partyId], references: [id])
   
-  @@id([userId, gameId])
+  @@id([userId, partyId])
 }
 
 enum PartyMemberLevel {
