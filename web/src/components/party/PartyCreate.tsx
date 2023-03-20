@@ -7,11 +7,34 @@ export interface PartyCreateData {
     userId: string
 }
 
-function createParty(e: any) {
-    e.preventDefault()
-}
-
 const PartyCreate = (props: PartyCreateData) => {
+    const [name, setName] = useState("")
+    const [type, setType] = useState(PartyType.Casual)
+    const [visibility, setVisibility] = useState(PartyVisibility.Public)
+
+    const partyMutation = api.party.createParty.useMutation()
+
+    const handlePartyTypeChange = (event: any) => {
+        setType(event.target.value);
+    };
+
+    const handlePartyVisibilityChange = (event: any) => {
+        setVisibility(event.target.value);
+    };
+
+    function createParty(e: any) {
+        e.preventDefault()
+
+        const createPartyDTO = {
+            gameId: props.gameId,
+            partyTitle: name,
+            partyType: type,
+            partyVisibility: visibility
+        }
+        
+        partyMutation.mutate(createPartyDTO)
+    }
+
     return (
         <>
             <div className="flex flex-col justify-start w-full max-w-7xl h-full p-8 bg-gray-700 text-white">
@@ -23,17 +46,28 @@ const PartyCreate = (props: PartyCreateData) => {
                 <div className="grid grid-cols-2 gap-10">
                     <div>
                         <h3 className="font-semibold text-xl mb-2">Party Name</h3>
+                        <input
+                            id="partyName"
+                            name="name"
+                            type="text"
+                            onChange={e => setName(e.target.value)}
+                            minLength={1}
+                            maxLength={50}
+                        />
                     </div>
                     <div>
                         <h3 className="font-semibold text-xl mb-2">Party Type</h3>
+                        <select id="partyType" value={type} onChange={handlePartyTypeChange}>
+                            <option value={PartyType.Casual}>Casual</option>
+                            <option value={PartyType.Competitive}>Competitive</option>
+                        </select>
                     </div>
                     <div>
                         <h3 className="font-semibold text-xl mb-2">Party Visibility</h3>
-                        <p>Set whether anyone can join your party or not</p>
-                    </div>
-                    <div>
-                        <h3 className="font-semibold text-xl mb-2">Minimum Rank</h3>
-                        <p>Set the minimum rank needed to join your party</p>
+                        <select id="partyVisibility" value={visibility} onChange={handlePartyVisibilityChange}>
+                            <option value={PartyVisibility.Public}>Public</option>
+                            <option value={PartyVisibility.Private}>Private</option>
+                        </select> 
                     </div>
                 </div>
                 <div>

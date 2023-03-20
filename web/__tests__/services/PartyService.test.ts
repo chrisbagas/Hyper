@@ -175,7 +175,6 @@ describe("Party Service", () => {
         id: "1",
         email: "google@gmail.com",
         image: "amogus.png",
-        
     }
 
     const mockUserInParty = {
@@ -259,5 +258,35 @@ describe("Party Service", () => {
             prisma,
             mockPartyMember
         )).rejects.toThrowError("already in party")
+    })
+
+    it("leaveParty positive test", async () => {
+        prisma.partyMember.delete.mockResolvedValue(
+            mockPartyMember
+        )
+
+        const partyMember = await PartyService.leaveParty(
+            prisma,
+            {
+                userId: mockPartyMember.userId,
+                partyId: mockPartyMember.partyId
+            }
+        )
+
+        expect(partyMember).toStrictEqual(mockPartyMember)
+    })
+
+    it("leaveParty negative test: party member not found", async () => {
+        prisma.partyMember.delete.mockRejectedValue(
+            new Error("Error: party member not found")
+        )
+        
+        expect(PartyService.leaveParty(
+            prisma,
+            {
+                userId: mockPartyMember.userId,
+                partyId: mockPartyMember.partyId
+            }
+        )).rejects.toThrowError("not found")
     })
 })

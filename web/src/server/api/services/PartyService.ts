@@ -3,7 +3,6 @@ import { PrismaClient, Party, PartyType, PartyVisibility, PartyMember, GameAccou
 export interface CreatePartyData {
     gameId: string,
     partyTitle: string,
-    minimumRank: string,
     partyType: PartyType,
     partyVisibility: PartyVisibility
 }
@@ -15,7 +14,8 @@ export interface JoinPartyData {
 } 
 
 export interface LeavePartyData {
-    
+    userId: string,
+    partyId: string
 }
 
 export class PartyService {
@@ -53,7 +53,7 @@ export class PartyService {
         })
 
         // check if party exists and is not full, if not then throw error
-        if (party == null) {
+        if (party == null || party == undefined) {
             throw Error("Error: Party not found")
         }
         if (party?.partyMembers.length >= 5) {
@@ -61,15 +61,28 @@ export class PartyService {
         }
 
         // check if user exists and is not already in a party, if not then throw error
-        if (user == undefined) {
+        if (user == null || user == undefined) {
             throw Error("Error: User not found")
         }
-        if (user.partyMember != null) {
+        if (user.partyMember != null && user.partyMember != undefined) {
             throw Error("Error: user already in party")
         }
 
         return prisma.partyMember.create({
             data: data
+        })
+    }
+
+    public static async leaveParty(prisma: PrismaClient, data: LeavePartyData): Promise<PartyMember> {
+        const userId = data.userId
+        const partyId = data.partyId
+        return prisma.partyMember.delete({
+            where: {
+                userId_partyId: {
+                    userId: userId,
+                    partyId: partyId
+                }
+            }
         })
     }
 }

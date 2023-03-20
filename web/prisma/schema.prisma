@@ -99,7 +99,6 @@ model Party {
   id                String           @id @default(cuid())
   gameId            String
   partyTitle        String
-  minimumRank       String
   partyType         PartyType?
   partyVisibility   PartyVisibility?
   discordInviteLink String?

@@ -96,7 +96,6 @@ describe("Party RPC", () => {
         id: "1",
         email: "google@gmail.com",
         image: "amogus.png",
-
     }
 
     it("joinParty positive test", async () => {
@@ -135,5 +134,31 @@ describe("Party RPC", () => {
         expect(caller.party.joinParty(
             mockPartyMember
         )).rejects.toThrowError("not found")
+    })
+
+    it("leaveParty positive test", async () => {
+        prisma.partyMember.delete.mockResolvedValue(
+            mockPartyMember
+        )
+
+        const partyMember = await caller.party.leaveParty({
+            userId: mockPartyMember.userId,
+            partyId: mockPartyMember.partyId
+        })
+
+        expect(partyMember).toStrictEqual(
+            mockPartyMember
+        )
+    })
+
+    it("leaveParty negative test", async () => {
+        prisma.partyMember.delete.mockRejectedValue(
+            new Error("Error: party member not found")
+        )
+        
+        expect(caller.party.leaveParty({
+            userId: mockPartyMember.userId,
+            partyId: mockPartyMember.partyId
+        })).rejects.toThrowError("not found")
     })
 })
