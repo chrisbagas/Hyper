@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { PartyVisibility, PartyType, PartyMember } from "@prisma/client"
 import { api } from "../../utils/api";
 
@@ -10,12 +10,15 @@ export interface PartyCardData {
     minimalRank: string | undefined,
     visibility: PartyVisibility,
     type: PartyType,
-    partyMembers: PartyMember[],
-    isFull: boolean
+    partyMembers: PartyMember[]
 }
 
 const PartyCard = (props: PartyCardData) => {
+    const partyIsFull = props.partyMembers.length == 5
+
     const partyMutation = api.party.joinParty.useMutation()
+
+    const [canJoin, setCanJoin] = useState(partyIsFull)
 
     function joinParty(e: any) {
         e.preventDefault()
@@ -27,6 +30,8 @@ const PartyCard = (props: PartyCardData) => {
         }
 
         partyMutation.mutate(joinPartyDTO)
+
+        setCanJoin(false)
     }
 
     const memberAvatars = props.partyMembers.map((partyMember) =>
@@ -93,7 +98,8 @@ const PartyCard = (props: PartyCardData) => {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                             </svg>  
                         </button>
-                        {props.isFull
+
+                        {canJoin
                             ? <button className="btn bg-gray-500">Join Party</button>
                             : <button onClick={joinParty} className="btn bg-green-500 hover:bg-green-600">Join Party</button>
                         }

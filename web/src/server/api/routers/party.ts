@@ -33,7 +33,7 @@ export const partyRouter = createTRPCRouter({
       }))
       .mutation(async ({ ctx, input }) => {
         try {
-          return PartyService.joinParty(ctx.prisma, input)
+          return await PartyService.joinParty(ctx.prisma, input)
         }
         catch (e: any) {
           return {

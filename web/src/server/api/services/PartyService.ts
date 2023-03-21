@@ -1,4 +1,4 @@
-import { PrismaClient, Party, PartyType, PartyVisibility, PartyMember, GameAccount, PartyMemberLevel } from "@prisma/client"
+import { PrismaClient, Party, PartyType, PartyVisibility, PartyMember, PartyMemberLevel } from "@prisma/client"
 
 export interface CreatePartyData {
     userId: string,

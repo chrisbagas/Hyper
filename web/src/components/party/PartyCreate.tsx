@@ -49,6 +49,7 @@ const PartyCreate = (props: PartyCreateData) => {
                         <h3 className="font-semibold text-xl mb-2">Party Name</h3>
                         <input
                             id="partyName"
+                            value=""
                             name="name"
                             type="text"
                             onChange={e => setName(e.target.value)}

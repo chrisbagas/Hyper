@@ -1,6 +1,5 @@
 import React from "react"
-import { PartyPlayerData } from "./PartyPlayer"
-import { PartyPlayer } from "./PartyPlayer"
+import { PartyPlayerData, PartyPlayer } from "./PartyPlayer"
 
 export interface PartyPlayerListData {
     partyPlayers: PartyPlayerData[]
