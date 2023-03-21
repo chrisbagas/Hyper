@@ -140,7 +140,7 @@ describe("Call Valorant's API Using The Wrong Parameter Returns 404 Status Code"
 describe("Get Combined Valorant Data Successfully", () => {
     it("Should return combined Valorant data successfully", async () => {
         const mockValorantAPIData = {
-            status: -1,
+            status: 200,
             accountData: {
                 region: "ap",
                 account_level: 34,
@@ -148,35 +148,65 @@ describe("Get Combined Valorant Data Successfully", () => {
                 tag: "5407"
             },
             mmrData: {
-                current_rank: "Ascendant 1",
-                elo: 1877,
-                rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png"
+                current_rank: "Ascendant 2",
+                elo: 1921,
+                rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png"
             },
-            mmrHistory: [
+            competitiveHistory: [
                 {
-                    rank: "Ascendant 1",
-                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
-                    elo_change: 27
+                    rank: "Ascendant 2",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
+                    elo_change: -14,
+                    kills: 22,
+                    deaths: 18,
+                    assists: 6,
+                    headshot_rate: 9,
+                    agent_image: "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png",
+                    victory: "false"
+                },
+                {
+                    rank: "Ascendant 2",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
+                    elo_change: 25,
+                    kills: 34,
+                    deaths: 16,
+                    assists: 8,
+                    headshot_rate: 16,
+                    agent_image: "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png",
+                    victory: "true"
+                },
+                {
+                    rank: "Ascendant 2",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
+                    elo_change: 29,
+                    kills: 12,
+                    deaths: 10,
+                    assists: 6,
+                    headshot_rate: 15,
+                    agent_image: "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png",
+                    victory: "true"
                 },
                 {
                     rank: "Ascendant 1",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
-                    elo_change: 18
+                    elo_change: 27,
+                    kills: 23,
+                    deaths: 9,
+                    assists: 11,
+                    headshot_rate: 34,
+                    agent_image: "https://media.valorant-api.com/agents/5f8d3a7f-467b-97f3-062c-13acf203c006/displayicon.png",
+                    victory: "true"
                 },
                 {
                     rank: "Ascendant 1",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
-                    elo_change: 20
-                },
-                {
-                    rank: "Ascendant 1",
-                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
-                    elo_change: 22
-                },
-                {
-                    rank: "Diamond 3",
-                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/20/largeicon.png",
-                    elo_change: 23
+                    elo_change: 18,
+                    kills: 21,
+                    deaths: 8,
+                    assists: 5,
+                    headshot_rate: 12,
+                    agent_image: "https://media.valorant-api.com/agents/a3bfb853-43b2-7238-a4f1-ad90e9e46bcc/displayicon.png",
+                    victory: "true"
                 },
             ]
         }
