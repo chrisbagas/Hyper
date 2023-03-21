@@ -7,7 +7,7 @@ export interface PartyPlayerListData {
 
 const PartyPlayerList = (props: PartyPlayerListData) => {
     const partyPlayers = props.partyPlayers.map((partyPlayer) =>
-        <PartyPlayer {...partyPlayer} />
+        <PartyPlayer key={partyPlayer.userId} {...partyPlayer} />
     )
     let i = props.partyPlayers.length
     while (i < 5) {
