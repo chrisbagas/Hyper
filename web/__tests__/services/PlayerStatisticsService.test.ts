@@ -150,63 +150,85 @@ describe("Get Combined Valorant Data Successfully", () => {
             mmrData: {
                 current_rank: "Ascendant 2",
                 elo: 1921,
-                rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png"
+                current_rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
+                highest_rank: "Ascendant 2",
+                highest_rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
             },
             competitiveHistory: [
                 {
                     rank: "Ascendant 2",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
                     elo_change: -14,
+                    map_name: "Lotus",
                     kills: 22,
                     deaths: 18,
                     assists: 6,
+                    kd: 1.2,
                     headshot_rate: 9,
                     agent_image: "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png",
-                    victory: "false"
+                    victory: false,
+                    rounds_won: 11,
+                    rounds_lost: 13
                 },
                 {
                     rank: "Ascendant 2",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
                     elo_change: 25,
+                    map_name: "Haven",
                     kills: 34,
                     deaths: 16,
                     assists: 8,
+                    kd: 2.1,
                     headshot_rate: 16,
                     agent_image: "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png",
-                    victory: "true"
+                    victory: true,
+                    rounds_won: 15,
+                    rounds_lost: 13
                 },
                 {
                     rank: "Ascendant 2",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
                     elo_change: 29,
+                    map_name: "Icebox",
                     kills: 12,
                     deaths: 10,
                     assists: 6,
+                    kd: 1.2,
                     headshot_rate: 15,
                     agent_image: "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png",
-                    victory: "true"
+                    victory: true,
+                    rounds_won: 13,
+                    rounds_lost: 4
                 },
                 {
                     rank: "Ascendant 1",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
                     elo_change: 27,
+                    map_name: "Split",
                     kills: 23,
                     deaths: 9,
                     assists: 11,
+                    kd: 2.6,
                     headshot_rate: 34,
                     agent_image: "https://media.valorant-api.com/agents/5f8d3a7f-467b-97f3-062c-13acf203c006/displayicon.png",
-                    victory: "true"
+                    victory: true,
+                    rounds_won: 13,
+                    rounds_lost: 6
                 },
                 {
                     rank: "Ascendant 1",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
                     elo_change: 18,
+                    map_name: "Haven",
                     kills: 21,
                     deaths: 8,
                     assists: 5,
+                    kd: 2.6,
                     headshot_rate: 12,
                     agent_image: "https://media.valorant-api.com/agents/a3bfb853-43b2-7238-a4f1-ad90e9e46bcc/displayicon.png",
-                    victory: "true"
+                    victory: true,
+                    rounds_won: 13,
+                    rounds_lost: 6
                 },
             ]
         }
