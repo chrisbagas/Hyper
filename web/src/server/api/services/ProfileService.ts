@@ -8,6 +8,18 @@ export interface Profile {
     countryCode: string | null
     games: Game[]
 }
+export interface AccountC {
+    type: string;
+    id: string;
+    name: string;
+    visibility: number;
+    friend_sync: boolean;
+    show_activity: boolean;
+    verified: boolean;
+    two_way_link: boolean;
+    metadata_visibility: number;
+  }
+  
 
 export class ProfileService {
     public static async getProfile(id: string, prisma: PrismaClient): Promise<Profile> {
@@ -41,7 +53,7 @@ export class ProfileService {
         }
     }
     
-    public static async updateProfile(id: string, data: Partial<Profile>, prisma: PrismaClient): Promise<Profile> {
+    public static async updateProfile(id: string, data: Partial<Profile>, prisma: PrismaClient) {
         const user = await prisma.user.update({
             where: { id },
             data: {
@@ -54,18 +66,12 @@ export class ProfileService {
         if (!user) {
             throw Error("User not found");
         }
-
-
     }
-    // TODO: get auth token from database
-    public static async getConnectionAccount() {
-        const res = await fetch(
-            "https://discord.com/api/users/@me/connections", {
-                headers: {
-                    "Authorization": `Bearer YxDUXxV8qtvOPZp95wuPIpzorzYINk`
-                }
-            }
-        );
-        return res.json();
+    public static async getAllCountries(prisma: PrismaClient){
+        const countries = await prisma.country.findMany()
+        return countries
     }
+
+    
+    
 }
