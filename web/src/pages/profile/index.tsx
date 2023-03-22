@@ -49,7 +49,7 @@ const Statistic: NextPage = () => {
                         </h1>
                         <div className="flex flex-col sm:flex-row gap-4 mt-4">
                             <div className="flex flex-col sm:flex-row ">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Flag_of_the_United_States_%28Pantone%29.svg/1200px-Flag_of_the_United_States_%28Pantone%29.svg.png" className="h-10 w-16" />
+                                <img src= {data?.country?.imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Flag_of_the_United_Nations.svg/1280px-Flag_of_the_United_Nations.svg.png"} className="h-10 w-16" />
                                 <div className="divider lg:divider-horizontal "></div>
                                 <div className="flex flex-row items-center gap-2">
                                 <div className="badge badge-lg border-none text-neutral-0 font-normal bg-accent-6 text-sm">Casual Gamer</div>

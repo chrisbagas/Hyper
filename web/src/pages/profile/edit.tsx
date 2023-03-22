@@ -27,8 +27,12 @@ const EditProfile: NextPage = () => {
     const saveUpdateProfile = async (e: any) => {
         e.preventDefault();
         profile["countryCode"] = (document.getElementById("countryCode") as HTMLInputElement).value;
-        profileMutation.mutate(profile)
-        router.push("/profile")
+        if(profile["username"] === "") alert("Username tidak boleh kosong")
+        else if(profile["bio"] === "") alert("Bio tidak boleh kosong")
+        else {
+            profileMutation.mutate(profile)
+            router.push("/profile")
+        }
     };
 
 
@@ -72,10 +76,9 @@ const EditProfile: NextPage = () => {
                         </label>
                         <select className="select select-bordered" id="countryCode"
                             name="countryCode">
-                            <option disabled selected>Select one</option>
                             {countries?.data?.map(country =>
                             <>
-                                <option>{country.localeCode}</option>
+                                <option value={country.localeCode}>{country.name}</option>
                             </>
                             )}
 
