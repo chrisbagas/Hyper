@@ -1,7 +1,7 @@
 import "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import { appRouter } from "../../src/server/api/root";
-import { User, Account, GameAccount, Game } from "@prisma/client" 
+import { User, Account, GameAccount, Game, Country } from "@prisma/client" 
 import { Profile } from "../../src/server/api/services/ProfileService";
 import prisma from "../../src/server/__mocks__/db";
 
@@ -9,6 +9,7 @@ vi.mock("../../src/server/db")
 
 type UserMock = (User & {
     accounts: Account[];
+    country: Country
     GameAccount: (GameAccount & {
         game: Game;
     })[];
@@ -29,6 +30,11 @@ describe("Profile RPC", () => {
             logoUrl: "lala"
         }
     }
+    const mockedCountry = {
+      localeCode: "id-ID",
+      name: "Indonesia",
+      imageUrl: "lala"
+  }
     const ctx = {
       session: {
         user: {
@@ -45,6 +51,7 @@ describe("Profile RPC", () => {
         bio: null,
         image: "https://google.com/",
         countryCode: "id-ID",
+        country: mockedCountry,
         accounts: [],
         GameAccount: [mockGameAccount]
     }
@@ -54,6 +61,7 @@ describe("Profile RPC", () => {
         bio: "No information provided",
         image: "https://google.com/",
         countryCode: "id-ID",
+        country: mockedCountry,
         games: [mockGameAccount.game]
     }
 

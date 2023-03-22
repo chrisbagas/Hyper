@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from "vitest"
 import prisma from "../../src/server/__mocks__/db";
-import { User, Account, GameAccount, Game } from "@prisma/client"
+import { User, Account, GameAccount, Game, Country} from "@prisma/client"
 import { ProfileService, Profile } from "../../src/server/api/services/ProfileService";
 
 type UserMock = (User & {
     accounts: Account[];
+    country: Country
     GameAccount: (GameAccount & {
         game: Game;
     })[];
@@ -26,6 +27,12 @@ describe("Profile Service", () => {
             }
         }
 
+        const mockedCountry = {
+            localeCode: "id-ID",
+            name: "Indonesia",
+            imageUrl: "lala"
+        }
+
         const mockedUser: UserMock = {
             id: "TEST-1",
             username: "Asyraf#6942",
@@ -33,9 +40,12 @@ describe("Profile Service", () => {
             bio: null,
             image: "https://google.com",
             countryCode: "id-ID",
+            country: mockedCountry,
             accounts: [],
             GameAccount: [mockGameAccount]
         }
+
+        
 
         const expectedProfile: Profile = {
             id: "TEST-1",
@@ -43,6 +53,7 @@ describe("Profile Service", () => {
             bio: "No information provided",
             image: "https://google.com",
             countryCode: "id-ID",
+            country: mockedCountry,
             games: [mockGameAccount.game]
         }
 
@@ -70,6 +81,11 @@ describe("Profile Service", () => {
                 logoUrl: "lala"
             }
         }
+        const mockedCountry = {
+            localeCode: "id-ID",
+            name: "Indonesia",
+            imageUrl: "lala"
+        }
 
         const mockedUser: UserMock = {
             id: "TEST-1",
@@ -77,6 +93,7 @@ describe("Profile Service", () => {
             bio: null,
             image: "https://google.com",
             countryCode: "id-ID",
+            country: mockedCountry,
             accounts: [],
             GameAccount: [mockGameAccount]
         }
@@ -87,6 +104,7 @@ describe("Profile Service", () => {
             bio: "No information provided",
             image: "https://google.com",
             countryCode: "id-ID",
+            country: mockedCountry,
             games: [mockGameAccount.game]
         }
 
@@ -102,6 +120,12 @@ describe("Profile Service", () => {
 
 
     it("getProfile without connected games should return user profile without games", async () => {
+        const mockedCountry = {
+            localeCode: "id-ID",
+            name: "Indonesia",
+            imageUrl: "lala"
+        }
+        
         const mockedUser: UserMock = {
             id: "TEST-1",
             username: "Asyraf#6942",
@@ -109,6 +133,7 @@ describe("Profile Service", () => {
             bio: "Hello, World!",
             image: "https://google.com",
             countryCode: "id-ID",
+            country: mockedCountry,
             accounts: [],
             GameAccount: []
         }
@@ -119,6 +144,7 @@ describe("Profile Service", () => {
             bio: "Hello, World!",
             image: "https://google.com",
             countryCode: "id-ID",
+            country: mockedCountry,
             games: []
         }
 
