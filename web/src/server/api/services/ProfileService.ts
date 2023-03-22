@@ -1,4 +1,4 @@
-import { PrismaClient, Game } from "@prisma/client";
+import { PrismaClient, Game, Country } from "@prisma/client";
 
 export interface Profile {
     id: string
@@ -7,6 +7,7 @@ export interface Profile {
     image: string
     countryCode: string | null
     games: Game[]
+    country: Country | null
 }
 export interface AccountC {
     type: string;
@@ -29,6 +30,7 @@ export class ProfileService {
             },
             include: {
                 accounts: true,
+                country:true,
                 GameAccount: {
                     include: {
                         game: true
@@ -47,6 +49,7 @@ export class ProfileService {
             bio: user.bio ?? "No information provided",
             image: user.image ,
             countryCode: user.countryCode,
+            country: user.country,
             games: user.GameAccount.map((item) => {
                 return item.game
             })
