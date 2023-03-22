@@ -18,7 +18,7 @@ cache-web-packages:
       policy: push
   script:
     - cd web/
-    - yarn
+    - yarn install --cache-folder .yarn-cache
   only:
     refs:
       - push
