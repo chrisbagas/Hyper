@@ -111,7 +111,8 @@ describe("Profile RPC", () => {
     });
   });
 
-  it("getConnectionAccount should return connection account" , async () => {
+  it("getCountrie shpould returns list of countries", async () => {
+    
     const ctx = {
       session: {
         user: {
@@ -120,9 +121,21 @@ describe("Profile RPC", () => {
       },
       prisma,
     }
-    const caller = appRouter.createCaller(ctx);
-    await expect(caller.profiles.getConnectionAccount()).rejects.toThrow()
-   
+
+    const expectedCountries = [{
+      localeCode: "id-ID",
+      name: "Indonesia"
+    }];
+
+    prisma.country.findMany.mockResolvedValue(expectedCountries);
+    const caller = appRouter.createCaller(ctx)
+    const countries = await caller.profiles.getAllCountry()
+
+    expect(countries).toStrictEqual(expectedCountries)
+    expect(countries.length).toBe(1)
+ 
   })
+
+  
 
 })

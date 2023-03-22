@@ -56,6 +56,51 @@ describe("Profile Service", () => {
         expect(profile.games[0]).toStrictEqual(mockGameAccount.game)
     })
 
+    it("getProfile user without username should return name user", async () => {
+        const mockGameAccount = {
+            userId: "TEST-1",
+            gameId: "1",
+            gameIdentifier: "rostova",
+            statisticsData: null,
+            statisticsLastUpdatedAt: null,
+            createdAt: new Date(),
+            game: {
+                id: "1",
+                name: "valorant",
+                logoUrl: "lala"
+            }
+        }
+
+        const mockedUser: UserMock = {
+            id: "TEST-1",
+            name: "Muhammad Asyraf",
+            bio: null,
+            image: "https://google.com",
+            countryCode: "id-ID",
+            accounts: [],
+            GameAccount: [mockGameAccount]
+        }
+
+        const expectedProfile: Profile = {
+            id: "TEST-1",
+            username: "Muhammad Asyraf",
+            bio: "No information provided",
+            image: "https://google.com",
+            countryCode: "id-ID",
+            games: [mockGameAccount.game]
+        }
+
+        const mockPrisma = prisma
+        prisma.user.findUnique.mockResolvedValue(mockedUser)
+
+        const profile = await ProfileService.getProfile("TEST-1", mockPrisma)
+
+        expect(profile).toStrictEqual(expectedProfile)
+        expect(profile.games.length).toBe(1)
+        expect(profile.games[0]).toStrictEqual(mockGameAccount.game)
+    })
+
+
     it("getProfile without connected games should return user profile without games", async () => {
         const mockedUser: UserMock = {
             id: "TEST-1",
@@ -154,8 +199,21 @@ describe("Profile Service", () => {
             ProfileService.updateProfile("TEST-1", {}, mockPrisma)
         ).rejects.toThrow();
     });
+    
+    
+    it("getContries should return list of countries", async () => {
+        const expectedCountries = [{
+            localeCode: "id-ID",
+            name: "Indonesia"
+        }];
+        const mockPrisma = prisma;
+        prisma.country.findMany.mockResolvedValue(expectedCountries);
+        const countries = await ProfileService.getAllCountries(mockPrisma)
 
-    it("getConnectionAccount should return connection account" , async () => {
-        await expect(ProfileService.getConnectionAccount()).rejects.toThrow()
-    })
+        expect(countries).toStrictEqual(expectedCountries)
+        expect(countries.length).toBe(1)
+       
+        
+    });
+    
 })
