@@ -46,4 +46,12 @@ export class UserService {
       
     }
   }
+
+  public static async submitOnboarding(userId: string, prisma: PrismaClient) {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      }
+    });
+  }
 }
