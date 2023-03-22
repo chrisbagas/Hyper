@@ -4,9 +4,8 @@ import { api } from "../../../utils/api"
 import { useRouter } from 'next/router'
 import Link from "next/link"
 import React, { useState } from "react"
-import { useSession } from "next-auth/react"
 import { ArrowLeftIcon, EyeIcon, FolderPlusIcon, LinkIcon, PaperAirplaneIcon } from "@heroicons/react/24/solid"
-import { CommunityPostStatus } from "@prisma/client"
+import { CommunityPostStatus, CommunityPostType, ContentType } from "@prisma/client"
 
 const CreateGuides: NextPage = () => {
   const router = useRouter()
@@ -14,25 +13,64 @@ const CreateGuides: NextPage = () => {
   const postMutation = api.guides.create.useMutation()
 
   const [post, setPost] = useState({
-    type: null,
-    status: null,
+    type: undefined,
     title: "",
     content: "",
-    headerType: null,
+    headerType: undefined,
     headerUrl: "",
     gameId: gameId,
   })
+  const [errorMessage, setErrorMessage] = useState('')
+  const [success, setSuccess] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>) => {
+    setErrorMessage('')
     const value = event.target.value
+    console.log(value)
     setPost({
       ...post,
       [event.target.id]: value,
     })
   }
 
-  const savePost = (event: React.MouseEventHandler<HTMLButtonElement>, status: CommunityPostStatus) => {
+  const savePost = async (event: React.SyntheticEvent, status: CommunityPostStatus, isPreview: boolean) => {
+    event.preventDefault()
+    setErrorMessage('')
+    setIsSubmitting(true)
+    if (!post.type||!post.title||!post.content||!post.headerType||!post.headerUrl){
+      setErrorMessage('Please fill in all fields')
+      setIsSubmitting(false)
+      return
+    }
     
+    try {
+      const result = await postMutation.mutateAsync({
+        type: post.type,
+        status: status,
+        title: post.title,
+        content: post.content,
+        headerType: post.headerType,
+        headerUrl: post.headerUrl,
+        gameId: post.gameId as string,
+      })
+
+      console.log(result)
+
+      setSuccess(true)
+      let redirectTo = `/${gameId}/your-guides`
+      if (isPreview){
+        redirectTo = `/${gameId}/guides/${result.id}`
+      }
+      setTimeout(() => {
+        router.push(redirectTo)
+      }, 1000)
+    } catch (error) {
+      setErrorMessage('Something went wrong! Please try again later')
+      setIsSubmitting(false)
+      postMutation.reset()
+    }
   }
 
   return (
@@ -47,9 +85,9 @@ const CreateGuides: NextPage = () => {
         <div className="flex justify-between px-8 pt-8">
           <Link href="/"> <button className="flex btn btn-ghost normal-case gap-2"><ArrowLeftIcon className="w-4"/> Go Back</button> </Link>
           <div className="flex justify-between gap-2">
-            <button className="flex btn btn-ghost normal-case gap-2"><FolderPlusIcon className="w-4"/> Save as Draft</button>
-            <button className="flex btn btn-ghost normal-case gap-2"><EyeIcon className="w-4"/> Save & Preview</button>
-            <button className="flex btn btn-primary bg-blue-700 normal-case gap-2"><PaperAirplaneIcon className="w-4"/> Save Changes</button>
+            <button className="flex btn btn-ghost normal-case gap-2" onClick={(e)=>savePost(e, CommunityPostStatus.DRAFT, false)}><FolderPlusIcon className="w-4"/> Save as Draft</button>
+            <button className="flex btn btn-ghost normal-case gap-2" onClick={(e)=>savePost(e, CommunityPostStatus.DRAFT, true)}><EyeIcon className="w-4"/> Save & Preview</button>
+            <button className="flex btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2" onClick={()=>setIsModalOpen(true)}><PaperAirplaneIcon className="w-4"/> Save & Publish Post</button>
           </div>
         </div>
 
@@ -57,7 +95,14 @@ const CreateGuides: NextPage = () => {
           <label className="label">
             <span className="label-text">Post Title</span>
           </label>
-          <input type="text" placeholder="How to Win a match" className="input input-bordered w-full" />
+          <input 
+            type="text" 
+            id="title"
+            placeholder="How to Win a match" 
+            className="input input-bordered w-full" 
+            value={post.title} 
+            onChange={handleChange}
+          />
         </div>
 
         <div className="flex justify-between px-8 gap-6">
@@ -65,10 +110,10 @@ const CreateGuides: NextPage = () => {
             <label className="label">
               <span className="label-text">Header Attachment Type</span>
             </label>
-            <select className="select w-full">
-              <option disabled selected>Select header type</option>
-              <option>Image</option>
-              <option>Video</option>
+            <select id="headerType" className="select w-full" value={post.headerType} onChange={handleChange}>
+              <option disabled selected value={undefined}>Select header type</option>
+              <option value={ContentType.IMAGE}>Image</option>
+              <option value={ContentType.VIDEO}>Video</option>
             </select>
             <label className="label">
               <span className="label-text-alt">Please select the attachment type</span>
@@ -81,7 +126,14 @@ const CreateGuides: NextPage = () => {
             </label>
             <label className="input-group">
               <span><LinkIcon className="w-4"/></span>
-              <input type="text" placeholder="www.medal.tv/001ojiad0983q09" className="input input-bordered w-full" />
+              <input 
+                type="text" 
+                id="headerUrl"
+                placeholder="www.medal.tv/001ojiad0983q09" 
+                className="input input-bordered w-full" 
+                value={post.headerUrl}
+                onChange={handleChange}
+              />
             </label>
             <label className="label">
               <span className="label-text-alt">Only supports link or files provided by selected attachment type</span>
@@ -93,10 +145,10 @@ const CreateGuides: NextPage = () => {
           <label className="label">
             <span className="label-text">Select Post Type</span>
           </label>
-          <select className="select w-full">
-            <option disabled selected>Select post type</option>
-            <option>Clip</option>
-            <option>Guide</option>
+          <select id="type" className="select w-full" value={post.type} onChange={handleChange}>
+            <option disabled selected value={undefined}>Select post type</option>
+            <option value={CommunityPostType.CLIP}>Clip</option>
+            <option value={CommunityPostType.GUIDE}>Guide</option>
           </select>
         </div>
 
@@ -104,12 +156,54 @@ const CreateGuides: NextPage = () => {
           <label className="label">
             <span className="label-text">Post Content</span>
           </label>
-          <textarea className="textarea" placeholder="This post contains a match replay and ..."></textarea>
+          <textarea 
+            id="content"
+            className="textarea" 
+            placeholder="This post contains a match replay and ..."
+            value={post.content}
+            onChange={handleChange}
+          >
+          </textarea>
         </div>
+        
+        <div className="toast">
+          {errorMessage && <div className="alert alert-error shadow-lg px-8">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>{errorMessage}</span>
+            </div>
+          </div>}
 
+          {success && <div className="alert alert-success shadow-lg px-8">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <span>Post create successfully</span>
+            </div>
+          </div>}
+        </div>
       </div>
 
       
+      
+      <input type="checkbox" id="my-modal" className="modal-toggle" />
+      <div className={`modal ${isModalOpen && 'modal-open'}`}>
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Save and publish post?</h3>
+          <p className="py-4">You cannot make any more changes and this action is irreversible</p>
+          <div className="modal-action">
+            <button className="btn btn-ghost normal-case gap-2" onClick={()=>setIsModalOpen(false)}>Go Back</button>
+            <button 
+              className="btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2" 
+              onClick={(e)=>{
+                setIsModalOpen(false)
+                savePost(e, CommunityPostStatus.PUBLISHED, false)
+              }}
+            >
+              <PaperAirplaneIcon className="w-4"/> Save & Publish Post
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
