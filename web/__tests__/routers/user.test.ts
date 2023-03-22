@@ -1,6 +1,5 @@
-import { User } from "@prisma/client";
 import { randomUUID } from "crypto";
-import { describe, expect, it, vi } from "vitest"
+import { describe, expect, it } from "vitest"
 import { appRouter } from "../../src/server/api/root";
 import prisma from "../../src/server/__mocks__/db";
 
