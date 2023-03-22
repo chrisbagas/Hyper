@@ -11,6 +11,7 @@ const PartyCreate = (props: PartyCreateData) => {
     const [name, setName] = useState("")
     const [type, setType] = useState(PartyType.Casual)
     const [visibility, setVisibility] = useState(PartyVisibility.Public)
+    const [error, setError] = useState("")
 
     const partyMutation = api.party.createParty.useMutation()
 
@@ -25,6 +26,15 @@ const PartyCreate = (props: PartyCreateData) => {
     function createParty(e: any) {
         e.preventDefault()
 
+        if (!name) {
+            setError("Please fill the party name")
+            return
+        }
+        if (name.length > 50) {
+            setError("Party name too long: must be less than 50 characters")
+            return
+        }
+
         const createPartyDTO = {
             userId: props.userId,
             gameId: props.gameId,
@@ -34,6 +44,8 @@ const PartyCreate = (props: PartyCreateData) => {
         }
         
         partyMutation.mutate(createPartyDTO)
+
+        // get party object then redirect to party detail page
     }
 
     return (
@@ -53,9 +65,12 @@ const PartyCreate = (props: PartyCreateData) => {
                             name="name"
                             type="text"
                             onChange={e => setName(e.target.value)}
-                            minLength={1}
                             maxLength={50}
                         />
+                        {error
+                            ? <p className="text-red-500">{error}</p>
+                            : <></>
+                        }
                     </div>
                     <div>
                         <h3 className="font-semibold text-xl mb-2">Party Type</h3>

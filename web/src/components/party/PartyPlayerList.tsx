@@ -12,13 +12,15 @@ const PartyPlayerList = (props: PartyPlayerListData) => {
     let i = props.partyPlayers.length
     while (i < 5) {
         partyPlayers.push(
-            <div className="flex flex-row max-w-full bg-gray-500 p-4 my-4 rounded-xl align-bottom">
-                <div className="w-12 h-12 bg-gray-200 rounded-full object-cover">
+            <>
+                <div className="flex flex-row max-w-full bg-gray-500 p-4 my-4 rounded-xl align-bottom">
+                    <div className="w-12 h-12 bg-gray-200 rounded-full object-cover">
+                    </div>
+                    <h2 className="font-semibold text-lg ml-6">
+                        Empty Slot
+                    </h2>
                 </div>
-                <h2 className="font-semibold text-lg ml-6">
-                    Empty Slot
-                </h2>
-            </div>
+            </>
         )
         i++;
     }

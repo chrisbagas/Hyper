@@ -9,7 +9,8 @@ export interface PartyPlayerData {
     kdr: number | undefined,
     winrate: number | undefined,
     profilePictureURL: string | undefined,
-    level: PartyMemberLevel
+    level: PartyMemberLevel,
+    viewedByLeader: boolean, // if the viewer is the leader, then enable the kick buttons
 }
 
 const PartyPlayer = (props: PartyPlayerData) => {
@@ -32,7 +33,7 @@ const PartyPlayer = (props: PartyPlayerData) => {
                     </h3>
                 </div>
                 </div>
-                {props.level == PartyMemberLevel.member
+                {props.viewedByLeader && props.level == PartyMemberLevel.member
                     ? <button className="btn btn-circle bg-red-600 border-red-700 hover:bg-red-700">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>

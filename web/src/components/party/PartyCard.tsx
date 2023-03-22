@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { PartyVisibility, PartyType, PartyMember } from "@prisma/client"
 import { api } from "../../utils/api";
 
@@ -10,15 +10,12 @@ export interface PartyCardData {
     minimalRank: string | undefined,
     visibility: PartyVisibility,
     type: PartyType,
-    partyMembers: PartyMember[]
+    partyMembers: PartyMember[],
+    partyIsFull: boolean
 }
 
 const PartyCard = (props: PartyCardData) => {
-    const partyIsFull = props.partyMembers.length == 5
-
     const partyMutation = api.party.joinParty.useMutation()
-
-    const [canJoin, setCanJoin] = useState(partyIsFull)
 
     function joinParty(e: any) {
         e.preventDefault()
@@ -31,7 +28,7 @@ const PartyCard = (props: PartyCardData) => {
 
         partyMutation.mutate(joinPartyDTO)
 
-        setCanJoin(false)
+        // then redirect to party detail page
     }
 
     const memberAvatars = props.partyMembers.map((partyMember) =>
@@ -44,10 +41,12 @@ const PartyCard = (props: PartyCardData) => {
     let i = props.partyMembers.length
     while (i < 5) {
         memberAvatars.push(
-            <div className="avatar">
-                <div className="w-12 rounded-full bg-gray-200">
+            <>
+                <div className="avatar">
+                    <div className="w-12 rounded-full bg-gray-200">
+                    </div>
                 </div>
-            </div>
+            </>
         )
         i++;
     }
@@ -57,15 +56,15 @@ const PartyCard = (props: PartyCardData) => {
             <div className="flex flex-col justify-start w-full max-w-4xl h-full p-8 bg-gray-700 text-white">
                 <div className="flex flex-row justify-between">
                     <div className="flex flex-row">
-                    <div className="bg-red-400 mx-2 py-1 px-2 rounded-lg text-sm">
-                        {props.visibility}
-                    </div>
-                    <div className="bg-green-400 mx-2 py-1 px-2 rounded-lg text-sm">
-                        {props.type}
-                    </div>
+                        <div className="bg-red-400 mx-2 py-1 px-2 rounded-lg text-sm">
+                            {props.visibility}
+                        </div>
+                        <div className="bg-green-400 mx-2 py-1 px-2 rounded-lg text-sm">
+                            {props.type}
+                        </div>
                     </div>
                     <div>
-                    <h3 className="opacity-50 text-xl"></h3>
+                        <h3 className="opacity-50 text-xl"></h3>
                     </div>
                 </div>
                 <div>
@@ -73,14 +72,17 @@ const PartyCard = (props: PartyCardData) => {
                         {props.title}
                     </h1>
                 </div>
-                <div className="flex flex-row">
-                    {props.minimalRank 
-                        ? <p className="text-white text-opacity-50 mr-2">
-                            Minimal Rank: {props.minimalRank} 
-                        </p> 
-                        : <></>
-                    }
-                </div>
+                {props.minimalRank 
+                    ? <>
+                        <div className="flex flex-row">
+                            <p className="text-white text-opacity-50 mr-2">
+                                Minimal Rank:
+                            </p> 
+                            {props.minimalRank}
+                        </div>
+                    </>
+                    : <></>
+                }
                 <div className="flex flex-row align-center justify-between mt-10">
                     <div className="flex flex-row">
                     <div className="bg-gray-700 p-2 rounded-lg font-bold">
@@ -99,7 +101,7 @@ const PartyCard = (props: PartyCardData) => {
                             </svg>  
                         </button>
 
-                        {canJoin
+                        {props.partyIsFull
                             ? <button className="btn bg-gray-500">Join Party</button>
                             : <button onClick={joinParty} className="btn bg-green-500 hover:bg-green-600">Join Party</button>
                         }
