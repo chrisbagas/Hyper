@@ -8,6 +8,7 @@ export interface PartyCreateData {
 }
 
 const PartyCreate = (props: PartyCreateData) => {
+    // note: kata adrian pake react hook form aja
     const [name, setName] = useState("")
     const [type, setType] = useState(PartyType.Casual)
     const [visibility, setVisibility] = useState(PartyVisibility.Public)

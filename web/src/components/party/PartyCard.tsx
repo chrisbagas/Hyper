@@ -31,6 +31,7 @@ const PartyCard = (props: PartyCardData) => {
         // then redirect to party detail page
     }
 
+    // note: kata adrian ini anti-pattern
     const memberAvatars = props.partyMembers.map((partyMember) =>
         <div className="avatar" key={partyMember.userId}>
             <div className="w-12 rounded-full">
