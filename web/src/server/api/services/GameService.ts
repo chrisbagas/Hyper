@@ -1,4 +1,4 @@
-import type { Game, PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
 
 export class GameService {
   static getAllGames(prisma: PrismaClient) {
