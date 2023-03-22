@@ -1,6 +1,7 @@
 import { discordRouter } from "./routers/discord";
 import { gameRouter } from "./routers/game";
 import { userRouter } from "./routers/user";
+import profileRouter from "./routers/profileRouter";
 import { createTRPCRouter } from "./trpc";
 import { partyRouter } from "./routers/party"
 
@@ -12,6 +13,7 @@ import { partyRouter } from "./routers/party"
 export const appRouter = createTRPCRouter({
   games: gameRouter,
   party: partyRouter,
+  profiles: profileRouter,
   users: userRouter,
   discord: discordRouter,
 });

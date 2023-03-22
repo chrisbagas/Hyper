@@ -70,6 +70,7 @@ model User {
 model Country {
   localeCode String @id
   name       String
+  imageUrl   String
   user       User[]
 }
 
