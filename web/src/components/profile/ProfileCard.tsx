@@ -9,9 +9,10 @@ interface ProfileCardProps {
 export const ProfileCard: React.FC<ProfileCardProps> = ({ connectAcc }) => {
     const router = useRouter()
     return (
+ 
         <div className="flex flex-row flex-wrap ">
 
-            {connectAcc?.data?.gameAkuns.map((game: { game: Game, gameIdentifier:String }) =>
+            {connectAcc?.data?.gameAkuns.map((game: {game:Game, gameIdentifier:string}) =>
                 <div key={game.game.id} className="card bg-base-2 shadow-xl m-4 grid  flex-grow rounded-box " onClick={() => router.push(`/result?${game.gameIdentifier}`)}>
                     <div className="card-body gap-4 lg:gap-0">
 

@@ -39,7 +39,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ data, connectAcc})
             <h3 className="mt-4 text-white">{data?.bio}</h3>
             <div className="flex flex-col sm:flex-row gap-8 mt-4">
                 {connectAcc?.data?.connected.map((acc: any) =>
-                    <div className="text-white flex gap-2">
+                    <div key={acc?.type} className="text-white flex gap-2">
 
                         {acc?.name}
                         <ArrowTopRightOnSquareIcon className="w-4" />
