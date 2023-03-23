@@ -19,7 +19,13 @@ export class UserService {
       where: {
         id
       },
-      
+      include:{
+        GameAccount:{
+          include: {
+            game: true
+          }
+        }
+      }
     })
 
     if (!user) {
@@ -30,7 +36,13 @@ export class UserService {
       id: user.id,
       username: user.username,
       name: user.name,
-      connectedGames: []
+      connectedGames: user.GameAccount.map((item)=>{
+        return {
+          gameId:item.gameId,
+          username: item.gameIdentifier,
+          game:item.game
+        }
+      })
       
     }
   }
