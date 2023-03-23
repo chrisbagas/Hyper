@@ -53,8 +53,8 @@ test_discord:
     - key:
         files:
           - discord/yarn.lock
-        paths:
-          - discord/.yarn-cache/
+      paths:
+        - discord/.yarn-cache/
   only:
     - staging
     - merge_requests
