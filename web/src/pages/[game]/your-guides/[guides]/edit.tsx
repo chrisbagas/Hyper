@@ -1,26 +1,47 @@
 import { type NextPage } from "next"
 import Head from "next/head"
-import { api } from "../../../utils/api"
+import { api } from "../../../../utils/api"
 import { useRouter } from 'next/router'
 import React, { useState } from "react"
 import { CommunityPostStatus } from "@prisma/client"
-import { GuideForm } from "../../../components/Guide/GuideForm"
+import { GuideForm, Post } from "../../../../components/Guide/GuideForm"
 
-const CreateGuides: NextPage = () => {
+const EditGuides: NextPage = () => {
   const router = useRouter()
   const gameId = router.query.game
-  const postMutation = api.guides.create.useMutation()
-
+  const postId = router.query.guides
+  const postMutation = api.guides.updatePostById.useMutation()
   const [post, setPost] = useState({
     type: undefined,
-    title: "",
-    content: "",
+    title: '',
+    content: '',
     headerType: undefined,
-    headerUrl: "",
-  })
+    headerUrl: '',
+  } as Post)
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const { isLoading, isError, error } = api.guides.getPostById.useQuery(
+    { id: postId as string }, 
+    { onSuccess: (data) => {
+      setPost({
+        type: data.type,
+        title: data.title as string,
+        content: data.content as string,
+        headerType: data.header?.type,
+        headerUrl: data.header?.url as string,
+      })
+    } })
+
+  if (isLoading) {
+    return <span>Loading...</span>
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>
+  }
+
+  
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>) => {
     setErrorMessage('')
@@ -44,6 +65,7 @@ const CreateGuides: NextPage = () => {
     
     try {
       const result = await postMutation.mutateAsync({
+        id: postId as string,
         type: post.type,
         status: status,
         title: post.title,
@@ -58,7 +80,7 @@ const CreateGuides: NextPage = () => {
       setSuccess(true)
       let redirectTo = `/${gameId}/your-guides`
       if (isPreview){
-        redirectTo = `/${gameId}/guides/${result.id}`
+        redirectTo = `/${gameId}/guides/${postId}`
       }
       setTimeout(() => {
         router.push(redirectTo)
@@ -91,4 +113,4 @@ const CreateGuides: NextPage = () => {
   )
 }
 
-export default CreateGuides
+export default EditGuides
