@@ -27,7 +27,7 @@ export const ValorantStatistic: React.FC<GameCardProps> = ({ status, accountData
             </div>
         </div>
 
-        <div className="card bg-base-2 shadow-xl m-4 flex flex-col lg:flex-row p-4 gap-y-4 lg:gap-x-4">
+        <div className="card bg-base-2 shadow-xl m-4 p-8 flex flex-col lg:flex-row p-4 gap-y-4 lg:gap-x-4">
             <div className="basis-1/4 flex flex-col gap-y-4">
 
                 <div className="flex flex-col gap-y-3 p-4 bg-base-3 rounded-lg">
@@ -84,11 +84,6 @@ export const ValorantStatistic: React.FC<GameCardProps> = ({ status, accountData
                 </div>
             </div>
         </div>
-
-        <div>{status}</div>
-        <div>{accountData.region}</div>
-
-        <CardLineChart dataset="null"> </CardLineChart>
 
         
     </div>
