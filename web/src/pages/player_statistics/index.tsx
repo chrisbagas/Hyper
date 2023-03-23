@@ -33,11 +33,8 @@ const Statistic: NextPage = () => {
 
                 </div>
                 
-       
                 <ValorantStatistic status={status} accountData={accountData} mmrData={mmrData} competitiveHistory={competitiveHistory}></ValorantStatistic>
-
-                
-                
+ 
             </div>
         </>
     );
