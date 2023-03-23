@@ -1,8 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import { Game, PrismaClient } from "@prisma/client";
 
 export interface ProfileGame {
   gameId: string
   username: string
+  game: Game
 }
 
 export interface Profile {
@@ -17,6 +18,13 @@ export class UserService {
     const user = await prisma.user.findUnique({
       where: {
         id
+      },
+      include:{
+        GameAccount:{
+          include: {
+            game: true
+          }
+        }
       }
     })
 
@@ -28,7 +36,14 @@ export class UserService {
       id: user.id,
       username: user.username,
       name: user.name,
-      connectedGames: []
+      connectedGames: user.GameAccount.map((item)=>{
+        return {
+          gameId:item.gameId,
+          username: item.gameIdentifier,
+          game:item.game
+        }
+      })
+      
     }
   }
 }
