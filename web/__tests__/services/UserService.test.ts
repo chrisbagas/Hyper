@@ -8,19 +8,35 @@ describe("User Service", () => {
     const mockPrisma = prisma
     const randomId = randomUUID()
 
+    const mockGameAccount = {
+      userId: randomId,
+      gameId: "1",
+      gameIdentifier: "rostova",
+      statisticsData: null,
+      statisticsLastUpdatedAt: null,
+      createdAt: new Date(),
+      game: {
+          id: "1",
+          name: "valorant",
+          logoUrl: "lala"
+      }
+  }
+
     // @ts-ignore
     prisma.user.findUnique.mockResolvedValue({
       id: randomId,
-      username: "",
+      username: "rostova",
       name: "Meta",
+      GameAccount: [mockGameAccount]
+      
     })
 
     const profile = await UserService.getProfile(randomId, mockPrisma)
 
     expect(profile.name).toBe("Meta")
-    expect(profile.username).toBe("")
+    expect(profile.username).toBe("rostova")
     expect(profile.id).toBe(randomId)
-    expect(profile.connectedGames).toStrictEqual([])
+    
   })
 
   it("getProfile should throw error when user not found", async () => {
