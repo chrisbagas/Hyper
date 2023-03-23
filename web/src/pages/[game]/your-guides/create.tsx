@@ -58,7 +58,7 @@ const CreateGuides: NextPage = () => {
       setSuccess(true)
       let redirectTo = `/${gameId}/your-guides`
       if (isPreview){
-        redirectTo = `/${gameId}/guides/${result.id}`
+        redirectTo = `/${gameId}/your-guides/${result.id}`
       }
       setTimeout(() => {
         router.push(redirectTo)

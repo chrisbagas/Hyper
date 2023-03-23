@@ -19,16 +19,17 @@ export interface GuideFormProps {
   onChange:(event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>)=>void,
   onSubmit:(event: React.SyntheticEvent, status: CommunityPostStatus, isPreview: boolean)=>Promise<void>,
   gameId:string,
+  postId?:string,
 }
 
-export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, isSuccess, isSubmitting, onChange, onSubmit, gameId }) => {
+export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, isSuccess, isSubmitting, onChange, onSubmit, gameId, postId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <>
       <div className="flex flex-col gap-6">
         
-        <GuideTopButtonGroup className="px-8" returnUrl={`/${gameId}/your-guides`}>
+        <GuideTopButtonGroup className="px-8" returnUrl={postId ? `/${gameId}/your-guides/${postId}` : `/${gameId}/your-guides`}>
           <div className="flex justify-between gap-2">
             <button className={`flex btn btn-ghost normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={(e)=>onSubmit(e, CommunityPostStatus.DRAFT, false)}><FolderPlusIcon className="w-4"/> Save as Draft</button>
             <button className={`flex btn btn-ghost normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={(e)=>onSubmit(e, CommunityPostStatus.DRAFT, true)}><EyeIcon className="w-4"/> Save & Preview</button>

@@ -1,143 +1,145 @@
-import { CommunityPostType, ContentType } from "@prisma/client";
+import { CommunityPostStatus, ContentType } from "@prisma/client";
 import { NextPage } from "next";
 import Head from "next/head"
 import { GuideContent } from "../../../../components/Guide/GuideContent"
 import { GuideTopButtonGroup } from "../../../../components/Guide/GuideTopButtonGroup"
-import { PaperAirplaneIcon, PencilSquareIcon } from "@heroicons/react/24/solid"
+import { PaperAirplaneIcon, PencilSquareIcon, ShareIcon } from "@heroicons/react/24/solid"
+import { useRouter } from "next/router";
+import { api } from "../../../../utils/api";
+import React, { useState } from "react";
 
-const mdExample = `# A demo of \`react-markdown\`
-
-\`react-markdown\` is a markdown component for React.
-
-👉 Changes are re-rendered as you type.
-
-👈 Try writing some markdown on the left.
-
-## Overview
-
-* Follows [CommonMark](https://commonmark.org)
-* Optionally follows [GitHub Flavored Markdown](https://github.github.com/gfm/)
-* Renders actual React elements instead of using \`dangerouslySetInnerHTML\`
-* Lets you define your own components (to render \`MyHeading\` instead of \`h1\`)
-* Has a lot of plugins
-
-## Table of contents
-
-Here is an example of a plugin in action
-([\`remark-toc\`](https://github.com/remarkjs/remark-toc)).
-This section is replaced by an actual table of contents.
-
-## Syntax highlighting
-
-Here is an example of a plugin to highlight code:
-[\`rehype-highlight\`](https://github.com/rehypejs/rehype-highlight).
-
-\`\`\`js
-import React from 'react'
-import ReactDOM from 'react-dom'
-import ReactMarkdown from 'react-markdown'
-import rehypeHighlight from 'rehype-highlight'
-
-ReactDOM.render(
-  <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{'# Your markdown here'}</ReactMarkdown>,
-  document.querySelector('#content')
-)
-\`\`\`
-
-Pretty neat, eh?
-
-## GitHub flavored markdown (GFM)
-
-For GFM, you can *also* use a plugin:
-[\`remark-gfm\`](https://github.com/remarkjs/react-markdown#use).
-It adds support for GitHub-specific extensions to the language:
-tables, strikethrough, tasklists, and literal URLs.
-
-These features **do not work by default**.
-👆 Use the toggle above to add the plugin.
-
-| Feature    | Support              |
-| ---------: | :------------------- |
-| CommonMark | 100%                 |
-| GFM        | 100% w/ \`remark-gfm\` |
-
-~~strikethrough~~
-
-* [ ] task list
-* [x] checked item
-
-https://example.com
-
-## HTML in markdown
-
-⚠️ HTML in markdown is quite unsafe, but if you want to support it, you can
-use [\`rehype-raw\`](https://github.com/rehypejs/rehype-raw).
-You should probably combine it with
-[\`rehype-sanitize\`](https://github.com/rehypejs/rehype-sanitize).
-
-<blockquote>
-  👆 Use the toggle above to add the plugin.
-</blockquote>
-
-## Components
-
-You can pass components to change things:
-
-\`\`\`js
-import React from 'react'
-import ReactDOM from 'react-dom'
-import ReactMarkdown from 'react-markdown'
-import MyFancyRule from './components/my-fancy-rule.js'
-
-ReactDOM.render(
-  <ReactMarkdown
-    components={{
-      // Use h2s instead of h1s
-      h1: 'h2',
-      // Use a component instead of hrs
-      hr: ({node, ...props}) => <MyFancyRule {...props} />
-    }}
-  >
-    # Your markdown here
-  </ReactMarkdown>,
-  document.querySelector('#content')
-)
-\`\`\`
-
-## More info?
-
-Much more info is available in the
-[readme on GitHub](https://github.com/remarkjs/react-markdown)!
-
-***
-
-A component by [Espen Hovlandsdal](https://espen.codes/)`
 
 const ShowMyGuides: NextPage = () => {
+  const router = useRouter()
+  const gameId = router.query.game
+  const postId = router.query.guides
+  const postMutation = api.guides.updatePostById.useMutation()
+  const { data, isError, isLoading, error } = api.guides.getPostById.useQuery({ id: postId as string })
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
 
+  if (isLoading) {
+    return <span>Loading...</span>
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>
+  }
+
+  const publishPost = async (event: React.SyntheticEvent) => {
+    event.preventDefault()
+    setErrorMessage('')
+    setIsSubmitting(true)
+    
+    try{
+      await postMutation.mutateAsync({
+        id: postId as string,
+        type: data.type,
+        status: CommunityPostStatus.PUBLISHED,
+        title: data.title,
+        content: data.content as string,
+        headerType: data.header?.type as ContentType,
+        headerUrl: data.header?.url as string,
+        gameId: gameId as string,
+      })
+
+      setIsSuccess(true)
+      
+      setTimeout(()=>{
+        router.reload()
+      }, 1000)
+    } catch (error) {
+      setErrorMessage('Something went wrong! Please try again later')
+      setIsSubmitting(false)
+      postMutation.reset()
+    }
+  }
 
   return (
     <>
       <Head>
-        <title>Title</title>
+        <title>{data.title}</title>
         <meta name="description" content="Generated by create-t3-app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <GuideTopButtonGroup returnUrl="/" className="px-16 pb-6">
+      {data.status === CommunityPostStatus.DRAFT && <GuideTopButtonGroup returnUrl={`/${gameId}/your-guides`} className="px-16 pb-6">
         <div className="flex justify-between gap-2">
-          <button className={`flex btn btn-ghost normal-case gap-2`}><PencilSquareIcon className="w-4"/> Edit Post</button>
-          <button className={`flex btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2`}><PaperAirplaneIcon className="w-4"/> Publish Post</button>
+          <button className={`flex btn btn-ghost normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={()=>router.push(`/${gameId}/your-guides/${postId}/edit`)}><PencilSquareIcon className="w-4"/> Edit Post</button>
+          <button className={`flex btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={()=>setIsModalOpen(true)}><PaperAirplaneIcon className="w-4"/> Publish Post</button>
         </div>
-      </GuideTopButtonGroup>
+      </GuideTopButtonGroup>}
+
+      {data.status === CommunityPostStatus.PUBLISHED && <GuideTopButtonGroup returnUrl={`/${gameId}/your-guides`} className="px-16 pb-6">
+        <button 
+          className="flex btn btn-ghost normal-case gap-2" 
+          onClick={()=>{
+            navigator.clipboard.writeText(`${window.location.host}/${gameId}/guides/${postId}`)
+            setIsTooltipOpen(true)
+            setTimeout(()=>{
+              setIsTooltipOpen(false)
+            }, 2000)
+          }
+        }>
+          Share This Post <ShareIcon className="w-4"/>
+        </button>
+      </GuideTopButtonGroup>}
 
       <GuideContent 
-        type={CommunityPostType.GUIDE}
-        title="Top 10 Valorant Aiming Trick Wall Hack Accusation Guranteed"
-        content={mdExample}
-        headerType={ContentType.IMAGE}
-        headerUrl="https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg"
+        type={data?.type}
+        title={data?.title}
+        content={data?.content as string}
+        headerType={data?.header?.type as ContentType}
+        headerUrl={data?.header?.url as string}
+        author={data?.authorName as string}
+        postedAt={data?.updatedAt}
       />
+
+      <div className="toast px-16">
+        {isTooltipOpen && <div className="alert alert-info shadow-lg">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current flex-shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Copied to clipboard.</span>
+          </div>
+        </div>}
+
+        {errorMessage && <div className="alert alert-error shadow-lg px-8">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>{errorMessage}</span>
+          </div>
+        </div>}
+
+        {isSuccess && <div className="alert alert-success shadow-lg px-8">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>Post published successfully</span>
+          </div>
+        </div>}
+      </div>
+
+      <input type="checkbox" id="my-modal" className="modal-toggle" />
+      <div className={`modal ${isModalOpen && 'modal-open'}`}>
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Publish this post?</h3>
+          <p className="py-4">You cannot make any more changes and this action is irreversible</p>
+          <div className="modal-action">
+            <button className="btn btn-ghost normal-case gap-2" onClick={()=>setIsModalOpen(false)}>Go Back</button>
+            <button 
+              className="btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2" 
+              onClick={(e)=>{
+                setIsModalOpen(false)
+                publishPost(e)
+              }}
+            >
+              <PaperAirplaneIcon className="w-4"/> Publish Post
+            </button>
+          </div>
+        </div>
+      </div>
 
     </>
   )

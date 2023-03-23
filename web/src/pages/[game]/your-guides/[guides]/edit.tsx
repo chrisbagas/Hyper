@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import React, { useState } from "react"
 import { CommunityPostStatus } from "@prisma/client"
 import { GuideForm, Post } from "../../../../components/Guide/GuideForm"
+import ErrorPage from 'next/error'
 
 const EditGuides: NextPage = () => {
   const router = useRouter()
@@ -31,7 +32,9 @@ const EditGuides: NextPage = () => {
         headerType: data.header?.type,
         headerUrl: data.header?.url as string,
       })
+      setIsPublished(true)
     } })
+  const [isPublished, setIsPublished] = useState(false)
 
   if (isLoading) {
     return <span>Loading...</span>
@@ -41,7 +44,9 @@ const EditGuides: NextPage = () => {
     return <span>Error: {error.message}</span>
   }
 
-  
+  if (isPublished) {
+    return <ErrorPage statusCode={404}/>
+  }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>) => {
     setErrorMessage('')
@@ -80,7 +85,7 @@ const EditGuides: NextPage = () => {
       setSuccess(true)
       let redirectTo = `/${gameId}/your-guides`
       if (isPreview){
-        redirectTo = `/${gameId}/guides/${postId}`
+        redirectTo = `/${gameId}/your-guides/${postId}`
       }
       setTimeout(() => {
         router.push(redirectTo)
@@ -108,6 +113,7 @@ const EditGuides: NextPage = () => {
         onChange={handleChange}
         onSubmit={savePost}
         gameId={gameId as string}
+        postId={postId as string}
       />
     </>
   )
