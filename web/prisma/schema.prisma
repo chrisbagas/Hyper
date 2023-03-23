@@ -51,32 +51,35 @@ model VerificationToken {
 }
 
 model User {
-  id            String           @id @default(cuid())
-  username      String?          @unique
-  email         String           @unique
-  image         String
-  emailVerified Boolean?
-  name          String?
-  bio           String?
-  countryCode   String?
-  country       Country?         @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
-  accounts      Account[]
-  sessions      Session[]
-  GameAccount   GameAccount[]
+  id             String           @id @default(cuid())
+  username       String?          @unique
+  email          String           @unique
+  image          String
+  emailVerified  Boolean?
+  name           String?
+  bio            String?
+  countryCode    String?
+  country        Country?         @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
+  partyMember    PartyMember?
+  accounts       Account[]
+  sessions       Session[]
+  GameAccount    GameAccount[]
   communityPosts CommunityPost[]
 }
 
 model Country {
   localeCode String @id
   name       String
+  imageUrl   String
   user       User[]
 }
 
 model Game {
-  id             String          @id @default(cuid())
-  name           String
-  logoUrl        String
-  GameAccount    GameAccount[]
+  id           String        @id @default(cuid())
+  name         String
+  logoUrl      String
+  GameAccount  GameAccount[]
+  parties      Party[]
   communityPosts CommunityPost[]
 }
 
@@ -91,6 +94,42 @@ model GameAccount {
   user                    User      @relation(fields: [userId], references: [id])
 
   @@id([userId, gameId])
+}
+
+model Party {
+  id                String           @id @default(cuid())
+  gameId            String
+  partyTitle        String
+  partyType         PartyType?
+  partyVisibility   PartyVisibility?
+  discordInviteLink String?
+  game              Game             @relation(fields: [gameId], references: [id])
+  partyMembers      PartyMember[]
+}
+
+enum PartyType {
+  Competitive
+  Casual
+}
+
+enum PartyVisibility {
+  Public
+  Private
+}
+
+model PartyMember {
+  userId  String           @unique
+  partyId String
+  level   PartyMemberLevel @default(member)
+  user    User             @relation(fields: [userId], references: [id])
+  party   Party            @relation(fields: [partyId], references: [id])
+  
+  @@id([userId, partyId])
+}
+
+enum PartyMemberLevel {
+  member
+  leader
 }
 
 model CommunityPost {

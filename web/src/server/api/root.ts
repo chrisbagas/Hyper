@@ -1,7 +1,10 @@
+import { discordRouter } from "./routers/discord";
 import { gameRouter } from "./routers/game";
 import guideRouter from "./routers/guideRouter";
 import { userRouter } from "./routers/user";
+import profileRouter from "./routers/profileRouter";
 import { createTRPCRouter } from "./trpc";
+import { partyRouter } from "./routers/party"
 
 /**
  * This is the primary router for your server.
@@ -10,7 +13,10 @@ import { createTRPCRouter } from "./trpc";
  */
 export const appRouter = createTRPCRouter({
   games: gameRouter,
+  party: partyRouter,
+  profiles: profileRouter,
   users: userRouter,
+  discord: discordRouter,
   guides: guideRouter
 });
 
