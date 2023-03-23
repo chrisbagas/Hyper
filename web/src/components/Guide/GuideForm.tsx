@@ -1,7 +1,7 @@
 import { CommunityPostStatus, CommunityPostType, ContentType } from "@prisma/client"
 import React, { useState } from "react"
-import { ArrowLeftIcon, EyeIcon, FolderPlusIcon, LinkIcon, PaperAirplaneIcon } from "@heroicons/react/24/solid"
-import Link from "next/link"
+import { EyeIcon, FolderPlusIcon, LinkIcon, PaperAirplaneIcon } from "@heroicons/react/24/solid"
+import { GuideTopButtonGroup } from "./GuideTopButtonGroup"
 
 export interface Post {
   type:CommunityPostType|undefined,
@@ -27,14 +27,14 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
   return (
     <>
       <div className="flex flex-col gap-6">
-        <div className="flex justify-between px-8 pt-8">
-          <Link href={`/${gameId}/your-guides`}> <button className="flex btn btn-ghost normal-case gap-2"><ArrowLeftIcon className="w-4"/> Go Back</button> </Link>
+        
+        <GuideTopButtonGroup className="px-8" returnUrl={`/${gameId}/your-guides`}>
           <div className="flex justify-between gap-2">
             <button className={`flex btn btn-ghost normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={(e)=>onSubmit(e, CommunityPostStatus.DRAFT, false)}><FolderPlusIcon className="w-4"/> Save as Draft</button>
             <button className={`flex btn btn-ghost normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={(e)=>onSubmit(e, CommunityPostStatus.DRAFT, true)}><EyeIcon className="w-4"/> Save & Preview</button>
             <button className={`flex btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={()=>setIsModalOpen(true)}><PaperAirplaneIcon className="w-4"/> Save & Publish Post</button>
           </div>
-        </div>
+        </GuideTopButtonGroup>
 
         <div className="form-control w-full px-8">
           <label className="label">
