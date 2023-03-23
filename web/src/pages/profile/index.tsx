@@ -5,13 +5,14 @@ import { useRouter } from 'next/router'
 import Link from "next/link";
 import React, { useEffect } from "react"
 import { useSession } from "next-auth/react"
-import { ArrowLeftIcon, PencilSquareIcon } from "@heroicons/react/24/solid"
+import { ArrowLeftIcon, PencilSquareIcon} from "@heroicons/react/24/solid"
+import { ProfileHeader } from "../../components/profile/ProfileHeader";
 
 const Statistic: NextPage = () => {
-
     const { data, refetch } = api.profiles.getProfile.useQuery()
+    const connectAcc = api.profiles.getConnectionAccount.useQuery()
     const session = useSession()
-    
+
     useEffect(() => {
         refetch()
     }, [session])
@@ -26,57 +27,57 @@ const Statistic: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="flex justify-between mx-16 pt-8">
-            <Link href="/"> <button className="flex btn btn-ghost normal-case gap-2 text-white"><ArrowLeftIcon className="w-4"/> Go Back</button> </Link>
+                <Link href="/"> <button className="flex btn btn-ghost normal-case gap-2 text-white"><ArrowLeftIcon className="w-4" /> Go Back</button> </Link>
 
-            <Link href="/profile/edit"><button className="btn btn-primary bg-blue-700 normal-case flex gap-2 text-white"><PencilSquareIcon className="w-4"/>Edit Profile</button></Link>
+                <Link href="/profile/edit"><button className="btn btn-primary bg-blue-700 normal-case flex gap-2 text-white"><PencilSquareIcon className="w-4" />Edit Profile</button></Link>
 
 
             </div>
 
             <div className="mx-16">
-                <div className="flex flex-col sm:flex-row gap-4">
-                    <div className=" mt-4">
-                        <div className="avatar">
-                            <div className=" rounded-full h-24 w-24">
-                                <img src={data?.image} />
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className=" ml-8 mt-4" >
-                        <h1 className="text-4xl font-bold font text-white">
-                            {data?.username}
-                        </h1>
-                        <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                            <div className="flex flex-col sm:flex-row ">
-                                <img src= {data?.country?.imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Flag_of_the_United_Nations.svg/1280px-Flag_of_the_United_Nations.svg.png"} className="h-10 w-16" />
-                                <div className="divider lg:divider-horizontal "></div>
-                                <div className="flex flex-row items-center gap-2">
-                                <div className="badge badge-lg border-none text-neutral-0 font-normal bg-accent-6 text-sm">Casual Gamer</div>
-                            </div>
-                            </div>
-                            
-
-                            <div className="flex flex-row items-center gap-2">
-                                <div className="badge badge-lg border-none text-neutral-0 font-normal bg-yellow-500 text-sm">Content Creator</div>
-                            </div>
-
-                        </div>
-
-                        <h3 className="mt-4 text-white">{data?.bio}</h3>
-                        
-                    </div>
-
-                </div>
+                <ProfileHeader data={data} connectAcc={connectAcc}/>
 
 
                 <div className="tabs my-4 ">
                     <a className="tab tab-bordered tab-active">Overview</a>
 
                 </div>
+                <div className="flex flex-row flex-wrap ">
+
+                    {connectAcc?.data?.gameAkuns.map(game =>
+                        <div key={game.game.id} className="card bg-base-2 shadow-xl m-4 grid  flex-grow rounded-box " onClick={() => router.push(`/result?${game.gameIdentifier}`)}>
+                            <div className="card-body gap-4 lg:gap-0">
+
+                                <div className="flex flex-row gap-6">
+                                    <figure>
+                                        <img className="bg-white rounded-md w-16 h-16" src={game.game.logoUrl} />
+                                    </figure>
+
+                                    <div className="flex flex-col gap-2">
+                                        <h2 className="card-title text-neutral-0 font-bold">{game.game.name}</h2>
+
+                                        <div className="flex flex-col sm:flex-row gap-4">
+
+                                            <div className="flex flex-row items-center gap-2">
+
+                                                <div className="badge badge-lg border-none text-neutral-0 font-normal bg-blue-500 text-sm">First-Person Shooter</div>
+                                            </div>
+
+                                            <div className="flex flex-row items-center gap-2">
+                                                <div className="badge badge-lg border-none text-neutral-0 font-normal bg-accent-6 text-sm">Competitive</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                </div>
 
 
-                
+
 
             </div>
         </>
