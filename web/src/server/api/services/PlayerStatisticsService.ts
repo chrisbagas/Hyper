@@ -39,7 +39,9 @@ export class PlayerStatisticsService {
             "mmrData": {
                 "current_rank":"",
                 "elo":0,
-                "rank_image":""
+                "current_rank_image":"",
+                "highest_rank":"",
+                "highest_rank_image":""
             },
             "competitiveHistory": [
                 
@@ -57,12 +59,11 @@ export class PlayerStatisticsService {
 
         valorantData.mmrData.current_rank = mmrData.data.current_data.currenttierpatched
         valorantData.mmrData.elo = mmrData.data.current_data.elo
-        valorantData.mmrData.rank_image = mmrData.data.current_data.images.large
+        valorantData.mmrData.current_rank_image = mmrData.data.current_data.images.large
+        valorantData.mmrData.highest_rank = mmrData.data.highest_rank.patched_tier
+        valorantData.mmrData.highest_rank_image = "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/" + mmrData.data.highest_rank.tier + "/largeicon.png"
 
-        var counter = 0
         for (let i = 0; i < 5; i++) {
-            if (counter == 5) break
-
             var item = mmrHistory.data[i];
             var item2 = matchHistory.data[i].players.all_players;
 
@@ -72,22 +73,27 @@ export class PlayerStatisticsService {
                     break
                 }
             }
-
-            var victory_boolean = ""
-            if (item.mmr_change_to_last_game > 0) {
-                victory_boolean = "true"
-            } else victory_boolean = "false"
+            
+            var player_team = item2.team.toLowerCase()
+            var teams = matchHistory.data[i].teams
+            var victory_boolean = teams[player_team].has_won
+            var rounds_won = teams[player_team].rounds_won
+            var rounds_lost = teams[player_team].rounds_lost
 
             valorantData.competitiveHistory.push({
                 "rank": item.currenttierpatched,
                 "rank_image": item.images.large,
                 "elo_change": item.mmr_change_to_last_game,
+                "map_name": matchHistory.data[i].metadata.map,
                 "kills": item2.stats.kills,
                 "deaths": item2.stats.deaths,
                 "assists": item2.stats.assists,
+                "kd": Math.round(item2.stats.kills / item2.stats.deaths * 10) / 10,
                 "headshot_rate": Math.round(item2.stats.headshots / (item2.stats.headshots + item2.stats.bodyshots + item2.stats.legshots) * 100),
                 "agent_image": item2.assets.agent.small,
-                "victory": victory_boolean
+                "victory": victory_boolean,
+                "rounds_won": rounds_won,
+                "rounds_lost": rounds_lost
             });
 
             counter++
