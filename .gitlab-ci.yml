@@ -18,7 +18,7 @@ cache-web-packages:
       policy: push
   script:
     - cd web/
-    - yarn
+    - yarn install --cache-folder .yarn-cache
   only:
     refs:
       - push
@@ -34,6 +34,10 @@ test_web:
       paths:
         - web/.yarn-cache/
       policy: pull
+  only:
+    - staging
+    - merge_requests
+    - main
   artifacts:
     paths:
       - web/coverage/
