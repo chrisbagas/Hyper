@@ -12,7 +12,7 @@ import Head from "next/head";
 
 
 const Statistic: NextPage = () => {
-    const [valorantData, setValorantData] = useState({});
+    const [valorantData, setValorantData] = useState({"status":0, "accountData":"", mmrData:"", competitiveHistory:[""]});
     const router = useRouter()
     const { id } = router.query
     const riot_id = Array.isArray(id) ? id[0]?.split(",") : id?.split(",");
