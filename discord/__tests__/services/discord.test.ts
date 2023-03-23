@@ -56,4 +56,36 @@ describe("DiscordService createChannel method", () => {
 
     expect(channel?.createInvite).toHaveBeenCalledOnce()
   })
+
+  it("should return channel data", async () => {
+    // @ts-ignore
+    client.guilds.fetch.mockResolvedValue(guild);
+    // @ts-ignore
+    guild.channels.create.mockResolvedValue(channel);
+
+    guild.id = "test"
+    channel.id = "test"
+    // @ts-ignore
+    channel.name = "test"
+    // @ts-ignore
+    channel.userLimit = 5
+    // @ts-ignore
+    channel.createInvite.mockResolvedValue({
+      url: "test"
+    })
+
+    const data = await DiscordService.createChannel({
+      name: "test",
+      authorizedUserIds: ["test-1"]
+    })
+
+    expect(data).toStrictEqual({
+      id: "test",
+      guildId: "test",
+      name: "test",
+      userLimit: 5,
+      inviteLink: "test",
+    })
+
+  })
 })
