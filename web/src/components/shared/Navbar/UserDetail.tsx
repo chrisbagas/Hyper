@@ -58,7 +58,7 @@ const AuthorizedUserDetail: React.FC = () => {
           ) : (
             <div className="flex flex-col gap-2">
               {data?.connectedGames.map(connectGame =>
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div key={connectGame.gameId} className="flex flex-col sm:flex-row gap-4">
                     <div className="text-white flex gap-2">
                       <img src={connectGame.game.logoUrl} className="w-5 h-5" />
                       {connectGame.username}
