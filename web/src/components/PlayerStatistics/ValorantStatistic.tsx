@@ -1,5 +1,6 @@
 import React from "react"
 import { CardLineChart } from "../shared/Charts/CardLineChart";
+import { ValorantMatchHistory } from "./ValorantMatchHistory";
 
 export interface GameCardProps {
     status:number
@@ -26,17 +27,61 @@ export const ValorantStatistic: React.FC<GameCardProps> = ({ status, accountData
             </div>
         </div>
 
-        <div className="card bg-base-2 shadow-xl m-4 flex flex-col md:flex-row p-4 gap-y-4 md:gap-x-4">
+        <div className="card bg-base-2 shadow-xl m-4 flex flex-col lg:flex-row p-4 gap-y-4 lg:gap-x-4">
             <div className="basis-1/4 flex flex-col gap-y-4">
-                <div className="flex flex-col gap-y-4 p-4 bg-base-3 rounded-lg">
+
+                <div className="flex flex-col gap-y-3 p-4 bg-base-3 rounded-lg">
                     <h3 className="text-sm font-bold text-base-5">Player Profile</h3>
+                    <div className="badge badge-lg border-none text-neutral-0 font-normal bg-accent-0 text-sm uppercase">{ accountData.tag }</div>
+                    <div className="flex flex-col gap-y-2">
+                        <h2 className="text-xl font-bold text-neutral-0">{ accountData.name }</h2>
+                        <div className="flex flex-row gap-x-1">
+                            <h2 className="text-sm text-base-5">Account Level:</h2>
+                            <p className="text-sm font-bold text-base-5">{ accountData.account_level }</p>
+                        </div>
+                        <div className="flex flex-row gap-x-1">
+                            <h2 className="text-sm text-base-5">Region:</h2>
+                            <p className="text-sm font-bold text-base-5 uppercase">{ accountData.region }</p>
+                        </div>
+                    </div>    
                 </div>
-                <div>
+
+                <div className="flex flex-col gap-y-3 p-4 bg-base-3 rounded-lg">
                     <h3 className="text-sm font-bold text-base-5">Rank History</h3>
+
+                    <div className="flex flex-col gap-y-2 p-3 bg-base-4 rounded-lg">
+                        <p className="text-sm text-neutral-0">Current Rating</p>
+                        <div className="flex flex-row gap-x-2 items-center">
+                            <img className="bg-white rounded-md w-12 h-12" src={ mmrData.current_rank_image } />
+                            <div className="flex flex-col">
+                                <h2 className="text-xl font-bold text-neutral-0">{ mmrData.current_rank }</h2>
+                                <p className="text-sm text-base-5">ELO: { mmrData.elo }</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-y-2 p-3 rounded-lg">
+                        <p className="text-sm text-neutral-0">Peak Rating</p>
+                        <div className="flex flex-row gap-x-2 items-center">
+                            <img className="bg-white rounded-md w-8 h-8" src={ mmrData.highest_rank_image } />
+                            <h2 className="text-lg font-bold text-neutral-0">{ mmrData.highest_rank }</h2>
+                        </div>
+                    </div>
                 </div>
+
             </div>
-            <div className="basis-3/4">
-                a
+            <div className="basis-3/4 flex flex-col gap-y-4">
+                <h1 className="text-2xl font-bold text-neutral-0">Competitive History</h1>
+                <div className="flex flex-col gap-y-3 p-4 bg-base-3 rounded-lg">
+                    <h3 className="text-sm font-bold text-base-5">Match History</h3>
+
+                    {competitiveHistory?.map(match => 
+                    
+                        <ValorantMatchHistory key={match.index} match={ match }> </ValorantMatchHistory>
+                    
+                    )}
+
+                </div>
             </div>
         </div>
 
