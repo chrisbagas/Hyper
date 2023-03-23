@@ -35,7 +35,7 @@ export const ValorantMatchHistory: React.FC<ValorantMatchHistoryProps> = ({ matc
                     <div className="grid grid-cols-4 col-span-2 gap-x-4 items-center">
                         <div className="flex flex-col">
                             <p className="text-xs text-base-4">Score</p>
-                            <h1 className="text-base font-bold text-neutral-0">{ match.rounds_won }/{ match.rounds_lost }</h1>
+                            <h1 className="text-base font-bold text-neutral-0">{ match.rounds_won }:{ match.rounds_lost }</h1>
                         </div>
                         <div className="flex flex-col">
                             <p className="text-xs text-base-4">K/D/A</p>
@@ -47,7 +47,7 @@ export const ValorantMatchHistory: React.FC<ValorantMatchHistoryProps> = ({ matc
                         </div>
                         <div className="flex flex-col">
                             <p className="text-xs text-base-4">Headshot</p>
-                            <h1 className="text-base font-bold text-neutral-0">{ match.headshot_rate }</h1>
+                            <h1 className="text-base font-bold text-neutral-0">{ match.headshot_rate }%</h1>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@ export const ValorantMatchHistory: React.FC<ValorantMatchHistoryProps> = ({ matc
                     <div className="grid grid-cols-4 col-span-2 gap-x-4 items-center">
                         <div className="flex flex-col">
                             <p className="text-xs text-base-4">Score</p>
-                            <h1 className="text-base font-bold text-neutral-0">{ match.rounds_won }/{ match.rounds_lost }</h1>
+                            <h1 className="text-base font-bold text-neutral-0">{ match.rounds_won }:{ match.rounds_lost }</h1>
                         </div>
                         <div className="flex flex-col">
                             <p className="text-xs text-base-4">K/D/A</p>
@@ -88,7 +88,7 @@ export const ValorantMatchHistory: React.FC<ValorantMatchHistoryProps> = ({ matc
                         </div>
                         <div className="flex flex-col">
                             <p className="text-xs text-base-4">Headshot</p>
-                            <h1 className="text-base font-bold text-neutral-0">{ match.headshot_rate }</h1>
+                            <h1 className="text-base font-bold text-neutral-0">{ match.headshot_rate }%</h1>
                         </div>
                     </div>
                 </div>

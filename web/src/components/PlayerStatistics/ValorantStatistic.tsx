@@ -32,9 +32,8 @@ export const ValorantStatistic: React.FC<GameCardProps> = ({ status, accountData
 
                 <div className="flex flex-col gap-y-3 p-4 bg-base-3 rounded-lg">
                     <h3 className="text-sm font-bold text-base-5">Player Profile</h3>
-                    <div className="badge badge-lg border-none text-neutral-0 font-normal bg-accent-0 text-sm uppercase">{ accountData.tag }</div>
                     <div className="flex flex-col gap-y-2">
-                        <h2 className="text-xl font-bold text-neutral-0">{ accountData.name }</h2>
+                        <h2 className="text-xl font-bold text-neutral-0">{ accountData.name }#{ accountData.tag }</h2>
                         <div className="flex flex-row gap-x-1">
                             <h2 className="text-sm text-base-5">Account Level:</h2>
                             <p className="text-sm font-bold text-base-5">{ accountData.account_level }</p>

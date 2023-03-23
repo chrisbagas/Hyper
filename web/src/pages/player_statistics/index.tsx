@@ -1,14 +1,32 @@
 import { type NextPage } from "next";
 // import { signIn, useSession } from "next-auth/react";
 // import { api } from "../../utils/api";
-
+import { PlayerStatisticsService } from "../../server/api/services/PlayerStatisticsService";
+import { ValorantStatistic } from "../../components/PlayerStatistics/ValorantStatistic";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 
 // Temporary
-import { status, accountData, mmrData, competitiveHistory } from "../../../public/temp/message.json"
-import { ValorantStatistic } from "../../components/PlayerStatistics/ValorantStatistic";
+// import { status, accountData, mmrData, competitiveHistory } from "../../../public/temp/message.json"
+
 
 const Statistic: NextPage = () => {
+    const [valorantData, setValorantData] = useState({});
+    const router = useRouter()
+    const { id } = router.query
+    const riot_id = Array.isArray(id) ? id[0]?.split(",") : id?.split(",");
+    const username = riot_id?.[0]
+    const tagline = riot_id?.[1]
+  
+    useEffect(() => {
+      async function fetchData() {
+        const data = await PlayerStatisticsService.getValorantData(username, tagline);
+        setValorantData(data);
+        console.log(data)
+      }
+      fetchData();
+    }, []);
 
     return (
         <>
@@ -18,23 +36,10 @@ const Statistic: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="m-8 ">
-                <div className="flex flex-row">
-                    <div className="basis-[10%] bg-red-300">
-                    <img src="https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/bltc3bf97021e2b2130/63b8afcc438f80612c39678d/Valorant_2022_EP6-1_PlayVALORANT_PlayValorantHomepage_3440x1020_MB01.png.jpg" className="rounded-lg" />
-                    </div>
-                    <div className="basis-[35%] ml-8" >
-                        <h1 className="text-4xl font-bold font text-white">
-                            WAR RakaZet#yummy
-                        </h1>
-                        <h1 className="text-4xl font-bold font">
-                            WAR RakaZet#yummy
-                        </h1>
-                    </div>
-
-                </div>
-                
-                <ValorantStatistic status={status} accountData={accountData} mmrData={mmrData} competitiveHistory={competitiveHistory}></ValorantStatistic>
- 
+                {
+                valorantData && valorantData.status && valorantData.accountData && valorantData.mmrData && valorantData.competitiveHistory &&
+                <ValorantStatistic status={valorantData?.status} accountData={valorantData?.accountData} mmrData={valorantData?.mmrData} competitiveHistory={valorantData?.competitiveHistory}></ValorantStatistic>
+                }   
             </div>
         </>
     );
