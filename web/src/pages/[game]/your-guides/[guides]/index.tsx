@@ -51,7 +51,7 @@ const ShowMyGuides: NextPage = () => {
       setTimeout(()=>{
         router.reload()
       }, 1000)
-    } catch (error) {
+    } catch (e) {
       setErrorMessage('Something went wrong! Please try again later')
       setIsSubmitting(false)
       postMutation.reset()
