@@ -1,7 +1,12 @@
 import { type NextPage } from "next";
+// import { signIn, useSession } from "next-auth/react";
+// import { api } from "../../utils/api";
+
 import Head from "next/head";
 
-
+// Temporary
+import { status, accountData, mmrData, competitiveHistory } from "../../../public/temp/message.json"
+import { ValorantStatistic } from "../../components/PlayerStatistics/ValorantStatistic";
 
 const Statistic: NextPage = () => {
 
@@ -29,15 +34,10 @@ const Statistic: NextPage = () => {
                 </div>
                 
        
-                <div className="tabs my-8">
-                    <a className="tab tab-lifted">Tab 1</a>
-                    <a className="tab tab-lifted tab-active">Tab 2</a>
-                    <a className="tab tab-lifted">Tab 3</a>
-                </div>
+                <ValorantStatistic status={status} accountData={accountData} mmrData={mmrData} competitiveHistory={competitiveHistory}></ValorantStatistic>
+
                 
-                <div className="flex w-full">
-                    <div className="grid flex-grow card bg-base-300 rounded-box place-items-center"> <img src="https://images.squarespace-cdn.com/content/v1/59af2189c534a58c97bd63b3/1630406639923-6LAFJTFURXD0V63BYHIJ/Valorant+rank+distribution+August+2021+episode+3+act+1.jpg" className="my-8"/> </div>
-                </div>
+                
             </div>
         </>
     );

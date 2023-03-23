@@ -64,8 +64,8 @@ export class PlayerStatisticsService {
         valorantData.mmrData.highest_rank_image = "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/" + mmrData.data.highest_rank.tier + "/largeicon.png"
 
         for (let i = 0; i < 5; i++) {
-            var item = mmrHistory.data[i];
-            var item2 = matchHistory.data[i].players.all_players;
+            const item = mmrHistory.data[i];
+            let item2 = matchHistory.data[i].players.all_players;
 
             for (let j = 0; j < 10; j++) {
                 if (item2[j].name === username && item2[j].tag === tagline) {
@@ -74,11 +74,11 @@ export class PlayerStatisticsService {
                 }
             }
             
-            var player_team = item2.team.toLowerCase()
-            var teams = matchHistory.data[i].teams
-            var victory_boolean = teams[player_team].has_won
-            var rounds_won = teams[player_team].rounds_won
-            var rounds_lost = teams[player_team].rounds_lost
+            const player_team = item2.team.toLowerCase()
+            const teams = matchHistory.data[i].teams
+            const victory_boolean = teams[player_team].has_won
+            const rounds_won = teams[player_team].rounds_won
+            const rounds_lost = teams[player_team].rounds_lost
 
             valorantData.competitiveHistory.push({
                 "rank": item.currenttierpatched,
@@ -96,7 +96,6 @@ export class PlayerStatisticsService {
                 "rounds_lost": rounds_lost
             });
 
-            counter++
         }
 
         return valorantData
