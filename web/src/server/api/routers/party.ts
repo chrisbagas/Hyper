@@ -32,7 +32,7 @@ export const partyRouter = createTRPCRouter({
         gameId: z.string()
       }))
       .mutation(async ({ ctx, input }) => {
-        return await PartyService.joinParty(ctx.prisma, input)
+        return PartyService.joinParty(ctx.prisma, input)
     }),
 
     leaveParty: publicProcedure
