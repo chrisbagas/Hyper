@@ -1,12 +1,12 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { api } from "../../utils/api";
-import { useRouter } from 'next/router'
 import Link from "next/link";
 import React, { useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { ArrowLeftIcon, PencilSquareIcon} from "@heroicons/react/24/solid"
 import { ProfileHeader } from "../../components/profile/ProfileHeader";
+import { ProfileCard } from "../../components/profile/ProfileCard";
 
 const Statistic: NextPage = () => {
     const { data, refetch } = api.profiles.getProfile.useQuery()
@@ -17,7 +17,7 @@ const Statistic: NextPage = () => {
         refetch()
     }, [session])
 
-    const router = useRouter()
+    
 
     return (
         <>
@@ -36,49 +36,10 @@ const Statistic: NextPage = () => {
 
             <div className="mx-16">
                 <ProfileHeader data={data} connectAcc={connectAcc}/>
-
-
                 <div className="tabs my-4 ">
                     <a className="tab tab-bordered tab-active">Overview</a>
-
                 </div>
-                <div className="flex flex-row flex-wrap ">
-
-                    {connectAcc?.data?.gameAkuns.map(game =>
-                        <div key={game.game.id} className="card bg-base-2 shadow-xl m-4 grid  flex-grow rounded-box " onClick={() => router.push(`/result?${game.gameIdentifier}`)}>
-                            <div className="card-body gap-4 lg:gap-0">
-
-                                <div className="flex flex-row gap-6">
-                                    <figure>
-                                        <img className="bg-white rounded-md w-16 h-16" src={game.game.logoUrl} />
-                                    </figure>
-
-                                    <div className="flex flex-col gap-2">
-                                        <h2 className="card-title text-neutral-0 font-bold">{game.game.name}</h2>
-
-                                        <div className="flex flex-col sm:flex-row gap-4">
-
-                                            <div className="flex flex-row items-center gap-2">
-
-                                                <div className="badge badge-lg border-none text-neutral-0 font-normal bg-blue-500 text-sm">First-Person Shooter</div>
-                                            </div>
-
-                                            <div className="flex flex-row items-center gap-2">
-                                                <div className="badge badge-lg border-none text-neutral-0 font-normal bg-accent-6 text-sm">Competitive</div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                </div>
-
-
-
-
+                <ProfileCard connectAcc={connectAcc}/>
             </div>
         </>
     );
