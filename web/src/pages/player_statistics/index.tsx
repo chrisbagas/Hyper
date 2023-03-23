@@ -18,20 +18,6 @@ const Statistic: NextPage = () => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="m-8 ">
-                <div className="flex flex-row">
-                    <div className="basis-[10%] bg-red-300">
-                    <img src="https://images.contentstack.io/v3/assets/bltb6530b271fddd0b1/bltc3bf97021e2b2130/63b8afcc438f80612c39678d/Valorant_2022_EP6-1_PlayVALORANT_PlayValorantHomepage_3440x1020_MB01.png.jpg" className="rounded-lg" />
-                    </div>
-                    <div className="basis-[35%] ml-8" >
-                        <h1 className="text-4xl font-bold font text-white">
-                            WAR RakaZet#yummy
-                        </h1>
-                        <h1 className="text-4xl font-bold font">
-                            WAR RakaZet#yummy
-                        </h1>
-                    </div>
-
-                </div>
                 
                 <ValorantStatistic status={status} accountData={accountData} mmrData={mmrData} competitiveHistory={competitiveHistory}></ValorantStatistic>
  
