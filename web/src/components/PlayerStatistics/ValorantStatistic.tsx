@@ -1,5 +1,4 @@
 import React from "react"
-import { CardLineChart } from "../shared/Charts/CardLineChart";
 import { ValorantMatchHistory } from "./ValorantMatchHistory";
 
 export interface GameCardProps {
