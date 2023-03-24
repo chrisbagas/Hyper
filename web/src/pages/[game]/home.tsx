@@ -2,13 +2,13 @@ import { GameDashboardNav } from "../../components/shared/GameDashboard/GameDash
 import { useRouter } from "next/router";
 import { api } from "../../utils/api";
 import Link from "next/link";
-import { ArrowRightIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import { PartyCard } from "../../components/party/PartyCard";
 import { useSession } from "next-auth/react";
 import { PartyType, PartyVisibility } from "@prisma/client";
 import { GuideCard } from "../../components/Guide/GuideCard";
 
-export default function GameSpecificDashboard() {
+export default function Home() {
     const router = useRouter()
     const gameId = router.query.game
     const { data: game } = api.games.getById.useQuery({ id: gameId as string })
@@ -21,21 +21,6 @@ export default function GameSpecificDashboard() {
     return <>
         <div className="p-16">
             <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
-            {/* <div className="bg-base-1 rounded-md mt-4 text-neutral-0">
-                <div className="collapse">
-                    <input type="checkbox" className="peer" />
-                    <div className="collapse-title ">
-                        <div className="flex justify-between">
-                            <div className="text-3xl">
-                                Your Party
-                            </div> 
-                            <ChevronDownIcon className="w-4"/>
-                        </div>
-                    </div>
-                    <div className="collapse-content rounded-md ">
-                    </div>
-                </div>
-            </div> */}
             <div className="flex justify-between items-center content-center my-6 text-neutral-0">
                 <h1 className="text-3xl">Find Parties that Suits You</h1>
                 <div className="flex">
