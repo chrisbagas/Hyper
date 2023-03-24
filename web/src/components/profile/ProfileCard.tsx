@@ -44,6 +44,5 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ connectAcc }) => {
 
         </div>
 
-
     )
 }
