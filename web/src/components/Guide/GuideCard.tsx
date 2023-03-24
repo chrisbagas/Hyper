@@ -1,3 +1,4 @@
+import Link from "next/link"
 import React from "react"
 
 export interface GuideCardProps{
@@ -6,11 +7,16 @@ export interface GuideCardProps{
     createdAt:Date
     content?:string
     status:string
+    gameId:string
+    postId:string
+    guidesLoc:string
+    headerUrl?:string
 }
 
-export const GuideCard: React.FC<GuideCardProps> = ({ title,username,createdAt,content,status }) => (
+export const GuideCard: React.FC<GuideCardProps> = ({ title,username,createdAt,content,status,gameId,postId,guidesLoc,headerUrl }) => (
+    <Link href={`/${gameId}/${guidesLoc}/${postId}`}>
     <div className="card w-full bg-base-100 shadow-xl">
-        <figure><img src="https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg" alt="Shoes" /></figure>
+        <figure><img src={headerUrl} alt="Header" /></figure>
         <div className="card-body">
             <div>
                 {status === "PUBLISHED"?(
@@ -27,4 +33,5 @@ export const GuideCard: React.FC<GuideCardProps> = ({ title,username,createdAt,c
             <p>{content}</p>
         </div>
     </div>
+    </Link>
 )

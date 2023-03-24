@@ -17,7 +17,7 @@ const Guides: NextPage = () => {
             <div className="p-14">
                 <div className="flex justify-between items-center content-center my-6">
                     <h1 className="text-3xl text-white">Your Posts</h1>
-                    <Link href={"/"}><button className="btn bg-primary-main text-white">Create New Post &nbsp;<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <Link href={`/${id}/your-guides/create`}><button className="btn bg-primary-main text-white">Create New Post &nbsp;<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
                     </button></Link>
@@ -25,7 +25,7 @@ const Guides: NextPage = () => {
                 <div className="grid xl:grid-cols-3 grid-flow-row gap-8 content-center justify-center items-center my-6">
                     {data?.map((guide) => {
                         return (
-                            <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status}></GuideCard>
+                            <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status} gameId={id as string} postId={guide.id} guidesLoc="your-guides" headerUrl={guide.header?.url as string}></GuideCard>
                         )
                     })}
                 </div>
