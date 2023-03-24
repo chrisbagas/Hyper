@@ -5,6 +5,10 @@ import { PlayerStatisticsService } from "../../server/api/services/PlayerStatist
 import { ValorantStatistic } from "../../components/PlayerStatistics/ValorantStatistic";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { PlayerStatisticsService } from "../../server/api/services/PlayerStatisticsService";
+import { ValorantStatistic } from "../../components/PlayerStatistics/ValorantStatistic";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 
 // Temporary
