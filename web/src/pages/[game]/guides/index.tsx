@@ -3,16 +3,20 @@ import { GuideCard } from "../../../components/Guide/GuideCard";
 import Link from "next/link";
 import { api } from "../../../utils/api";
 import { useRouter } from "next/router";
+import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
+
 
 const Guides: NextPage = () => {
     const router = useRouter()
     const gameId = router.query.game
+    const { data: game } = api.games.getById.useQuery({ id: gameId as string })
     const { data } = api.guides.getAllbyGame.useQuery({ id: gameId as string })
     console.log(data)
 
     return (
         <>
-            <div className="p-14">
+            <div className="p-16">
+            <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
                 <div className="flex justify-between items-center content-center my-6">
                     <h1 className="text-3xl text-white">See What Other Players Have Created</h1>
                     <Link href={`/${gameId}/your-guides/create`}><button className="btn bg-primary-main text-white">Create New Post &nbsp;<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">

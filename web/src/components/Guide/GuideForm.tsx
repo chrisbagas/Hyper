@@ -29,7 +29,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
     <>
       <div className="flex flex-col gap-6">
         
-        <GuideTopButtonGroup className="px-8" returnUrl={postId ? `/${gameId}/your-guides/${postId}` : `/${gameId}/your-guides`}>
+        <GuideTopButtonGroup className="px-16" returnUrl={postId ? `/${gameId}/your-guides/${postId}` : `/${gameId}/your-guides`}>
           <div className="flex justify-between gap-2">
             <button className={`flex btn btn-ghost normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={(e)=>onSubmit(e, CommunityPostStatus.DRAFT, false)}><FolderPlusIcon className="w-4"/> Save as Draft</button>
             <button className={`flex btn btn-ghost normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={(e)=>onSubmit(e, CommunityPostStatus.DRAFT, true)}><EyeIcon className="w-4"/> Save & Preview</button>
@@ -37,7 +37,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
           </div>
         </GuideTopButtonGroup>
 
-        <div className="form-control w-full px-8">
+        <div className="form-control w-full px-16">
           <label className="label">
             <span className="label-text">Post Title</span>
           </label>
@@ -51,7 +51,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
           />
         </div>
 
-        <div className="flex justify-between px-8 gap-6">
+        <div className="flex justify-between px-16 gap-6">
           <div className="form-control w-1/4">
             <label className="label">
               <span className="label-text">Header Attachment Type</span>
@@ -87,7 +87,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
           </div>
         </div>
 
-        <div className="form-control w-full px-8">
+        <div className="form-control w-full px-16">
           <label className="label">
             <span className="label-text">Select Post Type</span>
           </label>
@@ -98,7 +98,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
           </select>
         </div>
 
-        <div className="form-control w-full px-8">
+        <div className="form-control w-full px-16">
           <label className="label">
             <span className="label-text">Post Content</span>
           </label>
@@ -113,14 +113,14 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
         </div>
         
         <div className="toast">
-          {errorMessage && <div className="alert alert-error shadow-lg px-8">
+          {errorMessage && <div className="alert alert-error shadow-lg px-16">
             <div>
               <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <span>{errorMessage}</span>
             </div>
           </div>}
 
-          {isSuccess && <div className="alert alert-success shadow-lg px-8">
+          {isSuccess && <div className="alert alert-success shadow-lg px-16">
             <div>
               <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               <span>Post create successfully</span>

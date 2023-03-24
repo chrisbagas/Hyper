@@ -8,7 +8,7 @@ export interface GameDashboardProps {
     page: string
 }
 const menu = [
-    { title: 'Home', path: '' },
+    { title: 'Home', path: '/home' },
     { title: 'Party Finder', path: '/party' },
     { title: 'Community Posts', path: '/guides' },
     { title: 'Your Posts', path: '/your-guides' },
@@ -34,11 +34,11 @@ export const GameDashboardNav: React.FC<GameDashboardProps> = ({ id, logoUrl, na
             </div>
         </div>
         <div className="flex flex-col sm:flex-row gap-8 mt-4">
-            <Link href="valorant.com" className="text-white flex gap-2">
+            <Link href="https://playvalorant.com/" className="text-white flex gap-2">
                 <GlobeAltIcon className="w-4" />Valorant.com<ArrowTopRightOnSquareIcon className="w-4" />
             </Link>
-            <Link href="riot.com" className="text-white flex gap-2">
-                <img src="https://assets.stickpng.com/thumbs/6095215353a8bf00040ff3a6.png" alt="" className="mt-1 w-4 h-4" /> Valorant<ArrowTopRightOnSquareIcon className="w-4" />
+            <Link href="https://www.riotgames.com/en" className="text-white flex gap-2">
+                <img src="https://assets.stickpng.com/thumbs/6095215353a8bf00040ff3a6.png" alt="" className="mt-1 w-4 h-4" /> Riot<ArrowTopRightOnSquareIcon className="w-4" />
             </Link>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 w-full justify-between items-center content-center mt-8">
@@ -46,7 +46,7 @@ export const GameDashboardNav: React.FC<GameDashboardProps> = ({ id, logoUrl, na
                 return (
                     <Link key={index} href={"/" + id + item.path}>
                         <div
-                            className={`cursor-pointer ${page === "/[game]" + item.path
+                            className={`cursor-pointer ${page.includes(item.path)
                                 ? 'font-bold text-xl text-neutral-0 border-b-4 flex-1'
                                 : 'text-xl text-neutral-0 flex-1'
                                 }`}

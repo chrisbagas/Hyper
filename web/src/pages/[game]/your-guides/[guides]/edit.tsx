@@ -23,17 +23,21 @@ const EditGuides: NextPage = () => {
   const [success, setSuccess] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { isLoading, isError, error } = api.guides.getPostById.useQuery(
-    { id: postId as string }, 
-    { onSuccess: (data) => {
-      setPost({
-        type: data.type,
-        title: data.title as string,
-        content: data.content as string,
-        headerType: data.header?.type,
-        headerUrl: data.header?.url as string,
-      })
-      setIsPublished(true)
-    } })
+    { id: postId as string },
+    {
+      onSuccess: (data) => {
+        setPost({
+          type: data.type,
+          title: data.title as string,
+          content: data.content as string,
+          headerType: data.header?.type,
+          headerUrl: data.header?.url as string,
+        })
+        if (data.status === CommunityPostStatus.PUBLISHED) {
+          setIsPublished(true)
+        }
+      }
+    })
   const [isPublished, setIsPublished] = useState(false)
 
   if (isLoading) {
@@ -45,10 +49,10 @@ const EditGuides: NextPage = () => {
   }
 
   if (isPublished) {
-    return <ErrorPage statusCode={404}/>
+    return <ErrorPage statusCode={404} />
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setErrorMessage('')
     const value = event.target.value
     console.log(value)
@@ -62,12 +66,12 @@ const EditGuides: NextPage = () => {
     event.preventDefault()
     setErrorMessage('')
     setIsSubmitting(true)
-    if (!post.type||!post.title||!post.content||!post.headerType||!post.headerUrl){
+    if (!post.type || !post.title || !post.content || !post.headerType || !post.headerUrl) {
       setErrorMessage('Please fill in all fields')
       setIsSubmitting(false)
       return
     }
-    
+
     try {
       const result = await postMutation.mutateAsync({
         id: postId as string,
@@ -84,7 +88,7 @@ const EditGuides: NextPage = () => {
 
       setSuccess(true)
       let redirectTo = `/${gameId}/your-guides`
-      if (isPreview){
+      if (isPreview) {
         redirectTo = `/${gameId}/your-guides/${postId}`
       }
       setTimeout(() => {
@@ -105,7 +109,7 @@ const EditGuides: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <GuideForm 
+      <GuideForm
         postData={post}
         errorMessage={errorMessage}
         isSuccess={success}
