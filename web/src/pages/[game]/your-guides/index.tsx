@@ -25,7 +25,7 @@ const Guides: NextPage = () => {
                 <div className="grid xl:grid-cols-3 grid-flow-row gap-8 content-center justify-center items-center my-6">
                     {data?.map((guide) => {
                         return (
-                            <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status} gameId={id as string} postId={guide.id} guidesLoc="your-guides"></GuideCard>
+                            <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status} gameId={id as string} postId={guide.id} guidesLoc="your-guides" headerUrl={guide.header?.url as string}></GuideCard>
                         )
                     })}
                 </div>
