@@ -4,17 +4,20 @@ import Link from "next/link";
 import { api } from "../../../utils/api";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
 
 const Guides: NextPage = () => {
     const router = useRouter()
     const id = router.query.game
     const session = useSession()
+    const { data: game } = api.games.getById.useQuery({ id: id as string })
     const { data } = api.guides.getAllbyUser.useQuery({ gameId: id as string, userId: session.data?.user.id as string })
     console.log(data)
 
     return (
         <>
-            <div className="p-14">
+            <div className="p-16">
+            <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
                 <div className="flex justify-between items-center content-center my-6">
                     <h1 className="text-3xl text-white">Your Posts</h1>
                     <Link href={`/${id}/your-guides/create`}><button className="btn bg-primary-main text-white">Create New Post &nbsp;<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
