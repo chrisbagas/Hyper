@@ -1,11 +1,9 @@
 import { describe, expect, it, vi } from "vitest"
 import { PlayerStatisticsService } from "../../src/server/api/services/PlayerStatisticsService"
+import createFetchMock from "vitest-fetch-mock"
 
-/*
-Nilai yang ditest hanya nilai yang tidak akan berubah. Hal-hal seperti level, banyak permainan tidak
-diuji karena nilainya akan berubah ketika saya bermain Valorant. Jika test pass seharusnya sudah mewakili
-bahwa API berjalan sesuai harapan.
-*/
+const fetchMocker = createFetchMock(vi);
+fetchMocker.enableMocks();
 
 describe("Successfully Get Raka's Valorant Account Data, MMR History, Match History", () => {
     it("Get Raka's Valorant Account Data", async () => {
@@ -16,6 +14,8 @@ describe("Successfully Get Raka's Valorant Account Data, MMR History, Match Hist
                 tag: "yummy"
             }            
         }
+
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantAccountData))
 
         const valorantAccountData = await PlayerStatisticsService.getValorantAccountData("WAR RakaZet", "yummy")
 
@@ -41,6 +41,7 @@ describe("Successfully Get Raka's Valorant Account Data, MMR History, Match Hist
                 }
             }
         }
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantMMRData))
 
         const valorantMMRData = await PlayerStatisticsService.getValorantMMRData("WAR RakaZet", "yummy")
 
@@ -59,6 +60,7 @@ describe("Successfully Get Raka's Valorant Account Data, MMR History, Match Hist
             name: "WAR RakaZet",
             tag: "yummy"         
         }
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantMMRHistory))
 
         const valorantMMRHistory = await PlayerStatisticsService.getValorantMMRHistory("WAR RakaZet", "yummy")
 
@@ -71,6 +73,7 @@ describe("Successfully Get Raka's Valorant Account Data, MMR History, Match Hist
         const mockValorantMatchHistory = {
             status: 200  
         }
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantMatchHistory))
 
         const valorantMatchHistory = await PlayerStatisticsService.getValorantMatchHistory("WAR RakaZet", "yummy")
 
@@ -83,6 +86,7 @@ describe("Getting Non Existent Valorant Account Data, MMR History, Match History
         const mockValorantAccountData = {
             status: 404
         }
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantAccountData))
 
         // Tag Valid Riot Acount Maksimal 5 Karakter
         const valorantAccountData = await PlayerStatisticsService.getValorantAccountData("WAR RakaZet", "yummyyy")
@@ -94,7 +98,8 @@ describe("Getting Non Existent Valorant Account Data, MMR History, Match History
         const mockValorantMMRData = {
             status: 404
         }
-
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantMMRData))
+        
         // Tag Valid Riot Acount Maksimal 5 Karakter
         const valorantMMRData = await PlayerStatisticsService.getValorantMMRData("WAR RakaZet", "yummyyy")
 
@@ -106,6 +111,7 @@ describe("Getting Non Existent Valorant Account Data, MMR History, Match History
         const mockValorantMMRHistory = {
             status: 404        
         }
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantMMRHistory))
 
         // Tag Valid Riot Acount Maksimal 5 Karakter
         const valorantMMRHistory = await PlayerStatisticsService.getValorantMMRHistory("WAR RakaZet", "yummyyy")
@@ -117,6 +123,7 @@ describe("Getting Non Existent Valorant Account Data, MMR History, Match History
         const mockValorantMatchHistory = {
             status: 404  
         }
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantMatchHistory))
 
         // Tag Valid Riot Acount Maksimal 5 Karakter
         const valorantMatchHistory = await PlayerStatisticsService.getValorantMatchHistory("WAR RakaZet", "yummyyy")
@@ -130,6 +137,7 @@ describe("Call Valorant's API Using The Wrong Parameter Returns 404 Status Code"
         const mockValorantAPIData = {
             status: 404
         }
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantAPIData))
 
         const valorantAPIData = await PlayerStatisticsService.valorantAPI({})
 
@@ -139,6 +147,247 @@ describe("Call Valorant's API Using The Wrong Parameter Returns 404 Status Code"
 
 describe("Get Combined Valorant Data Successfully", () => {
     it("Should return combined Valorant data successfully", async () => {
+        const mockValorantAccountData = {
+            status: 200,
+            data : {
+                region: "ap",
+                account_level: 34,
+                name: "iRakaZet",
+                tag: "5407"
+            }
+        }
+        const mockValorantMMRData = {
+            status: 200,
+            data: {
+                current_data: {
+                    currenttierpatched: "Ascendant 2",
+                    elo: 1921,
+                    images: {
+                        large: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png"
+                    }
+                },
+                highest_rank: {
+                    patched_tier: "Ascendant 2",
+                    tier: 22
+                }
+            }
+        }
+        const mockValorantMMRHistory = {
+            status: 200,
+            data:[
+                {
+                    currenttierpatched: "Ascendant 2",
+                    images: {
+                        large: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png"
+                    },
+                    mmr_change_to_last_game: -14
+                },
+                {
+                    currenttierpatched: "Ascendant 2",
+                    images: {
+                        large: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png"
+                    },
+                    mmr_change_to_last_game: 25
+                },
+                {
+                    currenttierpatched: "Ascendant 2",
+                    images: {
+                        large: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png"
+                    },
+                    mmr_change_to_last_game: 29
+                },
+                {
+                    currenttierpatched: "Ascendant 1",
+                    images: {
+                        large: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png"
+                    },
+                    mmr_change_to_last_game: 27
+                },
+                {
+                    currenttierpatched: "Ascendant 1",
+                    images: {
+                        large: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png"
+                    },
+                    mmr_change_to_last_game: 18
+                }
+            ]
+        }
+        const mockValorantMatchHistory = {
+            status: 200,
+            data: [
+                {
+                    metadata: {
+                        map: "Lotus"
+                    },
+                    teams: {
+                        blue: {
+                            has_won: false,
+                            rounds_won: 11,
+                            rounds_lost: 13
+                        }
+                    },
+                    players: {
+                        all_players: [
+                            {
+                                name: "iRakaZet",
+                                tag: "5407",
+                                team: "Blue",
+                                stats: {
+                                    kills: 22,
+                                    deaths: 18,
+                                    assists: 6,
+                                    headshots: 9,
+                                    bodyshots: 91,
+                                    legshots: 0
+                                },
+                                assets: {
+                                    agent: {
+                                        small: "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    metadata: {
+                        map: "Haven"
+                    },
+                    teams: {
+                        blue: {
+                            has_won: true,
+                            rounds_won: 15,
+                            rounds_lost: 13
+                        }
+                    },
+                    players: {
+                        all_players: [
+                            {
+                                name: "iRakaZet",
+                                tag: "5407",
+                                team: "Blue",
+                                stats: {
+                                    kills: 34,
+                                    deaths: 16,
+                                    assists: 8,
+                                    headshots: 16,
+                                    bodyshots: 84,
+                                    legshots: 0
+                                },
+                                assets: {
+                                    agent: {
+                                        small: "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    metadata: {
+                        map: "Icebox"
+                    },
+                    teams: {
+                        blue: {
+                            has_won: true,
+                            rounds_won: 13,
+                            rounds_lost: 4
+                        }
+                    },
+                    players: {
+                        all_players: [
+                            {
+                                name: "iRakaZet",
+                                tag: "5407",
+                                team: "Blue",
+                                stats: {
+                                    kills: 12,
+                                    deaths: 10,
+                                    assists: 6,
+                                    headshots: 15,
+                                    bodyshots: 85,
+                                    legshots: 0
+                                },
+                                assets: {
+                                    agent: {
+                                        small: "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    metadata: {
+                        map: "Split"
+                    },
+                    teams: {
+                        blue: {
+                            has_won: true,
+                            rounds_won: 13,
+                            rounds_lost: 6
+                        }
+                    },
+                    players: {
+                        all_players: [
+                            {
+                                name: "iRakaZet",
+                                tag: "5407",
+                                team: "Blue",
+                                stats: {
+                                    kills: 23,
+                                    deaths: 9,
+                                    assists: 11,
+                                    headshots: 34,
+                                    bodyshots: 66,
+                                    legshots: 0
+                                },
+                                assets: {
+                                    agent: {
+                                        small: "https://media.valorant-api.com/agents/5f8d3a7f-467b-97f3-062c-13acf203c006/displayicon.png"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    metadata: {
+                        map: "Haven"
+                    },
+                    teams: {
+                        blue: {
+                            has_won: true,
+                            rounds_won: 13,
+                            rounds_lost: 6
+                        }
+                    },
+                    players: {
+                        all_players: [
+                            {
+                                name: "iRakaZet",
+                                tag: "5407",
+                                team: "Blue",
+                                stats: {
+                                    kills: 21,
+                                    deaths: 8,
+                                    assists: 5,
+                                    headshots: 12,
+                                    bodyshots: 88,
+                                    legshots: 0
+                                },
+                                assets: {
+                                    agent: {
+                                        small: "https://media.valorant-api.com/agents/a3bfb853-43b2-7238-a4f1-ad90e9e46bcc/displayicon.png"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+                
+            ]
+        }
         const mockValorantAPIData = {
             status: 200,
             accountData: {
@@ -233,8 +482,12 @@ describe("Get Combined Valorant Data Successfully", () => {
             ]
         }
 
-        const valorantAPIData = await PlayerStatisticsService.getValorantData("iRakaZet", "5407")
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantAccountData))
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantMMRData))
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantMMRHistory))
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantMatchHistory))
 
+        const valorantAPIData = await PlayerStatisticsService.getValorantData("iRakaZet", "5407")
         expect(valorantAPIData).toStrictEqual(mockValorantAPIData)
     }, 20000)
 })
