@@ -7,10 +7,11 @@ export interface GameCardProps {
     name?: string
     communityPost?: number
     openParty?: number
+    id: string
 }
 
 
-export const GameCard: React.FC<GameCardProps> = ({ key, logoUrl, name, communityPost, openParty }) => (
+export const GameCard: React.FC<GameCardProps> = ({ key, logoUrl, name, communityPost, openParty, id }) => (
     <div key={key} className="card bg-base-2 shadow-xl m-4">
         <div className="card-body gap-4 lg:gap-2">
 
@@ -44,7 +45,7 @@ export const GameCard: React.FC<GameCardProps> = ({ key, logoUrl, name, communit
                     </div>
 
                 </div>
-                <Link href={"/" + key  + "/home"}>
+                <Link href={"/" + id  + "/home"}>
                     <button className="btn btn-ghost gap-2">
                         View More
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 h-4">
