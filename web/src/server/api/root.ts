@@ -1,6 +1,6 @@
 import { discordRouter } from "./routers/discord";
 import { gameRouter } from "./routers/game";
-import guideRouter from "./routers/guideRouter";
+import { guideRouter } from "./routers/guide";
 import { userRouter } from "./routers/user";
 import profileRouter from "./routers/profileRouter";
 import { createTRPCRouter } from "./trpc";
@@ -16,8 +16,8 @@ export const appRouter = createTRPCRouter({
   party: partyRouter,
   profiles: profileRouter,
   users: userRouter,
+  guides: guideRouter,
   discord: discordRouter,
-  guides: guideRouter
 });
 
 // export type definition of API
