@@ -38,7 +38,7 @@ export const SidebarMenu: React.FC = () => {
       </SidebarMenuButton>
       <Divider />
       {games?.data?.map(game =>
-        <SidebarMenuButton path={"/"+game.id+"/home"}>
+        <SidebarMenuButton key={game.id}path={"/"+game.id+"/home"}>
           <img className="bg-white rounded-md w-6 h-6" src={game.logoUrl} />
           {game.name}
         </SidebarMenuButton>

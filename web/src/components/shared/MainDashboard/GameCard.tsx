@@ -2,7 +2,7 @@ import React from "react"
 import Link from "next/link"
 
 export interface GameCardProps {
-    id: string
+    key: string
     logoUrl?: string
     name?: string
     communityPost?: number
@@ -10,8 +10,8 @@ export interface GameCardProps {
 }
 
 
-export const GameCard: React.FC<GameCardProps> = ({ id, logoUrl, name, communityPost, openParty }) => (
-    <div key={id} className="card bg-base-2 shadow-xl m-4">
+export const GameCard: React.FC<GameCardProps> = ({ key, logoUrl, name, communityPost, openParty }) => (
+    <div key={key} className="card bg-base-2 shadow-xl m-4">
         <div className="card-body gap-4 lg:gap-2">
 
             <div className="flex flex-row gap-4">
@@ -44,7 +44,7 @@ export const GameCard: React.FC<GameCardProps> = ({ id, logoUrl, name, community
                     </div>
 
                 </div>
-                <Link href={"/" + id  + "/home"}>
+                <Link href={"/" + key  + "/home"}>
                     <button className="btn btn-ghost gap-2">
                         View More
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-4 h-4">
