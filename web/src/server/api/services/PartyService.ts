@@ -1,4 +1,4 @@
-import { PrismaClient, Party, PartyType, PartyVisibility, PartyMember, PartyMemberLevel } from "@prisma/client"
+import { PrismaClient, PartyType, PartyVisibility, PartyMemberLevel } from "@prisma/client"
 
 export interface CreatePartyData {
     userId: string,
@@ -20,15 +20,18 @@ export interface LeavePartyData {
 }
 
 export class PartyService {
-    public static async getParties(prisma: PrismaClient, gameId: string): Promise<Party[]> { 
+    public static async getParties(prisma: PrismaClient, gameId: string) { 
         return prisma.party.findMany({
             where: {
                 gameId: gameId
+            },
+            include:{
+                partyMembers: true
             }
         })
     }
 
-    public static async createParty(prisma: PrismaClient, data: CreatePartyData): Promise<Party> {
+    public static async createParty(prisma: PrismaClient, data: CreatePartyData){
         const newParty = await prisma.party.create({
             data: data
         })
@@ -44,7 +47,7 @@ export class PartyService {
         return newParty
     }
 
-    public static async joinParty(prisma: PrismaClient, data: JoinPartyData): Promise<PartyMember> {
+    public static async joinParty(prisma: PrismaClient, data: JoinPartyData){
         const party = await prisma.party.findUnique({
             where: {
                 id: data.partyId
@@ -80,11 +83,14 @@ export class PartyService {
         }
 
         return prisma.partyMember.create({
-            data: data
+            data: {
+                userId: data.userId,
+                partyId: data.partyId
+            }
         })
     }
 
-    public static async leaveParty(prisma: PrismaClient, data: LeavePartyData): Promise<PartyMember> {
+    public static async leaveParty(prisma: PrismaClient, data: LeavePartyData){
         const userId = data.userId
         const partyId = data.partyId
         return prisma.partyMember.delete({

@@ -34,7 +34,7 @@ const Home: NextPage = () => {
 
                 {games?.data?.map(game => 
 
-                  <GameCard key={game.id} logoUrl={game.logoUrl} name={game.name} communityPost={game.communityPosts.length} openParty={0}></GameCard>
+                  <GameCard key={game.id} logoUrl={game.logoUrl} name={game.name} communityPost={game.communityPosts.length} openParty={0} ></GameCard>
 
                 )}
 
