@@ -1,5 +1,4 @@
 import { PrismaClient, Game, Country } from "@prisma/client";
-import Discord from "next-auth/providers/discord";
 import { DiscordConnection } from "../../types/discord";
 import { DiscordService } from "./DiscordService";
 
@@ -74,8 +73,7 @@ export class ProfileService {
         }
     }
     public static async getAllCountries(prisma: PrismaClient){
-        const countries = await prisma.country.findMany()
-        return countries
+        return await prisma.country.findMany()
     }
 
     public static async getConnectionAccount(id: string, prisma: PrismaClient) {
@@ -110,9 +108,8 @@ export class ProfileService {
             include: { game: true }
         });
     
-        const dataaa = { connected: accounts, gameAkuns: gameAkuns };
     
-        return dataaa;
+        return { connected: accounts, gameAkuns: gameAkuns };
     }
 
     
