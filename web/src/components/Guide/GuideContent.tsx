@@ -31,7 +31,7 @@ export const GuideContent: React.FC<GuideContentProps> = ({ type, title, content
       <div className="flex flex-col gap-y-3">
         <GuideTypeBadge type={type}/>
         <h1 className="text-xl text-neutral-0 font-bold">{title}</h1>
-        <p className="text-sm text-base-4">{`Created by ${author} | Posted ${postedAt.getDate()}/${postedAt.getMonth()}/${postedAt.getFullYear()} ${('0'+postedAt.getHours()).slice(-2)}:${('0'+postedAt.getMinutes()).slice(-2)}`}</p>
+        <p className="text-sm text-base-4">{`Created by ${author} | Posted ${postedAt.getDate()}/${postedAt.getMonth()+1}/${postedAt.getFullYear()} ${('0'+postedAt.getHours()).slice(-2)}:${('0'+postedAt.getMinutes()).slice(-2)}`}</p>
         <ReactMarkdown className="flex flex-col">
           {content}
         </ReactMarkdown>
