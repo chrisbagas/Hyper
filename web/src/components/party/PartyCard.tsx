@@ -31,7 +31,6 @@ const PartyCard = (props: PartyCardData) => {
         // then redirect to party detail page
     }
 
-    // note: kata adrian ini anti-pattern
     const memberAvatars = props.partyMembers.map((partyMember) =>
         <div className="avatar" key={partyMember.userId}>
             <div className="w-12 rounded-full">
@@ -103,7 +102,7 @@ const PartyCard = (props: PartyCardData) => {
                         </button>
 
                         {props.partyIsFull
-                            ? <button className="btn bg-gray-500">Join Party</button>
+                            ? <button className="btn bg-gray-500" disabled>Join Party</button>
                             : <button onClick={joinParty} className="btn bg-green-500 hover:bg-green-600">Join Party</button>
                         }
                     </div>

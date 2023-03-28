@@ -43,4 +43,16 @@ export const partyRouter = createTRPCRouter({
       .mutation(async ({ ctx, input }) => {
         return PartyService.leaveParty(ctx.prisma, input)
     }),
+
+    updateParty: publicProcedure
+      .input(z.object({
+        partyId: z.string(),
+        userId: z.string(),
+        partyTitle: z.string(),
+        partyType: z.nativeEnum(PartyType),
+        partyVisibility: z.nativeEnum(PartyVisibility)
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return {}
+    }),
 })

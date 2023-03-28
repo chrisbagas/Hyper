@@ -75,11 +75,12 @@ model Country {
 }
 
 model Game {
-  id           String        @id @default(cuid())
-  name         String
-  logoUrl      String
-  GameAccount  GameAccount[]
-  parties      Party[]
+  id             String        @id @default(cuid())
+  name           String
+  logoUrl        String
+  teamCapacity   Int           
+  GameAccount    GameAccount[]
+  parties        Party[]
   communityPosts CommunityPost[]
 }
 
