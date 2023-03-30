@@ -127,6 +127,30 @@ export class PartyService {
     }
 
     public static async updateParty(prisma: PrismaClient, data: EditPartyData) {
-        return {}
+        const partyMember = await prisma.partyMember.findUnique({
+            where: {
+                userId: data.userId
+            }
+        })
+
+        // throw error if the user doesn't exist or not in the party
+        if (partyMember == null || partyMember == undefined) {
+            throw Error("Error: User not found")
+        }
+        // throw error if the user is not leader
+        if (partyMember.level == PartyMemberLevel.member) {
+            throw Error("Error: Permission denied")
+        }
+
+        return await prisma.party.update({
+            where: {
+                id: data.partyId
+            },
+            data: {
+                partyTitle: data.partyTitle,
+                partyType: data.partyType,
+                partyVisibility: data.partyVisibility
+            },
+        })
     }
 }

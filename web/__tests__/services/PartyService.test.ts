@@ -371,7 +371,7 @@ describe("Party Service", () => {
             mockParty
         )
 
-        const party = PartyService.updateParty(
+        const party = await PartyService.updateParty(
             prisma,
             {
                 partyId: "1",

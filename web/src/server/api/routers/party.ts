@@ -53,6 +53,6 @@ export const partyRouter = createTRPCRouter({
         partyVisibility: z.nativeEnum(PartyVisibility)
       }))
       .mutation(async ({ ctx, input }) => {
-        return {}
+        return PartyService.updateParty(ctx.prisma, input)
     }),
 })
