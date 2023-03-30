@@ -156,6 +156,28 @@ export class PartyService {
     }
 
     public static async deleteParty(prisma: PrismaClient, data: LeavePartyData) {
-        return {}
+        const partyMember = await prisma.partyMember.findUnique({
+            where: {
+                userId_partyId: {
+                    userId: data.userId,
+                    partyId: data.partyId
+                }
+            }
+        })
+
+        // throw error if the user doesn't exist or not in the party
+        if (partyMember == null || partyMember == undefined) {
+            throw Error("Error: User not found")
+        }
+        // throw error if the user is not leader
+        if (partyMember?.level == PartyMemberLevel.member) {
+            throw Error("Error: Permission denied, the requesting user is a member")
+        }
+
+        return await prisma.party.delete({
+            where: {
+                id: data.partyId
+            }
+        })
     }
 }
