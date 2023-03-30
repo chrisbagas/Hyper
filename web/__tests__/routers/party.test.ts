@@ -187,4 +187,22 @@ describe("Party RPC", () => {
 
         expect(party).toStrictEqual(mockParty)
     })
+
+    it("deleteParty test", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyMember
+        )
+        
+        prisma.party.delete.mockResolvedValue(
+            mockParty
+        )
+
+
+        const party = await caller.party.deleteParty({
+            partyId: "1",
+            userId: "1",
+        })
+
+        expect(party).toStrictEqual(mockParty)
+    })
 })

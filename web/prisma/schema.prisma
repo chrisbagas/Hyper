@@ -123,7 +123,7 @@ model PartyMember {
   partyId String
   level   PartyMemberLevel @default(member)
   user    User             @relation(fields: [userId], references: [id])
-  party   Party            @relation(fields: [partyId], references: [id])
+  party   Party            @relation(fields: [partyId], references: [id], onDelete: Cascade)
   
   @@id([userId, partyId])
 }

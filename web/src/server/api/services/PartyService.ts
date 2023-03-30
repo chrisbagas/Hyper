@@ -114,13 +114,11 @@ export class PartyService {
     }
 
     public static async leaveParty(prisma: PrismaClient, data: LeavePartyData){
-        const userId = data.userId
-        const partyId = data.partyId
         return prisma.partyMember.delete({
             where: {
                 userId_partyId: {
-                    userId: userId,
-                    partyId: partyId
+                    userId: data.userId,
+                    partyId: data.partyId
                 }
             }
         })
@@ -129,7 +127,10 @@ export class PartyService {
     public static async updateParty(prisma: PrismaClient, data: EditPartyData) {
         const partyMember = await prisma.partyMember.findUnique({
             where: {
-                userId: data.userId
+                userId_partyId: {
+                    userId: data.userId,
+                    partyId: data.partyId
+                }
             }
         })
 
@@ -139,7 +140,7 @@ export class PartyService {
         }
         // throw error if the user is not leader
         if (partyMember.level == PartyMemberLevel.member) {
-            throw Error("Error: Permission denied")
+            throw Error("Error: Permission denied, the requesting user is a member")
         }
 
         return await prisma.party.update({
@@ -152,5 +153,9 @@ export class PartyService {
                 partyVisibility: data.partyVisibility
             },
         })
+    }
+
+    public static async deleteParty(prisma: PrismaClient, data: LeavePartyData) {
+        return {}
     }
 }

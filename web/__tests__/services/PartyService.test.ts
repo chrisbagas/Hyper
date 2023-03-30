@@ -418,4 +418,64 @@ describe("Party Service", () => {
             }
         )).rejects.toThrowError("denied")
     })
+
+    it("deleteParty positive test", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyLeader
+        )
+        
+        prisma.party.delete.mockResolvedValue(
+            mockParty
+        )
+
+        prisma.party.update.mockResolvedValue(
+            mockParty
+        )
+
+        const party = await PartyService.deleteParty(
+            prisma,
+            {
+                partyId: "1",
+                userId: "1",
+            }
+        )
+
+        expect(party).toStrictEqual(mockParty)
+    })
+
+    it("deleteParty negative test: user not found", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            null
+        )
+        
+        prisma.party.delete.mockResolvedValue(
+            mockParty
+        )
+
+        expect(PartyService.deleteParty(
+            prisma,
+            {
+                partyId: "1",
+                userId: "1",
+            }
+        )).rejects.toThrowError("not found")
+    })
+
+    it("deleteParty negative test: permission denied", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyMember
+        )
+        
+        prisma.party.delete.mockResolvedValue(
+            mockParty
+        )
+
+        expect(PartyService.deleteParty(
+            prisma,
+            {
+                partyId: "1",
+                userId: "2",
+            }
+        )).rejects.toThrowError("denied")
+    })
 })
