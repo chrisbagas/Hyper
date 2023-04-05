@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest"
 import prisma from "../../src/server/__mocks__/db";
 import { PartyService } from "../../src/server/api/services/PartyService";
-import { PartyVisibility, PartyType, GameAccount, PartyMemberLevel } from "@prisma/client";
+import { PartyVisibility, PartyType, PartyMemberLevel } from "@prisma/client";
 
 describe("Party Service", () => {
     const mockParty = {

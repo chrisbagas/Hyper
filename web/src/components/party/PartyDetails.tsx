@@ -23,8 +23,8 @@ const PartyDetails = (props: PartyDetailsData) => {
     let isLeader = false
 
     // check if the user is the leader of the party or not
-    for (let i = 0; i < props.partyMembers.length; i++) {
-        if (props.partyMembers[i]?.userId == props.userId && props.partyMembers[i]?.level == PartyMemberLevel.leader) {
+    for (let partyMember of props.partyMembers) {
+        if (partyMember.userId == props.userId && partyMember.level == PartyMemberLevel.leader) {
             isLeader = true
             break
         }

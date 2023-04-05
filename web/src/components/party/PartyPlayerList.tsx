@@ -1,6 +1,6 @@
 import React from "react"
 import { PartyPlayer } from "./PartyPlayer"
-import { PartyMember, User } from "@prisma/client"
+import { PartyMember } from "@prisma/client"
 
 export interface PartyPlayerListData {
     userId: string

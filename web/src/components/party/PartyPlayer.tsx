@@ -1,6 +1,5 @@
 import React from "react"
-import { PartyMember, PartyMemberLevel, User } from "@prisma/client"
-import { api } from "../../utils/api";
+import { PartyMember, PartyMemberLevel } from "@prisma/client"
 
 export interface PartyPlayerData {
     userId: string

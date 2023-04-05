@@ -1,5 +1,4 @@
 import { PrismaClient, PartyType, PartyVisibility, PartyMemberLevel } from "@prisma/client"
-import { gameRouter } from "../routers/game"
 
 export interface CreatePartyData {
     userId: string,
