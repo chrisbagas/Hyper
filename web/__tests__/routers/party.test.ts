@@ -79,6 +79,18 @@ describe("Party RPC", () => {
         })).rejects.toThrowError("duplicate")
     })
 
+    it("getPartyMemberDetails test", async () => {
+        prisma.user.findUnique.mockResolvedValue(
+            mockUser
+        )
+
+        const user = await caller.party.getPartyMemberDetails(
+            "1"
+        )
+
+        expect(user).toEqual(mockUser)
+    })
+
     const mockPartyMember = {
         userId: "1",
         partyId: "1",
@@ -96,6 +108,11 @@ describe("Party RPC", () => {
         bio: "hello",
         countryCode: "id"
     }
+    
+    const mockUserInParty = {
+        ...mockUser,
+        partyMember: mockPartyMember
+    }
 
     const mockGame = {
         id: "valorant",
@@ -104,29 +121,41 @@ describe("Party RPC", () => {
         teamCapacity: 5
     }
 
-    // it("joinParty positive test", async () => {
-    //     prisma.party.findUnique.mockResolvedValue(
-    //         mockParty
-    //     )
+    it("getUserParty test", async () => {
+        prisma.user.findUnique.mockResolvedValue(
+            mockUserInParty
+        )
 
-    //     prisma.user.findUnique.mockResolvedValue(
-    //         mockUser
-    //     )
+        const party = await caller.party.getUserParty(
+            "1"
+        )
 
-    //     prisma.game.findUnique.mockResolvedValue(
-    //         mockGame
-    //     )
+        expect(party).toStrictEqual(party)
+    })
 
-    //     prisma.partyMember.create.mockResolvedValue(
-    //         mockPartyMember
-    //     )
+    it("joinParty positive test", async () => {
+        prisma.party.findUnique.mockResolvedValue(
+            mockParty
+        )
 
-    //     const partyMember = await caller.party.joinParty(
-    //         mockPartyMember
-    //     )
+        prisma.user.findUnique.mockResolvedValue(
+            mockUser
+        )
 
-    //     expect(partyMember).toStrictEqual(mockPartyMember)
-    // })
+        prisma.game.findUnique.mockResolvedValue(
+            mockGame
+        )
+
+        prisma.partyMember.create.mockResolvedValue(
+            mockPartyMember
+        )
+
+        const partyMember = await caller.party.joinParty(
+            mockPartyMember
+        )
+
+        expect(partyMember).toStrictEqual(mockPartyMember)
+    })
 
     it("joinParty negative test", async () => {
         prisma.party.findUnique.mockRejectedValue(

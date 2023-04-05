@@ -211,6 +211,49 @@ describe("Party Service", () => {
         logoUrl: "valorant.png",
         teamCapacity: 5
     }
+    
+    it("getPartyMemberDetails test", async () => {
+        prisma.user.findUnique.mockResolvedValue(
+            mockUser
+        )
+
+        const user = await PartyService.getPartyMemberDetails(
+            prisma,
+            "1"
+        )
+
+        expect(user).toEqual(mockUser)
+    })
+
+    it("getUserParty positive test", async () => {
+        prisma.user.findUnique.mockResolvedValue(
+            mockUserInParty
+        )
+
+        prisma.party.findUnique.mockResolvedValue(
+            mockParty
+        )
+
+        const party = await PartyService.getUserParty(
+            prisma,
+            "1"
+        )
+
+        expect(party).toStrictEqual(mockParty)
+    })
+
+    it("getUserParty negative test", async () => {
+        prisma.user.findUnique.mockResolvedValue(
+            null
+        )
+
+        const party = await PartyService.getUserParty(
+            prisma,
+            "1"
+        )
+
+        expect(party).toStrictEqual(null)
+    })
 
     it("joinParty positive test", async () => {
         prisma.party.findUnique.mockResolvedValue(

@@ -1,19 +1,29 @@
 import React from "react"
-import { PartyPlayerData, PartyPlayer } from "./PartyPlayer"
+import { PartyPlayer } from "./PartyPlayer"
+import { PartyMember, User } from "@prisma/client"
 
 export interface PartyPlayerListData {
-    partyPlayers: PartyPlayerData[]
+    userId: string
+    partyCapacity: number
+    partyMembers: PartyMember[]
 }
 
 const PartyPlayerList = (props: PartyPlayerListData) => {
-    const partyPlayers = props.partyPlayers.map((partyPlayer) =>
-        <PartyPlayer key={partyPlayer.userId} {...partyPlayer} />
+    const partyPlayers = props.partyMembers.map((partyMember) =>
+        <PartyPlayer 
+            key={partyMember.userId} 
+            userId={props.userId} 
+            matches={undefined}
+            kdr={undefined}
+            winrate={undefined}
+            partyMember={partyMember} 
+        />
     )
-    let i = props.partyPlayers.length
-    while (i < 5) {
+    let i = props.partyMembers.length
+    while (i < props.partyCapacity) {
         partyPlayers.push(
             <>
-                <div className="flex flex-row max-w-full bg-gray-500 p-4 my-4 rounded-xl align-bottom">
+                <div className="flex flex-row w-full h-full bg-gray-500 p-4 my-4 rounded-xl align-bottom">
                     <div className="w-12 h-12 bg-gray-200 rounded-full object-cover">
                     </div>
                     <h2 className="font-semibold text-lg ml-6">
@@ -27,13 +37,13 @@ const PartyPlayerList = (props: PartyPlayerListData) => {
 
     return (
         <>
-            <div className="flex flex-col justify-start w-full max-w-4xl h-full p-8 bg-gray-700 text-white">
+            <div className="flex flex-col justify-start w-full h-full p-8 bg-gray-700 text-white">
                 <div className="flex flex-row">
                     <div className="text-4xl font-bold">
                         Player List
                     </div>
                     <div className="bg-gray-500 p-2 ml-10 rounded-lg font-bold">
-                    {props.partyPlayers.length}/5
+                        {props.partyMembers.length}/{props.partyCapacity}
                     </div>
                 </div>
 

@@ -25,6 +25,18 @@ export const partyRouter = createTRPCRouter({
         return PartyService.createParty(ctx.prisma, input);
     }),
 
+    getUserParty: publicProcedure
+      .input(z.string())
+      .query(async ({ ctx, input }) => {
+        return PartyService.getUserParty(ctx.prisma, input)
+    }),
+
+    getPartyMemberDetails: publicProcedure
+      .input(z.string())
+      .query(async ({ ctx, input }) => {
+        return PartyService.getPartyMemberDetails(ctx.prisma, input)
+    }),
+
     joinParty: publicProcedure
       .input(z.object({
         userId: z.string(),

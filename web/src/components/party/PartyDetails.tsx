@@ -1,9 +1,12 @@
 import React from "react"
 import { api } from "../../utils/api";
+import { useRouter } from "next/router";
+import { PartyMember, PartyMemberLevel } from "@prisma/client";
 
 export interface PartyDetailsData {
     userId: string,
     partyId: string,
+    partyMembers: PartyMember[],
     title: string,
     minimalRank: string | undefined,
     averageRank: string | undefined,
@@ -14,7 +17,18 @@ export interface PartyDetailsData {
 }
 
 const PartyDetails = (props: PartyDetailsData) => {
-    const partyMutation = api.party.leaveParty.useMutation()
+    const leavePartyMutation = api.party.leaveParty.useMutation()
+    const deletePartyMutation = api.party.deleteParty.useMutation()
+    const router = useRouter()
+    let isLeader = false
+
+    // check if the user is the leader of the party or not
+    for (let i = 0; i < props.partyMembers.length; i++) {
+        if (props.partyMembers[i]?.userId == props.userId && props.partyMembers[i]?.level == PartyMemberLevel.leader) {
+            isLeader = true
+            break
+        }
+    }
     
     function leaveParty(e: any) {
         e.preventDefault()
@@ -24,12 +38,29 @@ const PartyDetails = (props: PartyDetailsData) => {
             partyId: props.partyId
         }
 
-        partyMutation.mutate(leavePartyDTO)
+        leavePartyMutation.mutate(leavePartyDTO)
+
+        // use refetch after refactor
+        router.reload()
+    }
+
+    function deleteParty(e: any) {
+        e.preventDefault()
+
+        const deletePartyDTO = {
+            userId: props.userId,
+            partyId: props.partyId
+        }
+        
+        deletePartyMutation.mutate(deletePartyDTO)
+
+        // use refetch after refactor
+        router.reload()
     }
 
     return (
         <>
-            <div className="flex flex-col justify-start w-full max-w-4xl h-full p-8 bg-gray-700 text-white">
+            <div className="flex flex-col justify-start w-full h-full p-8 bg-gray-700 text-white">
                 <div className="mb-4">
                     <h1 className="text-4xl font-bold">Party Detail</h1>
                 </div>
@@ -70,12 +101,18 @@ const PartyDetails = (props: PartyDetailsData) => {
                 </div>
                 <div className="flex flex-row mt-8 mb-4">
                     <button className="btn bg-blue-500 hover:bg-blue-600 mr-4">Join Discord Voice</button>
-                    <button onClick={leaveParty} className="btn bg-red-600 bg-opacity-25 border-red-500 hover:bg-opacity-100 hover:bg-red-600">Leave</button>
+                    {isLeader
+                        ? <button onClick={deleteParty} className="btn bg-red-600 bg-opacity-25 border-red-500 hover:bg-opacity-100 hover:bg-red-600">Delete Party</button>
+                        : <button onClick={leaveParty} className="btn bg-red-600 bg-opacity-25 border-red-500 hover:bg-opacity-100 hover:bg-red-600">Leave Party</button>
+                    }
                 </div>
                 <div>
-                    <h3>
-                        Discord Voice Channel ID: {props.discordVoiceID}
-                    </h3>
+                    {props.discordVoiceID
+                        ? <h3>
+                            Discord Voice Channel ID: {props.discordVoiceID}
+                        </h3>
+                        : <></>
+                    }
                 </div>
             </div>
         </>

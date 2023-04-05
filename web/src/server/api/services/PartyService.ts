@@ -1,4 +1,5 @@
-import { PrismaClient, PartyType, PartyVisibility, PartyMemberLevel, Game } from "@prisma/client"
+import { PrismaClient, PartyType, PartyVisibility, PartyMemberLevel } from "@prisma/client"
+import { gameRouter } from "../routers/game"
 
 export interface CreatePartyData {
     userId: string,
@@ -34,14 +35,27 @@ export class PartyService {
                 gameId: gameId
             },
             include:{
-                partyMembers: true
+                partyMembers: {
+                    include: {
+                        user: {
+                            select: {
+                                image: true
+                            }
+                        }
+                    }
+                }
             }
         })
     }
 
     public static async createParty(prisma: PrismaClient, data: CreatePartyData){
         const newParty = await prisma.party.create({
-            data: data
+            data: {
+                gameId: data.gameId,
+                partyTitle: data.partyTitle,
+                partyType: data.partyType,
+                partyVisibility: data.partyVisibility,
+            }
         })
         
         await prisma.partyMember.create({
@@ -55,8 +69,49 @@ export class PartyService {
         return newParty
     }
 
+    public static async getUserParty(prisma: PrismaClient, userId: string) {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            },
+            include: {
+                partyMember: true,
+            }
+        })
+
+        if (!user || !user.partyMember) {
+            return null
+        }
+
+        return prisma.party.findUnique({
+            where: {
+                id: user.partyMember.partyId
+            },
+            include: {
+                partyMembers: {
+                    include: {
+                        user: true
+                    }
+                },
+                game: true
+            } 
+        })
+    }
+
+    public static async getPartyMemberDetails(prisma: PrismaClient, userId: string) {
+        return prisma.user.findUnique({
+            where: {
+                id: userId
+            },
+            select: {
+                username: true,
+                image: true,
+            }
+        })
+    }
+
     public static async joinParty(prisma: PrismaClient, data: JoinPartyData){
-        let partyPromise = prisma.party.findUnique({
+        const partyPromise = prisma.party.findUnique({
             where: {
                 id: data.partyId
             },
@@ -65,7 +120,7 @@ export class PartyService {
             }
         })
 
-        let userPromise = prisma.user.findUnique({
+        const userPromise = prisma.user.findUnique({
             where: {
                 id: data.userId
             },
@@ -85,24 +140,24 @@ export class PartyService {
         const game = await gamePromise
 
         // check if game exists, if not then throw error
-        if (game == null || game == undefined) {
+        if (!game) {
             throw Error("Error: Game not found")
         }
 
         // check if party exists and is not full, if not then throw error
-        if (party == null || party == undefined) {
+        if (!party) {
             throw Error("Error: Party not found")
         }
         if (party?.partyMembers.length >= game.teamCapacity) {
-            throw Error("Error: Party already full")
+            throw Error("Party already full")
         }
 
         // check if user exists and is not already in a party, if not then throw error
-        if (user == null || user == undefined) {
+        if (!user) {
             throw Error("Error: User not found")
         }
         if (user.partyMember != null && user.partyMember != undefined) {
-            throw Error("Error: user already in party")
+            throw Error("You are already in party. Please leave the current party if you want to join another one.")
         }
 
         return prisma.partyMember.create({
@@ -135,7 +190,7 @@ export class PartyService {
         })
 
         // throw error if the user doesn't exist or not in the party
-        if (partyMember == null || partyMember == undefined) {
+        if (!partyMember) {
             throw Error("Error: User not found")
         }
         // throw error if the user is not leader
@@ -143,7 +198,7 @@ export class PartyService {
             throw Error("Error: Permission denied, the requesting user is a member")
         }
 
-        return await prisma.party.update({
+        return prisma.party.update({
             where: {
                 id: data.partyId
             },
@@ -166,7 +221,7 @@ export class PartyService {
         })
 
         // throw error if the user doesn't exist or not in the party
-        if (partyMember == null || partyMember == undefined) {
+        if (!partyMember) {
             throw Error("Error: User not found")
         }
         // throw error if the user is not leader
@@ -174,7 +229,7 @@ export class PartyService {
             throw Error("Error: Permission denied, the requesting user is a member")
         }
 
-        return await prisma.party.delete({
+        return prisma.party.delete({
             where: {
                 id: data.partyId
             }
