@@ -8,6 +8,7 @@ export interface PartyCardData {
     partyId: string,
     gameId: string,
     title: string,
+    partyCapacity: number,
     minimalRank: string | undefined,
     visibility: PartyVisibility,
     type: PartyType,
@@ -48,7 +49,7 @@ const PartyCard = (props: PartyCardData) => {
         </div>
     )
     let i = props.partyMembers.length
-    while (i < 5) {
+    while (i < props.partyCapacity) {
         memberAvatars.push(
             <>
                 <div className="avatar">
@@ -95,9 +96,9 @@ const PartyCard = (props: PartyCardData) => {
                 <div className="flex flex-row align-center justify-between mt-10">
                     <div className="flex flex-row">
                         <div className="bg-gray-500 p-2 rounded-lg font-bold h-auto">
-                            {props.partyMembers.length}/5
+                            {props.partyMembers.length}/{props.partyCapacity}
                         </div>
-                        <div className="avatar-group -space-x-6 mx-8">
+                        <div className="avatar-group -space-x-4 mx-8">
 
                             {memberAvatars}
                             
@@ -105,7 +106,7 @@ const PartyCard = (props: PartyCardData) => {
                     </div>
                     <div>
                         {props.alreadyJoined
-                            ? <button className="btn bg-gray-400 hover:bg-gray-500">Already In The Party</button>
+                            ? <button className="btn bg-gray-400 hover:bg-gray-500">Already In Party</button>
                             : <button onClick={joinParty} className="btn bg-green-500 hover:bg-green-600">Join Party</button>
                         }
                     </div>

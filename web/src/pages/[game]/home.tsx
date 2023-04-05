@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import { PartyCard } from "../../components/party/PartyCard";
 import { useSession } from "next-auth/react";
-import { PartyType, PartyVisibility } from "@prisma/client";
+import { PartyType, PartyVisibility, Game } from "@prisma/client";
 import { GuideCard } from "../../components/Guide/GuideCard";
 import { PartyPlayerList } from "../../components/party/PartyPlayerList";
 import { PartyDetails } from "../../components/party/PartyDetails";
@@ -26,8 +26,8 @@ export default function Home() {
             <div className="flex justify-between items-center content-center my-6 text-neutral-0">
                 <h1 className="text-3xl">
                     {userParty 
-                        ? "Your Party:"
-                        : "Find Parties that Suits You" 
+                        ? "Party Dashboard"
+                        : "Find Party that Suits You" 
                     }
                 </h1>
                 <div className="flex">
@@ -39,13 +39,14 @@ export default function Home() {
                 // render party details if user is in party
                 ? <div className="p-4 bg-gray-800">
                     <div className="grid grid-cols-2">
-                        <div className="grid grid-rows-2">
+                        <div className="flex flex-col">
                             <div className="m-4">
                                 <PartyCard
                                     userId={userId ?? ""}
                                     partyId={userParty.id}
                                     gameId={userParty.gameId}
                                     title={userParty.partyTitle}
+                                    partyCapacity={userParty.game.teamCapacity as number}
                                     minimalRank={undefined}
                                     visibility={userParty?.partyVisibility ?? PartyVisibility.Public}
                                     type={userParty?.partyType ?? PartyType.Casual}
@@ -59,6 +60,7 @@ export default function Home() {
                                     partyId={userParty.id}
                                     partyMembers={userParty.partyMembers}
                                     title={userParty.partyTitle}
+                                    game={userParty.game as Game}
                                     minimalRank={undefined}
                                     averageRank={undefined}
                                     averageKDR={undefined}
@@ -86,6 +88,7 @@ export default function Home() {
                                     partyId={party.id}
                                     gameId={party.gameId}
                                     title={party.partyTitle}
+                                    partyCapacity={game?.teamCapacity as number}
                                     minimalRank={undefined}
                                     visibility={party?.partyVisibility ?? PartyVisibility.Public}
                                     type={party?.partyType ?? PartyType.Casual}

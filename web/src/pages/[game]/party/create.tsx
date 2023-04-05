@@ -72,7 +72,7 @@ const PartyForm: NextPage = () => {
                         <div>
                             <h3 className="font-semibold text-xl mb-2">Party Name</h3>
                             <input
-                                className="bg-gray-500 w-full text-2xl pl-4 py-4"
+                                className="bg-gray-500 w-full text-xl pl-4 py-4"
                                 id="partyName"
                                 value={name}
                                 name="name"
@@ -80,20 +80,20 @@ const PartyForm: NextPage = () => {
                                 onChange={e => setName(e.target.value)}
                             />
                             {error
-                                ? <p className="text-red-500 font-bold text-xl my-2">{error}</p>
+                                ? <p className="text-red-500 font-bold text-lg my-2">{error}</p>
                                 : <></>
                             }
                         </div>
                         <div>
                             <h3 className="font-semibold text-xl mb-2">Party Type</h3>
-                            <select className="bg-gray-500 w-full text-2xl pl-4 py-4 font-bold" id="partyType" value={type} onChange={handlePartyTypeChange}>
+                            <select className="bg-gray-500 w-full text-xl pl-4 py-4 font-bold" id="partyType" value={type} onChange={handlePartyTypeChange}>
                                 <option value={PartyType.Casual}>Casual</option>
                                 <option value={PartyType.Competitive}>Competitive</option>
                             </select>
                         </div>
                         <div>
                             <h3 className="font-semibold text-xl mb-2">Party Visibility</h3>
-                            <select className="bg-gray-500 w-full text-2xl pl-4 py-4 font-bold" id="partyVisibility" value={visibility} onChange={handlePartyVisibilityChange}>
+                            <select className="bg-gray-500 w-full text-xl pl-4 py-4 font-bold" id="partyVisibility" value={visibility} onChange={handlePartyVisibilityChange}>
                                 <option value={PartyVisibility.Public}>Public</option>
                                 <option value={PartyVisibility.Private}>Private</option>
                             </select> 

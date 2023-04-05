@@ -11,7 +11,6 @@ import Link from "next/link";
 const Party: NextPage = () => {
     const router = useRouter()
     const session = useSession()
-    const [form, setForm] = useState(false)
 
     const gameId = router.query.game
     const userId = session.data?.user.id
@@ -32,7 +31,13 @@ const Party: NextPage = () => {
                             {userParty
                                 ? <></>
                                 : <Link href={`/${gameId}/party/create`}>
-                                    <button className="btn bg-blue-500 hover:bg-blue-600">Create New Party</button>
+                                    <button className="btn bg-blue-500 hover:bg-blue-600">
+                                        Create New Party
+                                        &nbsp;
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                            <path fillRule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clipRule="evenodd" />
+                                        </svg>
+                                    </button>
                                 </Link>
                             }
                         </div>
@@ -41,10 +46,12 @@ const Party: NextPage = () => {
                         {parties?.map(party => {
                             return <>
                                 <div className="m-4">
-                                    <PartyCard key={party.id} userId={userId ?? ''}
+                                    <PartyCard key={party.id} 
+                                        userId={userId ?? ''}
                                         partyId={party.id}
                                         gameId={party.gameId}
                                         title={party.partyTitle}
+                                        partyCapacity={game?.teamCapacity as number}
                                         minimalRank={undefined}
                                         visibility={party?.partyVisibility ?? PartyVisibility.Public}
                                         type={party?.partyType ?? PartyType.Casual}

@@ -1,13 +1,14 @@
 import React from "react"
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
-import { PartyMember, PartyMemberLevel } from "@prisma/client";
+import { PartyMember, PartyMemberLevel, Game } from "@prisma/client";
 
 export interface PartyDetailsData {
     userId: string,
     partyId: string,
     partyMembers: PartyMember[],
     title: string,
+    game: Game,
     minimalRank: string | undefined,
     averageRank: string | undefined,
     averageKDR: number | undefined,
@@ -62,10 +63,11 @@ const PartyDetails = (props: PartyDetailsData) => {
         <>
             <div className="flex flex-col justify-start w-full h-full p-8 bg-gray-700 text-white">
                 <div className="mb-4">
-                    <h1 className="text-4xl font-bold">Party Detail</h1>
+                    <h1 className="text-3xl font-bold">Party Detail</h1>
                 </div>
                 <div>
                     <h2 className="my-4 text-xl">Party Name: {props.title}</h2>
+                    <h2 className="my-4 text-xl">Game: {props.game.name}</h2>
                     <div className="grid grid-cols-2">
                         {props.minimalRank
                             ? <div className="flex flex-row">
