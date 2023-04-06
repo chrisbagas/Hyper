@@ -23,7 +23,11 @@ const profileRouter = createTRPCRouter({
       return ProfileService.getAllCountries(ctx.prisma)
     }),
 
-    
+    getConnectionAccount: protectedProcedure
+    .query(async ({ ctx }) => {
+       
+      return await ProfileService.getConnectionAccount(ctx.session.user.id, ctx.prisma)
+    }),
   
 });
 

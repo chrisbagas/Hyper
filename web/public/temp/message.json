@@ -1,0 +1,93 @@
+{
+    "status": 200,
+    "accountData": {
+        "region": "ap",
+        "account_level": 328,
+        "name": "WAR RakaZet",
+        "tag": "yummy"
+    },
+    "mmrData": {
+        "current_rank": "Immortal 2",
+        "elo": 2200,
+        "current_rank_image": "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/25/largeicon.png",
+        "highest_rank": "Radiant",
+        "highest_rank_image": "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/27/largeicon.png"
+    },
+    "competitiveHistory": [
+        {
+            "rank": "Immortal 2",
+            "rank_image": "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/25/largeicon.png",
+            "elo_change": -12,
+            "map_name": "Split",
+            "kills": 25,
+            "deaths": 17,
+            "assists": 2,
+            "kd": 1.5,
+            "headshot_rate": 16,
+            "agent_image": "https://media.valorant-api.com/agents/f94c3b30-42be-e959-889c-5aa313dba261/displayicon.png",
+            "victory": false,
+            "rounds_won": 11,
+            "rounds_lost": 13
+        },
+        {
+            "rank": "Immortal 2",
+            "rank_image": "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/25/largeicon.png",
+            "elo_change": -16,
+            "map_name": "Pearl",
+            "kills": 22,
+            "deaths": 16,
+            "assists": 10,
+            "kd": 1.4,
+            "headshot_rate": 28,
+            "agent_image": "https://media.valorant-api.com/agents/dade69b4-4f5a-8528-247b-219e5a1facd6/displayicon.png",
+            "victory": false,
+            "rounds_won": 10,
+            "rounds_lost": 13
+        },
+        {
+            "rank": "Immortal 2",
+            "rank_image": "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/25/largeicon.png",
+            "elo_change": -17,
+            "map_name": "Icebox",
+            "kills": 15,
+            "deaths": 13,
+            "assists": 2,
+            "kd": 1.2,
+            "headshot_rate": 19,
+            "agent_image": "https://media.valorant-api.com/agents/117ed9e3-49f3-6512-3ccf-0cada7e3823b/displayicon.png",
+            "victory": false,
+            "rounds_won": 6,
+            "rounds_lost": 13
+        },
+        {
+            "rank": "Immortal 2",
+            "rank_image": "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/25/largeicon.png",
+            "elo_change": -13,
+            "map_name": "Fracture",
+            "kills": 17,
+            "deaths": 15,
+            "assists": 5,
+            "kd": 1.1,
+            "headshot_rate": 32,
+            "agent_image": "https://media.valorant-api.com/agents/eb93336a-449b-9c1b-0a54-a891f7921d69/displayicon.png",
+            "victory": false,
+            "rounds_won": 7,
+            "rounds_lost": 13
+        },
+        {
+            "rank": "Immortal 2",
+            "rank_image": "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/25/largeicon.png",
+            "elo_change": 15,
+            "map_name": "Lotus",
+            "kills": 22,
+            "deaths": 9,
+            "assists": 9,
+            "kd": 2.4,
+            "headshot_rate": 26,
+            "agent_image": "https://media.valorant-api.com/agents/6f2a04ca-43e0-be17-7f36-b3908627744d/displayicon.png",
+            "victory": true,
+            "rounds_won": 13,
+            "rounds_lost": 4
+        }
+    ]
+}

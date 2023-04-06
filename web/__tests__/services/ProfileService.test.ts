@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest"
 import prisma from "../../src/server/__mocks__/db";
-import { User, Account, GameAccount, Game, Country} from "@prisma/client"
+import { User, Account, GameAccount, Game, Country } from "@prisma/client"
 import { ProfileService, Profile } from "../../src/server/api/services/ProfileService";
+import { DiscordService } from "../../src/server/api/services/DiscordService";
 
 type UserMock = (User & {
     accounts: Account[];
@@ -10,6 +11,49 @@ type UserMock = (User & {
         game: Game;
     })[];
 })
+
+vi.mock("../../src/server/api/services/DiscordService", () => {
+    const expectedConnections = [
+        {
+            "type": "riotgames",
+            "id": "1",
+            "name": "Rostova#5722",
+            "visibility": 0,
+            "friend_sync": true,
+            "show_activity": true,
+            "verified": true,
+            "two_way_link": false,
+            "metadata_visibility": 1
+        }
+    ]
+
+    const expectedDetails = {
+        "id": "150579219057868802",
+        "username": "Meta",
+        "display_name": null,
+        "avatar": "298b99f01f5f967db673b9801308c5ec",
+        "avatar_decoration": null,
+        "discriminator": "0147",
+        "public_flags": 64,
+        "flags": 64,
+        "banner": null,
+        "banner_color": null,
+        "accent_color": null,
+        "locale": "en-GB",
+        "mfa_enabled": true,
+        "premium_type": 0,
+        "email": "tmgfaction@gmail.com",
+        "verified": true
+    }
+
+    return {
+        DiscordService: {
+            getUserDetails: vi.fn().mockResolvedValue(expectedDetails),
+            getUserConnections: vi.fn().mockResolvedValue(expectedConnections),
+        }
+    }
+})
+
 
 describe("Profile Service", () => {
     it("getProfile with connected games should return user profile with games", async () => {
@@ -45,7 +89,6 @@ describe("Profile Service", () => {
             GameAccount: [mockGameAccount]
         }
 
-        
 
         const expectedProfile: Profile = {
             id: "TEST-1",
@@ -125,7 +168,6 @@ describe("Profile Service", () => {
             name: "Indonesia",
             imageUrl: "lala"
         }
-        
         const mockedUser: UserMock = {
             id: "TEST-1",
             username: "Asyraf#6942",
@@ -180,7 +222,6 @@ describe("Profile Service", () => {
             }
         };
 
-      
 
         const expectedProfile: Profile = {
             id: "TEST-1",
@@ -201,18 +242,18 @@ describe("Profile Service", () => {
         prisma.user.update.mockResolvedValue(expectedProfile);
 
         const updatedProfile = await ProfileService.updateProfile(
-            "TEST-1",input
+            "TEST-1", input
             ,
             mockPrisma
         );
         expect(prisma.user.update).toHaveBeenCalledWith({
             where: { id: expectedProfile.id },
             data: {
-              username: input.username,
-              bio: input.bio,
-              countryCode: input.countryCode
+                username: input.username,
+                bio: input.bio,
+                countryCode: input.countryCode
             },
-          });
+        });
 
     });
 
@@ -225,8 +266,8 @@ describe("Profile Service", () => {
             ProfileService.updateProfile("TEST-1", {}, mockPrisma)
         ).rejects.toThrow();
     });
-    
-    
+
+
     it("getContries should return list of countries", async () => {
         const expectedCountries = [{
             localeCode: "id-ID",
@@ -238,8 +279,117 @@ describe("Profile Service", () => {
 
         expect(countries).toStrictEqual(expectedCountries)
         expect(countries.length).toBe(1)
+<<<<<<< HEAD
        
         
     });
     
+=======
+
+    });
+
+    it('getConnectionAccount should return the expected data', async () => {
+        // Define mock data for the function's dependencies
+        
+
+        const game = { id: '1', name: 'Valorant', logoUrl: 'lala' };
+        const gameAkun = {
+            id: '1',
+            userId: '12345',
+            gameId: '1',
+            gameIdentifier: 'Rostova#5722',
+            statisticsData: null,
+            statisticsLastUpdatedAt: null,
+            createdAt: new Date(),
+        };
+        const gameAkuns = [gameAkun];
+
+        const mockPrisma = prisma;
+
+        
+
+        // You can then use the mocked function in your tests
+        const expectedConnections = [
+            {
+                "type": "riotgames",
+                "id": "1",
+                "name": "Rostova#5722",
+                "visibility": 0,
+                "friend_sync": true,
+                "show_activity": true,
+                "verified": true,
+                "two_way_link": false,
+                "metadata_visibility": 1
+            }
+        ];
+
+        const connections = await DiscordService.getUserConnections("12345",mockPrisma);
+
+        expect(connections).toStrictEqual(expectedConnections);
+
+        prisma.game.findFirst.mockResolvedValue(game);
+        prisma.gameAccount.upsert.mockResolvedValue(gameAkun);
+        prisma.gameAccount.findMany.mockResolvedValue(gameAkuns);
+
+        const data = await ProfileService.getConnectionAccount("12345",mockPrisma)
+        const expectedData = { connected: expectedConnections, gameAkuns: gameAkuns };
+
+        expect(data).toStrictEqual(expectedData)
+
+
+    })
+
+    
+    it('getConnectionAccount should handle null game object and return expected data', async () => {
+        // Define mock data for the function's dependencies
+        
+
+        const game = null;
+        const gameAkun = {
+            id: '1',
+            userId: '12345',
+            gameId: '1',
+            gameIdentifier: 'Rostova#5722',
+            statisticsData: null,
+            statisticsLastUpdatedAt: null,
+            createdAt: new Date(),
+        };
+        const gameAkuns = [gameAkun];
+
+        const mockPrisma = prisma;
+
+        
+
+        // You can then use the mocked function in your tests
+        const expectedConnections = [
+            {
+                "type": "riotgames",
+                "id": "1",
+                "name": "Rostova#5722",
+                "visibility": 0,
+                "friend_sync": true,
+                "show_activity": true,
+                "verified": true,
+                "two_way_link": false,
+                "metadata_visibility": 1
+            }
+        ];
+
+        const connections = await DiscordService.getUserConnections("12345",mockPrisma);
+
+        expect(connections).toStrictEqual(expectedConnections);
+
+        prisma.game.findFirst.mockResolvedValue(game);
+        prisma.gameAccount.upsert.mockResolvedValue(gameAkun);
+        prisma.gameAccount.findMany.mockResolvedValue(gameAkuns);
+
+        const data = await ProfileService.getConnectionAccount("12345",mockPrisma)
+        const expectedData = { connected: expectedConnections, gameAkuns: gameAkuns };
+
+    })
+
+
+
+
+>>>>>>> origin/staging
 })
