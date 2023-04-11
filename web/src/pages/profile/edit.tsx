@@ -26,13 +26,21 @@ const EditProfile: NextPage = () => {
 
     const saveUpdateProfile = async (e: any) => {
         e.preventDefault();
-        profile["countryCode"] = (document.getElementById("countryCode") as HTMLInputElement).value;
-        if(profile["username"] === "") alert("Username tidak boleh kosong")
-        else if(profile["bio"] === "") alert("Bio tidak boleh kosong")
-        else {
-            profileMutation.mutate(profile)
-            router.push("/profile")
+        
+         // Create a new object that only includes the fields that have been modified
+         const updatedProfile: { username?: string, bio?: string, countryCode?: string } = {};
+        if (profile.username !== "") {
+            updatedProfile.username = profile.username;
         }
+        if (profile.bio !== "") {
+            updatedProfile.bio = profile.bio;
+        }
+        if (profile.countryCode !== "") {
+            updatedProfile.countryCode = profile.countryCode;
+        }
+        
+        profileMutation.mutate(updatedProfile);
+        router.push("/profile");
     };
 
 
@@ -75,10 +83,15 @@ const EditProfile: NextPage = () => {
 
                         </label>
                         <select className="select select-bordered" id="countryCode"
-                            name="countryCode">
+                            name="countryCode" onChange={(event) =>
+                                setProfile(
+                                    { ...profile, [event.target.id]: event.target.value }
+                                )}>
+                            <option disabled selected>Select origin</option>
                             {countries?.data?.map(country =>
                             <>
-                                <option value={country.localeCode}>{country.name}</option>
+                                
+                                <option value={country.localeCode}> {country.name} </option>
                             </>
                             )}
 

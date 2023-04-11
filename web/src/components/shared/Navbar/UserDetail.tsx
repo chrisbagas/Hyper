@@ -7,6 +7,7 @@ import { useRouter } from "next/router"
 
 const AuthorizedUserDetail: React.FC = () => {
   const { data, refetch } = api.users.getProfile.useQuery()
+  const connectAccs = api.discord.getUserConnections.useQuery()
   const session = useSession()
   const router = useRouter()
 
@@ -51,17 +52,17 @@ const AuthorizedUserDetail: React.FC = () => {
 
         <div>
           <h1 className="text-base-4">Connected Accounts</h1>
-          {data?.connectedGames.length === 0 ? (
+          {connectAccs?.data?.length === 0 ? (
             <div className="text-base-5">
-              No game accounts connected
+              No  accounts connected
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              {data?.connectedGames.map(connectGame =>
-                <div key={connectGame.gameId} className="flex flex-col sm:flex-row gap-4">
+              {connectAccs?.data?.map(connectAcc =>
+                <div key={connectAcc.type} className="flex flex-col sm:flex-row gap-4">
                     <div className="text-white flex gap-2">
-                      <img src={connectGame.game.logoUrl} className="w-5 h-5" />
-                      {connectGame.username}
+                      {/* <img src={connectGame.game.logoUrl} className="w-5 h-5" /> */}
+                      {connectAcc.name}
                       <ArrowTopRightOnSquareIcon className="w-4" />
                     </div>
                 </div>
