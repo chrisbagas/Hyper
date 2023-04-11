@@ -1,7 +1,7 @@
 import "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 import { appRouter } from "../../src/server/api/root";
-import { PartyType, PartyVisibility } from "@prisma/client"
+import { PartyMemberLevel, PartyType, PartyVisibility } from "@prisma/client"
 import prisma from "../../src/server/__mocks__/db";
 
 
@@ -79,17 +79,59 @@ describe("Party RPC", () => {
         })).rejects.toThrowError("duplicate")
     })
 
+    it("getPartyMemberDetails test", async () => {
+        prisma.user.findUnique.mockResolvedValue(
+            mockUser
+        )
+
+        const user = await caller.party.getPartyMemberDetails(
+            "1"
+        )
+
+        expect(user).toEqual(mockUser)
+    })
+
     const mockPartyMember = {
         userId: "1",
         partyId: "1",
         gameId: "valorant",
+        level: PartyMemberLevel.leader
     }
 
     const mockUser = {
         id: "1",
         email: "google@gmail.com",
         image: "amogus.png",
+        username: "gamer123",
+        emailVerified: true,
+        name: "bob",
+        bio: "hello",
+        countryCode: "id"
     }
+    
+    const mockUserInParty = {
+        ...mockUser,
+        partyMember: mockPartyMember
+    }
+
+    const mockGame = {
+        id: "valorant",
+        name: "valorant",
+        logoUrl: "valorant.png",
+        teamCapacity: 5
+    }
+
+    it("getUserParty test", async () => {
+        prisma.user.findUnique.mockResolvedValue(
+            mockUserInParty
+        )
+
+        const party = await caller.party.getUserParty(
+            "1"
+        )
+
+        expect(party).toStrictEqual(party)
+    })
 
     it("joinParty positive test", async () => {
         prisma.party.findUnique.mockResolvedValue(
@@ -98,6 +140,10 @@ describe("Party RPC", () => {
 
         prisma.user.findUnique.mockResolvedValue(
             mockUser
+        )
+
+        prisma.game.findUnique.mockResolvedValue(
+            mockGame
         )
 
         prisma.partyMember.create.mockResolvedValue(
@@ -114,6 +160,10 @@ describe("Party RPC", () => {
     it("joinParty negative test", async () => {
         prisma.party.findUnique.mockRejectedValue(
             new Error("Error: Party not found")
+        )
+
+        prisma.game.findUnique.mockResolvedValue(
+            mockGame
         )
 
         expect(caller.party.joinParty(
@@ -145,5 +195,43 @@ describe("Party RPC", () => {
             userId: mockPartyMember.userId,
             partyId: mockPartyMember.partyId
         })).rejects.toThrowError("not found")
+    })
+
+    it("updateParty test", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyMember
+        )
+
+        prisma.party.update.mockResolvedValue(
+            mockParty
+        )
+
+        const party = await caller.party.updateParty({
+            partyId: "1",
+            userId: "1",
+            partyTitle: "gaming",
+            partyType: PartyType.Casual,
+            partyVisibility: PartyVisibility.Public,
+        })
+
+        expect(party).toStrictEqual(mockParty)
+    })
+
+    it("deleteParty test", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyMember
+        )
+        
+        prisma.party.delete.mockResolvedValue(
+            mockParty
+        )
+
+
+        const party = await caller.party.deleteParty({
+            partyId: "1",
+            userId: "1",
+        })
+
+        expect(party).toStrictEqual(mockParty)
     })
 })
