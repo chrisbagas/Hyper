@@ -279,12 +279,6 @@ describe("Profile Service", () => {
 
         expect(countries).toStrictEqual(expectedCountries)
         expect(countries.length).toBe(1)
-<<<<<<< HEAD
-       
-        
-    });
-    
-=======
 
     });
 
@@ -391,5 +385,4 @@ describe("Profile Service", () => {
 
 
 
->>>>>>> origin/staging
 })
