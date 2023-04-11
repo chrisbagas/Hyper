@@ -52,6 +52,7 @@ export const authOptions: NextAuthOptions = {
     DiscordProvider({
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
+      authorization: { params: { scope: 'identify email guilds connections' } },
     }),
     /**
      * ...add more providers here
@@ -63,6 +64,30 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      **/
   ],
+  events: {
+    signIn: async ({ user, account, isNewUser }) => {
+      if (user && account && !isNewUser) {
+        const dbAccount = await prisma.account.findFirst({
+          where: {
+            user: {
+              id: user.id
+            }
+          }
+        })
+
+        await prisma.account.update({
+          where: {
+            id: dbAccount?.id
+          },
+          data: {
+            access_token: account?.access_token,
+            refresh_token: account?.refresh_token,
+            expires_at: account?.expires_at,
+          }
+        })
+      }
+    }
+  }
 };
 
 /**

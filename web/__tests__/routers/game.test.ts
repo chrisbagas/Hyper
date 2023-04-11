@@ -14,11 +14,13 @@ describe("Game Data RPC", () => {
       id: "testGame1",
       name: "Valorant",
       logoUrl: "logoLink01",
+      teamCapacity: 5,
     }
     const mockedCSGO = {
       id: "testGame2",
       name: "CS:GO",
       logoUrl: "logoLink02",
+      teamCapacity: 5,
     }
 
     prisma.game.findMany.mockResolvedValue([
@@ -44,6 +46,7 @@ describe("Game Data RPC", () => {
       id: "testGame1",
       name: "Valorant",
       logoUrl: "logoLink01",
+      teamCapacity: 5,
     }
 
     prisma.game.findUnique.mockResolvedValue(mockedValorant)
@@ -54,7 +57,7 @@ describe("Game Data RPC", () => {
     }
 
     const caller = appRouter.createCaller(ctx)
-    const games = await caller.games.getById("testGame1")
+    const games = await caller.games.getById({id:"testGame1"})
 
     expect(games).toStrictEqual(mockedValorant)
 
@@ -62,7 +65,7 @@ describe("Game Data RPC", () => {
 
   it("getById nonexistent game should return null", async () => {
 
-    const randomId = randomUUID()
+    const randomId = { id: randomUUID()}
     prisma.game.findUnique.mockResolvedValue(null)
 
     const ctx = {
@@ -71,6 +74,7 @@ describe("Game Data RPC", () => {
     }
 
     const caller = appRouter.createCaller(ctx)
+
     await expect(caller.games.getById(randomId)).resolves.toBeNull()
 
   })
@@ -92,7 +96,7 @@ describe("Game Data RPC", () => {
 
   it("getById should return error when exist Prisma relater error", async () => {
 
-    const randomId = randomUUID()
+    const randomId = { id: randomUUID()}
 
     const ctx = {
       session: null,

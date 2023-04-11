@@ -1,12 +1,14 @@
 import React, { useEffect } from "react"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { signIn, signOut, useSession } from "next-auth/react"
-import { EllipsisVerticalIcon, UserCircleIcon } from "@heroicons/react/24/solid"
+import { EllipsisVerticalIcon, UserCircleIcon,ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid"
 import { api } from "../../../utils/api"
+import { useRouter } from "next/router"
 
 const AuthorizedUserDetail: React.FC = () => {
   const { data, refetch } = api.users.getProfile.useQuery()
   const session = useSession()
+  const router = useRouter()
 
   useEffect(() => {
     refetch()
@@ -37,6 +39,9 @@ const AuthorizedUserDetail: React.FC = () => {
               <EllipsisVerticalIcon className="h-6" />
             </label>
             <ul tabIndex={0} className="dropdown-content menu !bg-base-2 border border-base-3 shadow-xl p-2 shadow bg-base-100 rounded-box w-60">
+              <li >
+                <button onClick={() => router.push("/profile")}>Profile</button>
+              </li>
               <li className="text-error-main">
                 <button onClick={() => signOut()}>Sign Out</button>
               </li>
@@ -51,7 +56,18 @@ const AuthorizedUserDetail: React.FC = () => {
               No game accounts connected
             </div>
           ) : (
-            <div></div>
+            <div className="flex flex-col gap-2">
+              {data?.connectedGames.map(connectGame =>
+                <div key={connectGame.gameId} className="flex flex-col sm:flex-row gap-4">
+                    <div className="text-white flex gap-2">
+                      <img src={connectGame.game.logoUrl} className="w-5 h-5" />
+                      {connectGame.username}
+                      <ArrowTopRightOnSquareIcon className="w-4" />
+                    </div>
+                </div>
+
+              )}
+            </div>
           )}
         </div>
       </div>

@@ -3,6 +3,7 @@ import { HomeIcon } from "@heroicons/react/24/solid"
 import Link from "next/link"
 import { Divider } from "./Divider"
 import { useRouter } from "next/router"
+import { api } from "../../../utils/api"
 
 export interface SidebarMenuButtonProps {
   children?: React.ReactNode
@@ -28,6 +29,7 @@ const SidebarMenuButton: React.FC<SidebarMenuButtonProps> = ({ children, path })
 }
 
 export const SidebarMenu: React.FC = () => {
+  const games = api.games.getAll.useQuery()
   return (
     <div className="flex flex-col space-y-2">
       <SidebarMenuButton path="/">
@@ -35,14 +37,12 @@ export const SidebarMenu: React.FC = () => {
         Home
       </SidebarMenuButton>
       <Divider />
-      <SidebarMenuButton path="/games/valorant">
-        <img className="bg-white rounded-md w-6 h-6" src="/valorant.png" />
-        VALORANT
-      </SidebarMenuButton>
-      <SidebarMenuButton path="/games/csgo">
-        <img className="bg-white rounded-md w-6 h-6" src="/csgo.webp" />
-        CSGO
-      </SidebarMenuButton>
+      {games?.data?.map(game =>
+        <SidebarMenuButton key={game.id}path={"/"+game.id+"/home"}>
+          <img className="bg-white rounded-md w-6 h-6" src={game.logoUrl} />
+          {game.name}
+        </SidebarMenuButton>
+      )}
     </div>
   )
 }
