@@ -1,12 +1,14 @@
 import React from "react"
-import { PartyMember, PartyMemberLevel } from "@prisma/client"
+import { PartyMember, PartyMemberLevel, User } from "@prisma/client"
 
 export interface PartyPlayerData {
     userId: string
     matches: number | undefined
     kdr: number | undefined
     winrate: number | undefined
-    partyMember: PartyMember
+    partyMember: PartyMember & {
+        user: User
+    }
 }
 
 const PartyPlayer = (props: PartyPlayerData) => {

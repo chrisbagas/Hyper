@@ -44,6 +44,10 @@ const PartyForm: NextPage = () => {
         }
 
         setError("")
+ 
+        if (typeof gameId !== "string") {
+            return
+        }
 
         const createPartyDTO = {
             userId: userId,

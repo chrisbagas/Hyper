@@ -17,7 +17,7 @@ export default function Home() {
     const parties = api.party.getByGame.useQuery({ id: gameId as string }).data
     const { data } = api.guides.getAllbyGame.useQuery({ id: gameId as string })
     const session = useSession()
-    const userId = session.data?.user.id
+    const userId = session.data?.user.id ?? ""
     const userParty = api.party.getUserParty.useQuery(userId).data ?? null
 
     return <>
