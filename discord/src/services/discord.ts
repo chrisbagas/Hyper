@@ -1,4 +1,4 @@
-import { ChannelType, Client, Collection, Guild, GuildBasedChannel, PermissionsBitField } from "discord.js";
+import { ChannelType, Collection, PermissionsBitField } from "discord.js";
 import discordBotClient from "../engines/discord/discordBotClient";
 import { CreateChannelPayload, CreateChannelResult } from "../types/discord";
 
@@ -14,8 +14,7 @@ export default class DiscordService {
 
   public static async getChannelById(id: string) {
     const guild = await discordBotClient.guilds.fetch(process.env.DISCORD_GUILD_ID ?? "")
-    const channel = await guild.channels.fetch(id)
-    return channel
+    return guild.channels.fetch(id)
   }
 
   static async createChannel(payload: CreateChannelPayload): Promise<CreateChannelResult> {
