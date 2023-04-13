@@ -3,7 +3,7 @@ import React, { useState } from "react"
 import { ExclamationTriangleIcon, LinkIcon, XCircleIcon } from "@heroicons/react/24/solid"
 import { GuideTopButtonGroup } from "./GuideTopButtonGroup"
 import { EyeIcon, FolderPlusIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline"
-import { GuideConfirmationModal } from "./GuideConfirmationModal"
+import { ConfirmationModal } from "../shared/ConfirmationModal"
 
 export interface Post {
   type:CommunityPostType|undefined,
@@ -131,7 +131,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
         </div>
       </div>
 
-      <GuideConfirmationModal
+      <ConfirmationModal
         headerText="Save and publish post?"
         contentText="You cannot make any more changes and this action is irreversible"
         isModalOpen={isModalOpen}
@@ -146,7 +146,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
         >
           <PaperAirplaneIcon className="w-4"/> Save & Publish Post
         </button>
-      </GuideConfirmationModal>
+      </ConfirmationModal>
       
       
     </>
