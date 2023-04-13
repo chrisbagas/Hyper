@@ -52,14 +52,13 @@ export class GuideService {
     }
 
     public static async getAll(prisma: PrismaClient) {
-        const guides = await prisma.communityPost.findMany({
+        return await prisma.communityPost.findMany({
             include: {
                 author: true,
                 header: true,
                 game: true,
             }
         })
-        return guides
     }
 
     public static async updateStatusModerationById(id: string, status: CommunityPostStatus, prisma: PrismaClient) {
