@@ -1,5 +1,5 @@
 import React from "react"
-import { PartyVisibility, PartyType, PartyMember } from "@prisma/client"
+import { PartyVisibility, PartyType, PartyMember, User } from "@prisma/client"
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
 
@@ -12,7 +12,7 @@ export interface PartyCardData {
     minimalRank: string | undefined,
     visibility: PartyVisibility,
     type: PartyType,
-    partyMembers: PartyMember[],
+    partyMembers: (PartyMember & {user: User})[],
     alreadyJoined: boolean
 }
 

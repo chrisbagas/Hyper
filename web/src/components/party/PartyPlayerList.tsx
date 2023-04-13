@@ -1,11 +1,11 @@
 import React from "react"
 import { PartyPlayer } from "./PartyPlayer"
-import { PartyMember } from "@prisma/client"
+import { PartyMember, User } from "@prisma/client"
 
 export interface PartyPlayerListData {
     userId: string
     partyCapacity: number
-    partyMembers: PartyMember[]
+    partyMembers: (PartyMember & {user: User})[]
 }
 
 const PartyPlayerList = (props: PartyPlayerListData) => {

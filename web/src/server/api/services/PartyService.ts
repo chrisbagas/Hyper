@@ -36,11 +36,7 @@ export class PartyService {
             include:{
                 partyMembers: {
                     include: {
-                        user: {
-                            select: {
-                                image: true
-                            }
-                        }
+                        user: true
                     }
                 }
             }
