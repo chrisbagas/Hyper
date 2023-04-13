@@ -5,6 +5,7 @@ import { api } from "../../../utils/api";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
 
 const Guides: NextPage = () => {
   const router = useRouter()
@@ -20,10 +21,12 @@ const Guides: NextPage = () => {
         <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
         <div className="flex justify-between items-center content-center my-6">
           <h1 className="text-2xl font-bold text-white">Your Posts</h1>
-          <Link href={`/${id}/your-guides/create`}><button className="btn bg-primary-main text-white">Create New Post &nbsp;<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-          </button></Link>
+          <Link href={`/${id}/your-guides/create`}>
+            <button className="btn bg-primary-main text-white">
+              <span className="hidden lg:block">Create New Post &nbsp;</span>
+              <PencilSquareIcon className="w-5 h-5" />
+            </button>
+          </Link>
         </div>
         <div className="grid xl:grid-cols-3 grid-flow-row gap-8 content-center justify-center items-center my-6">
           {data?.map((guide) => {
