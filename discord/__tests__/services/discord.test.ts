@@ -5,6 +5,7 @@ import guild from "../__mocks__/guild"
 import channel from "../__mocks__/channel"
 
 import DiscordService from "../../src/services/discord"
+import { Collection } from "discord.js"
 
 vi.resetModules()
 vi.mock("~/engines/discord/discordBotClient", () => {
@@ -12,6 +13,71 @@ vi.mock("~/engines/discord/discordBotClient", () => {
     default: client
   }
 })
+
+describe("DiscordService getChannelById method", () => {
+  it("Should return discord channel", async () => {
+    client.guilds.fetch.mockResolvedValue(guild)
+    guild.channels.fetch.mockResolvedValue(channel)
+
+    expect(await DiscordService.getChannelById("TEST_ID")).toBe(channel)
+  })
+})
+
+describe("DiscordService checkChannel method", () => {
+  it("should return not fetch channel when channel does not exist", async () => {
+    client.guilds.fetch.mockResolvedValue(guild)
+    guild.channels.fetch.mockResolvedValue(null)
+
+    await DiscordService.checkChannel("test")
+    expect(channel.fetch).not.toHaveBeenCalled()
+  })
+
+  it("should call removeChannel when channel is empty", async () => {
+    const originalRemoveChannel = DiscordService.removeChannel
+    DiscordService.removeChannel = vi.fn()
+
+    client.guilds.fetch.mockResolvedValue(guild)
+    guild.channels.fetch.mockResolvedValue(channel)
+
+    channel.fetch.mockResolvedValue({
+      members: new Collection<string, any>(),
+    })
+
+    await DiscordService.checkChannel("test")
+    expect(DiscordService.removeChannel).toHaveBeenCalled()
+    expect(channel.delete).toHaveBeenCalled()
+
+    DiscordService.removeChannel = originalRemoveChannel
+  })
+})
+
+describe("DiscordService removeChannel method", () => {
+  it("should not call clearInterval if channel does not exist", () => {
+    DiscordService.channels = []
+    const mockClearInterval = vi.fn()
+    global.clearInterval = mockClearInterval
+
+    DiscordService.removeChannel("abcdefg")
+
+    expect(mockClearInterval).not.toHaveBeenCalled()
+  })
+
+  it("should call clearInterval if channel exists", () => {
+    DiscordService.channels = [
+      {
+        id: "abcdefg",
+        interval: null
+      }
+    ]
+
+    const mockClearInterval = vi.fn()
+    global.clearInterval = mockClearInterval
+
+    DiscordService.removeChannel("abcdefg")
+    expect(mockClearInterval).toHaveBeenCalled()
+  })
+})
+
 
 describe("DiscordService createChannel method", () => {
   it("should call fetch discord guild", async () => {
