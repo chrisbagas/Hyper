@@ -491,3 +491,365 @@ describe("Get Combined Valorant Data Successfully", () => {
         expect(valorantAPIData).toStrictEqual(mockValorantAPIData)
     }, 20000)
 })
+
+describe("Successfully Get Valorant Match Details", () => {
+    it("Get Valorant Match Details", async () => {
+        const mockValorantMatchData = {
+            status: 200,
+            data: {
+                metadata: {
+                    map: "Haven"
+                },
+                teams: {
+                    red: {
+                        rounds_won: 7
+                    },
+                    blue: {
+                        rounds_won:13
+                    }
+                },
+                players: {
+                    all_players: [
+                        {
+                            name: "peek mid",
+                            tag: "ell",
+                            currenttier: 24,
+                            currenttier_patched: "Immortal 1",
+                            team: "Blue",
+                            stats: {
+                                kills: 17,
+                                deaths: 17,
+                                assists: 1,
+                                headshots: 12,
+                                bodyshots: 26,
+                                legshots: 2
+                            },
+                            assets: {
+                                agent: {
+                                    small:"https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/displayicon.png",
+                                }
+                            }
+                        },
+                        {
+                            name: "Daydream",
+                            tag: "itsme",
+                            currenttier: 24,
+                            currenttier_patched: "Immortal 1",
+                            team: "Blue",
+                            stats: {
+                                kills: 9,
+                                deaths: 13,
+                                assists: 13,
+                                headshots: 10,
+                                bodyshots: 21,
+                                legshots: 0
+                            },
+                            assets: {
+                                agent: {
+                                    small: "https://media.valorant-api.com/agents/dade69b4-4f5a-8528-247b-219e5a1facd6/displayicon.png",
+                                }
+                            }
+                        },
+                        {
+                            name: "findingyashiro",
+                            tag: "ikaja",
+                            currenttier: 22,
+                            currenttier_patched: "Ascendant 2",
+                            team: "Blue",
+                            stats: {
+                                kills: 22,
+                                deaths: 10,
+                                assists: 10,
+                                headshots: 20,
+                                bodyshots: 25,
+                                legshots: 1
+                            },
+                            assets: {
+                                agent: {
+                                    small: "https://media.valorant-api.com/agents/8e253930-4c05-31dd-1b6c-968525494517/displayicon.png",
+                                }
+                            }
+                        },
+                        {
+                            name: "WAR CgfEd",
+                            tag: "dddd",
+                            currenttier: 26,
+                            currenttier_patched: "Immortal 3",
+                            team: "Red",
+                            stats: {
+                                kills: 23,
+                                deaths: 15,
+                                assists: 2,
+                                headshots: 17,
+                                bodyshots: 35,
+                                legshots: 4
+                            },
+                            assets: {
+                                agent: {
+                                    small: "https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/displayicon.png",
+                                }
+                            }
+                        },
+                        {
+                            name: "Shakipiyo",
+                            tag: "woh",
+                            currenttier: 23,
+                            currenttier_patched: "Ascendant 3",
+                            team: "Blue",
+                            stats: {
+                                kills: 12,
+                                deaths: 14,
+                                assists: 2,
+                                headshots: 7,
+                                bodyshots: 29,
+                                legshots: 0
+                            },
+                            assets: {
+                                agent: {
+                                    small: "https://media.valorant-api.com/agents/22697a3d-45bf-8dd7-4fec-84a9e28c69d7/displayicon.png",
+                                }
+                            }
+                        },
+                        {
+                            name: "WAR RakaZet",
+                            tag: "yummy",
+                            currenttier: 25,
+                            currenttier_patched: "Immortal 2",
+                            team: "Red",
+                            stats: {
+                                kills: 16,
+                                deaths: 14,
+                                assists: 3,
+                                headshots: 20,
+                                bodyshots: 28,
+                                legshots: 1
+                            },
+                            assets: {
+                                agent: {
+                                    small: "https://media.valorant-api.com/agents/a3bfb853-43b2-7238-a4f1-ad90e9e46bcc/displayicon.png",
+                                }
+                            }
+                        },
+                        {
+                            name: "Rostova",
+                            tag: "5722",
+                            currenttier: 20,
+                            currenttier_patched: "Diamond 3",
+                            team: "Red",
+                            stats: {
+                                kills: 9,
+                                deaths: 16,
+                                assists: 10,
+                                headshots: 3,
+                                bodyshots: 34,
+                                legshots: 0
+                            },
+                            assets: {
+                                agent: {
+                                    small: "https://media.valorant-api.com/agents/8e253930-4c05-31dd-1b6c-968525494517/displayicon.png",
+                                }
+                            }
+                        },
+                        {
+                            name: "iShowSpeed",
+                            tag: "LLLLL",
+                            currenttier: 24,
+                            currenttier_patched: "Immortal 1",
+                            team: "Blue",
+                            stats: {
+                                kills: 18,
+                                deaths: 13,
+                                assists: 5,
+                                headshots: 19,
+                                bodyshots: 27,
+                                legshots: 7
+                            },
+                            assets: {
+                                agent: {
+                                    small: "https://media.valorant-api.com/agents/a3bfb853-43b2-7238-a4f1-ad90e9e46bcc/displayicon.png",
+                                }
+                            }
+                        },
+                        {
+                            name: "WAR v1ctin",
+                            tag: "CR7",
+                            currenttier: 22,
+                            currenttier_patched: "Ascendant 2",
+                            team: "Red",
+                            stats: {
+                                kills: 8,
+                                deaths: 17,
+                                assists: 7,
+                                headshots: 5,
+                                bodyshots: 22,
+                                legshots: 2
+                            },
+                            assets: {
+                                agent: {
+                                    small: "https://media.valorant-api.com/agents/320b2a48-4d9b-a075-30f1-1f93a9b638fa/displayicon.png",
+                                }
+                            }
+                        },
+                        {
+                            name: "WAR Rts24",
+                            tag: "toto",
+                            currenttier: 23,
+                            currenttier_patched: "Ascendant 3",
+                            team: "Red",
+                            stats: {
+                                kills: 11,
+                                deaths: 16,
+                                assists: 3,
+                                headshots: 10,
+                                bodyshots: 18,
+                                legshots: 2
+                            },
+                            assets: {
+                                agent: {
+                                    small: "https://media.valorant-api.com/agents/117ed9e3-49f3-6512-3ccf-0cada7e3823b/displayicon.png",
+                                }
+                            }
+                        },
+                    ]
+                }
+            }
+        }
+
+        const mockValorantMatchDetails = {
+            status: 200,
+            map_name: "Haven",
+            friendly_team_score: 7,
+            enemy_team_score: 13,
+            friendly_team_members: [
+                {
+                    name: "WAR CgfEd",
+                    tag: "dddd",
+                    rank: "Immortal 3",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/26/largeicon.png",
+                    kills: 23,
+                    deaths: 15,
+                    assists: 2,
+                    kd: 1.53,
+                    headshot_rate: 30,
+                    agent_image: "https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/displayicon.png"
+                },
+                {
+                    name: "WAR RakaZet",
+                    tag: "yummy",
+                    rank: "Immortal 2",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/25/largeicon.png",
+                    kills: 16,
+                    deaths: 14,
+                    assists: 3,
+                    kd: 1.14,
+                    headshot_rate: 41,
+                    agent_image: "https://media.valorant-api.com/agents/a3bfb853-43b2-7238-a4f1-ad90e9e46bcc/displayicon.png"
+                },
+                {
+                    name: "WAR Rts24",
+                    tag: "toto",
+                    rank: "Ascendant 3",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/23/largeicon.png",
+                    kills: 11,
+                    deaths: 16,
+                    assists: 3,
+                    kd: 0.69,
+                    headshot_rate: 33,
+                    agent_image: "https://media.valorant-api.com/agents/117ed9e3-49f3-6512-3ccf-0cada7e3823b/displayicon.png"
+                },
+                {
+                    name: "Rostova",
+                    tag: "5722",
+                    rank: "Diamond 3",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/20/largeicon.png",
+                    kills: 9,
+                    deaths: 16,
+                    assists: 10,
+                    kd: 0.56,
+                    headshot_rate: 8,
+                    agent_image: "https://media.valorant-api.com/agents/8e253930-4c05-31dd-1b6c-968525494517/displayicon.png"
+                },
+                {
+                    name: "WAR v1ctin",
+                    tag: "CR7",
+                    rank: "Ascendant 2",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
+                    kills: 8,
+                    deaths: 17,
+                    assists: 7,
+                    kd: 0.47,
+                    headshot_rate: 17,
+                    agent_image: "https://media.valorant-api.com/agents/320b2a48-4d9b-a075-30f1-1f93a9b638fa/displayicon.png"
+                },
+            ],
+            enemy_team_members: [
+                {
+                    name: "findingyashiro",
+                    tag: "ikaja",
+                    rank: "Ascendant 2",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
+                    kills: 22,
+                    deaths: 10,
+                    assists: 10,
+                    kd: 2.2,
+                    headshot_rate: 43,
+                    agent_image: "https://media.valorant-api.com/agents/8e253930-4c05-31dd-1b6c-968525494517/displayicon.png"
+                },
+                {
+                    name: "iShowSpeed",
+                    tag: "LLLLL",
+                    rank: "Immortal 1",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/24/largeicon.png",
+                    kills: 18,
+                    deaths: 13,
+                    assists: 5,
+                    kd: 1.38,
+                    headshot_rate: 36,
+                    agent_image: "https://media.valorant-api.com/agents/a3bfb853-43b2-7238-a4f1-ad90e9e46bcc/displayicon.png"
+                },
+                {
+                    name: "peek mid",
+                    tag: "ell",
+                    rank: "Immortal 1",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/24/largeicon.png",
+                    kills: 17,
+                    deaths: 17,
+                    assists: 1,
+                    kd: 1.0,
+                    headshot_rate: 30,
+                    agent_image: "https://media.valorant-api.com/agents/add6443a-41bd-e414-f6ad-e58d267f4e95/displayicon.png"
+                },
+                {
+                    name: "Shakipiyo",
+                    tag: "woh",
+                    rank: "Ascendant 3",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/23/largeicon.png",
+                    kills: 12,
+                    deaths: 14,
+                    assists: 2,
+                    kd: 0.86,
+                    headshot_rate: 19,
+                    agent_image: "https://media.valorant-api.com/agents/22697a3d-45bf-8dd7-4fec-84a9e28c69d7/displayicon.png"
+                },
+                {
+                    name: "Daydream",
+                    tag: "itsme",
+                    rank: "Immortal 1",
+                    rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/24/largeicon.png",
+                    kills: 9,
+                    deaths: 13,
+                    assists: 13,
+                    kd: 0.69,
+                    headshot_rate: 32,
+                    agent_image: "https://media.valorant-api.com/agents/dade69b4-4f5a-8528-247b-219e5a1facd6/displayicon.png"
+                },
+            ]          
+        }
+        
+        fetchMocker.mockResponseOnce(JSON.stringify(mockValorantMatchData))
+
+        const valorantMatchDetails = await PlayerStatisticsService.getValorantMatchDetails("WAR RakaZet", "yummy", "9413d080-a016-4aa9-923e-6a8dfa7fef47")
+
+        expect(valorantMatchDetails).toStrictEqual(mockValorantMatchDetails)
+    })
+})
