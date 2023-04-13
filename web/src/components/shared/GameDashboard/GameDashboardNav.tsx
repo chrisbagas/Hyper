@@ -41,14 +41,14 @@ export const GameDashboardNav: React.FC<GameDashboardProps> = ({ id, logoUrl, na
                 <img src="https://assets.stickpng.com/thumbs/6095215353a8bf00040ff3a6.png" alt="" className="mt-1 w-4 h-4" /> Riot<ArrowTopRightOnSquareIcon className="w-4" />
             </Link>
         </div>
-        <div className="flex flex-col sm:flex-row gap-4 w-full justify-between items-center content-center mt-8">
+        <div className="flex flex-nowrap tabs border-b border-base-4 mt-8 overflow-x-auto">
             {menu.map((item, index) => {
                 return (
                     <Link key={index} href={"/" + id + item.path}>
                         <div
-                            className={`cursor-pointer ${page.includes(item.path)
-                                ? 'font-bold text-xl text-neutral-0 border-b-4 flex-1'
-                                : 'text-xl text-neutral-0 flex-1'
+                            className={`tab tab-lg cursor-pointer text-neutral-0 w-52 ${page.includes(item.path)
+                                ? 'border-b-[2px] font-bold border-neutral-0'
+                                : ''
                                 }`}
                         >
                             {item.title}

@@ -3,11 +3,12 @@ import { NextPage } from "next";
 import Head from "next/head"
 import { GuideContent } from "../../../../components/Guide/GuideContent"
 import { GuideTopButtonGroup } from "../../../../components/Guide/GuideTopButtonGroup"
-import { PaperAirplaneIcon, PencilSquareIcon, ShareIcon } from "@heroicons/react/24/solid"
+import { PaperAirplaneIcon, PencilSquareIcon, ShareIcon } from "@heroicons/react/24/outline"
 import { useRouter } from "next/router";
 import { api } from "../../../../utils/api";
 import React, { useState } from "react";
 import { GameDashboardNav } from "../../../../components/shared/GameDashboard/GameDashboardNav";
+import { GuideConfirmationModal } from "../../../../components/Guide/GuideConfirmationModal";
 
 const ShowMyGuides: NextPage = () => {
   const router = useRouter()
@@ -73,14 +74,14 @@ const ShowMyGuides: NextPage = () => {
 
       {data.status === CommunityPostStatus.DRAFT && <GuideTopButtonGroup returnUrl={`/${gameId}/your-guides`} className="px-16 pb-6">
         <div className="flex justify-between gap-2">
-          <button className={`flex btn btn-ghost normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={()=>router.push(`/${gameId}/your-guides/${postId}/edit`)}><PencilSquareIcon className="w-4"/> Edit Post</button>
+          <button className={`flex btn btn-ghost normal-case gap-2 text-neutral-0 ${isSubmitting && 'btn-disabled'}`} onClick={()=>router.push(`/${gameId}/your-guides/${postId}/edit`)}><PencilSquareIcon className="w-4"/> Edit Post</button>
           <button className={`flex btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={()=>setIsModalOpen(true)}><PaperAirplaneIcon className="w-4"/> Publish Post</button>
         </div>
       </GuideTopButtonGroup>}
 
       {data.status === CommunityPostStatus.PUBLISHED && <GuideTopButtonGroup returnUrl={`/${gameId}/your-guides`} className="px-16 pb-6">
         <button 
-          className="flex btn btn-ghost normal-case gap-2" 
+          className="flex btn btn-ghost normal-case gap-2 text-neutral-0" 
           onClick={()=>{
             navigator.clipboard.writeText(`${window.location.host}/${gameId}/guides/${postId}`)
             setIsTooltipOpen(true)
@@ -126,26 +127,22 @@ const ShowMyGuides: NextPage = () => {
         </div>}
       </div>
 
-      <input type="checkbox" id="my-modal" className="modal-toggle" />
-      <div className={`modal ${isModalOpen && 'modal-open'}`}>
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Publish this post?</h3>
-          <p className="py-4">You cannot make any more changes and this action is irreversible</p>
-          <div className="modal-action">
-            <button className="btn btn-ghost normal-case gap-2" onClick={()=>setIsModalOpen(false)}>Go Back</button>
-            <button 
-              className="btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2" 
-              onClick={(e)=>{
-                setIsModalOpen(false)
-                publishPost(e)
-              }}
-            >
-              <PaperAirplaneIcon className="w-4"/> Publish Post
-            </button>
-          </div>
-        </div>
-      </div>
-
+      <GuideConfirmationModal
+        headerText="Publish this post?"
+        contentText="You cannot make any more changes and this action is irreversible"
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      >
+        <button 
+          className="btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2" 
+          onClick={(e)=>{
+            setIsModalOpen(false)
+            publishPost(e)
+          }}
+        >
+          <PaperAirplaneIcon className="w-4"/> Publish Post
+        </button>
+      </GuideConfirmationModal>
     </>
   )
 }
