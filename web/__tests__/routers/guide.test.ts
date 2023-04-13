@@ -68,7 +68,7 @@ describe("Community Post RPC", () => {
     }
 
     const caller = appRouter.createCaller(ctx)
-    
+
     await expect(caller.guides.getPostById(input)).rejects.toThrowError("not found")
   })
 
@@ -82,7 +82,7 @@ describe("Community Post RPC", () => {
       headerUrl: "url",
       gameId: "game-1"
     }
-    
+
     // Prisma returning anythin mean the query is a success
     const mockPrismaOutput = {
       id: "a",
@@ -111,10 +111,10 @@ describe("Community Post RPC", () => {
     }
 
     prisma.communityPost.create.mockResolvedValue(mockPrismaOutput)
-    
+
     const caller = appRouter.createCaller(ctx)
     const value = await caller.guides.create(input)
-    
+
     expect(value.message).toBe(expectedOutput.message)
     expect(value.id).toBe(expectedOutput.id)
   })
@@ -139,7 +139,7 @@ describe("Community Post RPC", () => {
       prisma,
     }
 
-    prisma.communityPost.create.mockRejectedValue(new PrismaClientUnknownRequestError("Unknown Error", {clientVersion: "4.9.0"}))
+    prisma.communityPost.create.mockRejectedValue(new PrismaClientUnknownRequestError("Unknown Error", { clientVersion: "4.9.0" }))
 
     const caller = appRouter.createCaller(ctx)
 
@@ -182,8 +182,8 @@ describe("Community Post RPC", () => {
       },
       prisma,
     }
-    
-    prisma.communityPost.findUnique.mockResolvedValue({type: CommunityPostStatus.DRAFT})
+
+    prisma.communityPost.findUnique.mockResolvedValue({ type: CommunityPostStatus.DRAFT })
     prisma.communityPost.update.mockResolvedValue(mockPrismaOutput)
 
     const caller = appRouter.createCaller(ctx)
@@ -219,7 +219,7 @@ describe("Community Post RPC", () => {
     })
 
     const caller = appRouter.createCaller(ctx)
-    
+
     await expect(caller.guides.updatePostById(input)).rejects.toThrowError()
   })
 
@@ -247,7 +247,7 @@ describe("Community Post RPC", () => {
     prisma.communityPost.findUnique.mockResolvedValue(null)
 
     const caller = appRouter.createCaller(ctx)
-    
+
     await expect(caller.guides.updatePostById(input)).rejects.toThrowError()
   })
 
@@ -276,245 +276,443 @@ describe("Community Post RPC", () => {
       id: "post-1",
       status: CommunityPostStatus.DRAFT
     })
-    prisma.communityPost.update.mockRejectedValue(new PrismaClientUnknownRequestError("Unknown Error", {clientVersion: "4.9.0"}))
+    prisma.communityPost.update.mockRejectedValue(new PrismaClientUnknownRequestError("Unknown Error", { clientVersion: "4.9.0" }))
 
     const caller = appRouter.createCaller(ctx)
-    
+
     await expect(caller.guides.updatePostById(input)).rejects.toThrowError()
   })
-    it("getAllbyGame should return List of all guides related to the game", async () => {
-        const date = new Date()
-        const mockedPost = {
-            id: "1",
-            name: "CSGO",
-            logoUrl: "TEST",
-            communityPosts:
-            {
-                id: "post-1",
-                type: CommunityPostType.CLIP,
-                status: CommunityPostStatus.DRAFT,
-                createdAt: date,
-                updatedAt: date,
-                title: "a",
-                content: "a",
-                authorId: "user-1",
-                gameId: "1",
-                header: {
-                    postId: "clf16d8u90000j7c49filreet",
-                    type: "IMAGE",
-                    url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
-                },
-                author: {
-                    id: "user-1",
-                    email: "bagaslpt.2@gmail.com",
-                    image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
-                    bio: null,
-                    countryCode: null,
-                    emailVerified: null,
-                    name: "ChrisXTRM",
-                    username: null
-                }
-            }
+
+  it("getAll should return List of all guides", async () => {
+    const date = new Date()
+    const mockedPost = {
+      id: "post-1",
+      type: CommunityPostType.CLIP,
+      status: CommunityPostStatus.DRAFT,
+      createdAt: date,
+      updatedAt: date,
+      title: "a",
+      content: "a",
+      authorId: "user-1",
+      gameId: "1",
+      header: {
+        postId: "clf16d8u90000j7c49filreet",
+        type: "IMAGE",
+        url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
+      },
+      author: {
+        id: "user-1",
+        email: "bagaslpt.2@gmail.com",
+        image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
+        bio: null,
+        countryCode: null,
+        emailVerified: null,
+        name: "ChrisXTRM",
+        username: null
+      }
+    }
+
+    const expectedData = {
+      id: "post-1",
+      type: CommunityPostType.CLIP,
+      status: CommunityPostStatus.DRAFT,
+      createdAt: date,
+      updatedAt: date,
+      title: "a",
+      content: "a",
+      authorId: "user-1",
+      gameId: "1",
+      header: {
+        postId: "clf16d8u90000j7c49filreet",
+        type: "IMAGE",
+        url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
+      },
+      author: {
+        id: "user-1",
+        email: "bagaslpt.2@gmail.com",
+        image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
+        bio: null,
+        countryCode: null,
+        emailVerified: null,
+        name: "ChrisXTRM",
+        username: null
+      }
+    }
+
+    prisma.communityPost.findMany.mockResolvedValue(mockedPost)
+
+    const ctx = {
+      session: null,
+      prisma
+    }
+
+    const caller = appRouter.createCaller(ctx)
+    const post = await caller.guides.getAll()
+
+    expect(post).toStrictEqual(expectedData)
+  })
+
+  it("getAllbyGame should return List of all guides related to the game", async () => {
+    const date = new Date()
+    const mockedPost = {
+      id: "1",
+      name: "CSGO",
+      logoUrl: "TEST",
+      communityPosts:
+      {
+        id: "post-1",
+        type: CommunityPostType.CLIP,
+        status: CommunityPostStatus.DRAFT,
+        createdAt: date,
+        updatedAt: date,
+        title: "a",
+        content: "a",
+        authorId: "user-1",
+        gameId: "1",
+        header: {
+          postId: "clf16d8u90000j7c49filreet",
+          type: "IMAGE",
+          url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
+        },
+        author: {
+          id: "user-1",
+          email: "bagaslpt.2@gmail.com",
+          image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
+          bio: null,
+          countryCode: null,
+          emailVerified: null,
+          name: "ChrisXTRM",
+          username: null
         }
+      }
+    }
 
-        const expectedData = {
-            id: "post-1",
-            type: CommunityPostType.CLIP,
-            status: CommunityPostStatus.DRAFT,
-            createdAt: date,
-            updatedAt: date,
-            title: "a",
-            content: "a",
-            authorId: "user-1",
-            gameId: "1",
-            header: {
-                postId: "clf16d8u90000j7c49filreet",
-                type: "IMAGE",
-                url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
-            },
-            author: {
-                id: "user-1",
-                email: "bagaslpt.2@gmail.com",
-                image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
-                bio: null,
-                countryCode: null,
-                emailVerified: null,
-                name: "ChrisXTRM",
-                username: null
-            }
-        }
+    const expectedData = {
+      id: "post-1",
+      type: CommunityPostType.CLIP,
+      status: CommunityPostStatus.DRAFT,
+      createdAt: date,
+      updatedAt: date,
+      title: "a",
+      content: "a",
+      authorId: "user-1",
+      gameId: "1",
+      header: {
+        postId: "clf16d8u90000j7c49filreet",
+        type: "IMAGE",
+        url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
+      },
+      author: {
+        id: "user-1",
+        email: "bagaslpt.2@gmail.com",
+        image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
+        bio: null,
+        countryCode: null,
+        emailVerified: null,
+        name: "ChrisXTRM",
+        username: null
+      }
+    }
 
-        const input = { id: "1" }
-        prisma.game.findUnique.mockResolvedValue(mockedPost)
+    const input = { id: "1" }
+    prisma.game.findUnique.mockResolvedValue(mockedPost)
 
-        const ctx = {
-            session: null,
-            prisma
-        }
+    const ctx = {
+      session: null,
+      prisma
+    }
 
-        const caller = appRouter.createCaller(ctx)
-        const post = await caller.guides.getAllbyGame(input)
+    const caller = appRouter.createCaller(ctx)
+    const post = await caller.guides.getAllbyGame(input)
 
-        expect(post).toStrictEqual(expectedData)
-    })
+    expect(post).toStrictEqual(expectedData)
+  })
 
-    it("getAllbyGame should throw error when game not found", async () => {
-        const input = { id: "2" }
+  it("getAllbyGame should throw error when game not found", async () => {
+    const input = { id: "2" }
 
-        prisma.game.findUnique.mockResolvedValue(null)
+    prisma.game.findUnique.mockResolvedValue(null)
 
-        const ctx = {
-            session: null,
-            prisma
-        }
+    const ctx = {
+      session: null,
+      prisma
+    }
 
-        const caller = appRouter.createCaller(ctx)
+    const caller = appRouter.createCaller(ctx)
 
-        await expect(caller.guides.getAllbyGame(input)).rejects.toThrowError("Game not found")
-    })
+    await expect(caller.guides.getAllbyGame(input)).rejects.toThrowError("Game not found")
+  })
 
-    it("getAllbyUser should return List of all guides related to the game and user", async () => {
-        const date = new Date()
+  it("getAllbyUser should return List of all guides related to the game and user", async () => {
+    const date = new Date()
 
-        const mockedPost = {
-            communityPosts:
-                [{
-                    id: "post-1",
-                    type: CommunityPostType.CLIP,
-                    status: CommunityPostStatus.PUBLISHED,
-                    createdAt: date,
-                    updatedAt: date,
-                    title: "a",
-                    content: "a",
-                    authorId: "user-1",
-                    gameId: "1",
-                    header: {
-                        postId: "clf16d8u90000j7c49filreet",
-                        type: "IMAGE",
-                        url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
-                    },
-                    author: {
-                        id: "user-1",
-                        email: "bagaslpt.2@gmail.com",
-                        image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
-                        bio: null,
-                        countryCode: null,
-                        emailVerified: null,
-                        name: "ChrisXTRM",
-                        username: null
-                    }
+    const mockedPost = {
+      communityPosts:
+        [{
+          id: "post-1",
+          type: CommunityPostType.CLIP,
+          status: CommunityPostStatus.PUBLISHED,
+          createdAt: date,
+          updatedAt: date,
+          title: "a",
+          content: "a",
+          authorId: "user-1",
+          gameId: "1",
+          header: {
+            postId: "clf16d8u90000j7c49filreet",
+            type: "IMAGE",
+            url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
+          },
+          author: {
+            id: "user-1",
+            email: "bagaslpt.2@gmail.com",
+            image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
+            bio: null,
+            countryCode: null,
+            emailVerified: null,
+            name: "ChrisXTRM",
+            username: null
+          }
 
-                }, {
-                    id: "post-2",
-                    type: CommunityPostType.CLIP,
-                    status: CommunityPostStatus.DRAFT,
-                    createdAt: date,
-                    updatedAt: date,
-                    title: "a",
-                    content: "a",
-                    authorId: "user-1",
-                    gameId: "1",
-                    header: {
-                        postId: "clf16d8u90000j7c49filreet",
-                        type: "IMAGE",
-                        url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
-                    },
-                    author: {
-                        id: "user-1",
-                        email: "bagaslpt.2@gmail.com",
-                        image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
-                        bio: null,
-                        countryCode: null,
-                        emailVerified: null,
-                        name: "ChrisXTRM",
-                        username: null
-                    }
-
-                }
-            ]
-        }
-
-        const expectedData = [{
-            id: "post-1",
-            type: CommunityPostType.CLIP,
-            status: CommunityPostStatus.PUBLISHED,
-            createdAt: date,
-            updatedAt: date,
-            title: "a",
-            content: "a",
-            authorId: "user-1",
-            gameId: "1",
-            header: {
-                postId: "clf16d8u90000j7c49filreet",
-                type: "IMAGE",
-                url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
-            },
-            author: {
-                id: "user-1",
-                email: "bagaslpt.2@gmail.com",
-                image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
-                bio: null,
-                countryCode: null,
-                emailVerified: null,
-                name: "ChrisXTRM",
-                username: null
-
-            }
         }, {
-            id: "post-2",
-            type: CommunityPostType.CLIP,
-            status: CommunityPostStatus.DRAFT,
-            createdAt: date,
-            updatedAt: date,
-            title: "a",
-            content: "a",
-            authorId: "user-1",
-            gameId: "1",
-            header: {
-                postId: "clf16d8u90000j7c49filreet",
-                type: "IMAGE",
-                url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
-            },
-            author: {
-                id: "user-1",
-                email: "bagaslpt.2@gmail.com",
-                image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
-                bio: null,
-                countryCode: null,
-                emailVerified: null,
-                name: "ChrisXTRM",
-                username: null
+          id: "post-2",
+          type: CommunityPostType.CLIP,
+          status: CommunityPostStatus.DRAFT,
+          createdAt: date,
+          updatedAt: date,
+          title: "a",
+          content: "a",
+          authorId: "user-1",
+          gameId: "1",
+          header: {
+            postId: "clf16d8u90000j7c49filreet",
+            type: "IMAGE",
+            url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
+          },
+          author: {
+            id: "user-1",
+            email: "bagaslpt.2@gmail.com",
+            image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
+            bio: null,
+            countryCode: null,
+            emailVerified: null,
+            name: "ChrisXTRM",
+            username: null
+          }
 
-            }
-        }]
-
-        const input = { gameId: "1", userId: "user-1" }
-        prisma.game.findUnique.mockResolvedValue(mockedPost)
-
-        const ctx = {
-            session: null,
-            prisma
         }
+        ]
+    }
 
-        const caller = appRouter.createCaller(ctx)
-        const post = await caller.guides.getAllbyUser(input)
+    const expectedData = [{
+      id: "post-1",
+      type: CommunityPostType.CLIP,
+      status: CommunityPostStatus.PUBLISHED,
+      createdAt: date,
+      updatedAt: date,
+      title: "a",
+      content: "a",
+      authorId: "user-1",
+      gameId: "1",
+      header: {
+        postId: "clf16d8u90000j7c49filreet",
+        type: "IMAGE",
+        url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
+      },
+      author: {
+        id: "user-1",
+        email: "bagaslpt.2@gmail.com",
+        image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
+        bio: null,
+        countryCode: null,
+        emailVerified: null,
+        name: "ChrisXTRM",
+        username: null
 
-        expect(post).toStrictEqual(expectedData)
+      }
+    }, {
+      id: "post-2",
+      type: CommunityPostType.CLIP,
+      status: CommunityPostStatus.DRAFT,
+      createdAt: date,
+      updatedAt: date,
+      title: "a",
+      content: "a",
+      authorId: "user-1",
+      gameId: "1",
+      header: {
+        postId: "clf16d8u90000j7c49filreet",
+        type: "IMAGE",
+        url: "https://dafunda.com/wp-content/uploads/2021/03/CSGO-steam-terhapus.jpg"
+      },
+      author: {
+        id: "user-1",
+        email: "bagaslpt.2@gmail.com",
+        image: "https://cdn.discordapp.com/avatars/147326669911359488/1146bc24e6a581703f0ca27c08b07397.png",
+        bio: null,
+        countryCode: null,
+        emailVerified: null,
+        name: "ChrisXTRM",
+        username: null
+
+      }
+    }]
+
+    const input = { gameId: "1", userId: "user-1" }
+    prisma.game.findUnique.mockResolvedValue(mockedPost)
+
+    const ctx = {
+      session: null,
+      prisma
+    }
+
+    const caller = appRouter.createCaller(ctx)
+    const post = await caller.guides.getAllbyUser(input)
+
+    expect(post).toStrictEqual(expectedData)
+  })
+
+  it("getAllbyUser should throw error when game not found", async () => {
+    const input = { gameId: "1", userId: "user-1" }
+
+    prisma.game.findUnique.mockResolvedValue(null)
+
+    const ctx = {
+      session: null,
+      prisma
+    }
+
+    const caller = appRouter.createCaller(ctx)
+
+    await expect(caller.guides.getAllbyUser(input)).rejects.toThrowError("Game not found")
+  })
+
+  it("updateStatusModerationById should return a success message if update is successful", async () => {
+    const input = {
+      id: "post-1",
+      status: CommunityPostStatus.PUBLISHED,
+    }
+
+    const mockPrismaOutput = {
+      id: "post-1",
+      status: CommunityPostStatus.PUBLISHED,
+    }
+    const expectedOutput = {
+      message: "Post updated successfully"
+    }
+
+    const ctx = {
+      session: {
+        user: {
+          id: "1"
+        }
+      },
+      prisma,
+    }
+
+    prisma.communityPost.findUnique.mockResolvedValue({ id: input.id, status: CommunityPostStatus.PUBLISHED })
+    prisma.communityPost.update.mockResolvedValue(mockPrismaOutput)
+
+    const caller = appRouter.createCaller(ctx)
+    const value = await caller.guides.updateStatusModerationById(input)
+
+    expect(value.message).toBe(expectedOutput.message)
+  })
+
+  it("updateStatusModerationById should throw error when trying to update a draft post", async () => {
+    const input = {
+      id: "post-1",
+      status: CommunityPostStatus.PUBLISHED,
+    }
+
+    const ctx = {
+      session: {
+        user: {
+          id: "1"
+        }
+      },
+      prisma,
+    }
+
+    prisma.communityPost.findUnique.mockResolvedValue({
+      id: "post-1",
+      status: CommunityPostStatus.DRAFT
     })
 
-    it("getAllbyUser should throw error when game not found", async () => {
-        const input = { gameId: "1", userId: "user-1" }
+    const caller = appRouter.createCaller(ctx)
 
-        prisma.game.findUnique.mockResolvedValue(null)
+    await expect(caller.guides.updateStatusModerationById(input)).rejects.toThrowError()
+  })
+  it("updateStatusModerationById should throw error when trying to update to a draft post", async () => {
+    const input = {
+      id: "post-1",
+      status: CommunityPostStatus.DRAFT,
+    }
 
-        const ctx = {
-            session: null,
-            prisma
+    const ctx = {
+      session: {
+        user: {
+          id: "1"
         }
+      },
+      prisma,
+    }
 
-        const caller = appRouter.createCaller(ctx)
-
-        await expect(caller.guides.getAllbyUser(input)).rejects.toThrowError("Game not found")
+    prisma.communityPost.findUnique.mockResolvedValue({
+      id: "post-1",
+      status: CommunityPostStatus.PUBLISHED
     })
+
+    const caller = appRouter.createCaller(ctx)
+
+    await expect(caller.guides.updateStatusModerationById(input)).rejects.toThrowError()
+  })
+  it("updateStatusModerationById should throw error when trying to update a non exist post", async () => {
+    const input = {
+      id: "post-1",
+      status: CommunityPostStatus.PUBLISHED,
+    }
+
+    const ctx = {
+      session: {
+        user: {
+          id: "1"
+        }
+      },
+      prisma,
+    }
+
+    prisma.communityPost.findUnique.mockResolvedValue(null)
+
+    const caller = appRouter.createCaller(ctx)
+
+    await expect(caller.guides.updateStatusModerationById(input)).rejects.toThrowError()
+  })
+
+  it("updateStatusModerationById should throw error when prisma related error has occured", async () => {
+    const input = {
+      id: "post-1",
+      status: CommunityPostStatus.PUBLISHED,
+    }
+
+    const ctx = {
+      session: {
+        user: {
+          id: "1"
+        }
+      },
+      prisma,
+    }
+
+    prisma.communityPost.findUnique.mockResolvedValue({
+      id: "post-1",
+      status: CommunityPostStatus.PUBLISHED
+    })
+    prisma.communityPost.update.mockRejectedValue(new PrismaClientUnknownRequestError("Unknown Error", { clientVersion: "4.9.0" }))
+
+    const caller = appRouter.createCaller(ctx)
+
+    await expect(caller.guides.updateStatusModerationById(input)).rejects.toThrowError()
+  })
 })
 
