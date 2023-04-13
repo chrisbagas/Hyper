@@ -11,7 +11,7 @@ export interface GuideTopButtonGroupProps {
 export const GuideTopButtonGroup: React.FC<GuideTopButtonGroupProps> = ({ children, className, returnUrl }) => {
   return (
     <div className={`flex justify-between pt-8 ${className}`}>
-      <Link href={returnUrl}> <button className="flex btn btn-ghost normal-case gap-2"><ArrowLeftIcon className="w-4"/> Go Back</button> </Link>
+      <Link href={returnUrl}> <button className="flex btn btn-ghost normal-case gap-2 text-neutral-0"><ArrowLeftIcon className="w-4"/> Go Back</button> </Link>
       {children}
     </div>
   )
