@@ -66,7 +66,7 @@ const EditProfile: NextPage = () => {
                 <div>
                     <UserDetail></UserDetail>
                 </div>
-                <div className="flex flex-col gap-2 w-full">
+                <div className="flex flex-col gap-2 w-full justify-center">
                     <div className="form-control w-full ">
                         <label className="label">
                             <span className="label-text">Username</span>
