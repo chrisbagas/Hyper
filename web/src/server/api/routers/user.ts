@@ -8,6 +8,6 @@ export const userRouter = createTRPCRouter({
     }),
   createConnectionAccount: protectedProcedure
     .query(async ({ ctx }) => {
-      return await UserService.createConnectionAccount(ctx.session.user.id, ctx.prisma)
+      return UserService.createConnectionAccount(ctx.session.user.id, ctx.prisma)
     }),
 })

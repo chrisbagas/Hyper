@@ -1,5 +1,4 @@
 import { PrismaClient, Game, Country } from "@prisma/client";
-import { DiscordConnection } from "../../types/discord";
 import { DiscordService } from "./DiscordService";
 
 export interface Profile {
@@ -73,7 +72,7 @@ export class ProfileService {
         }
     }
     public static async getAllCountries(prisma: PrismaClient){
-        return await prisma.country.findMany()
+        return prisma.country.findMany()
     }
 
     public static async getConnectionAccount(id: string, prisma: PrismaClient) {
