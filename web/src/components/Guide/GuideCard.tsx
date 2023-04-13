@@ -16,7 +16,7 @@ export interface GuideCardProps {
 }
 
 export const GuideCard: React.FC<GuideCardProps> = ({ title, username, createdAt, content, status, gameId, postId, guidesLoc, headerUrl }) => (
-  <Link href={`/${gameId}/${guidesLoc}/${postId}`} className="md:h-full">
+  <Link href={`/${gameId}/${guidesLoc}/${postId}`} className="transition-all duration-[500ms] ease-in-out md:h-full hover:-translate-y-2">
     <div className="card flex flex-col justify-between w-full h-full bg-base-100 shadow-xl">
       <img src={headerUrl} className="aspect-video object-cover rounded-t-xl" alt="Header" />
       <div className="card-body">
