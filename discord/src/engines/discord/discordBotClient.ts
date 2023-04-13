@@ -8,6 +8,7 @@ const discordBotClient = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.GuildInvites,
+    GatewayIntentBits.GuildVoiceStates
   ]
 })
 
