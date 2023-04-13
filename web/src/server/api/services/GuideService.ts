@@ -52,7 +52,7 @@ export class GuideService {
     }
 
     public static async getAll(prisma: PrismaClient) {
-        return await prisma.communityPost.findMany({
+        return prisma.communityPost.findMany({
             include: {
                 author: true,
                 header: true,
