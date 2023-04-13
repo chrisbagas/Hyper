@@ -37,7 +37,7 @@ export default function Home() {
             </div>
             {userParty
                 // render party details if user is in party
-                ? <div className="p-4 bg-gray-800">
+                ? <div className="p-4 bg-gray-800 rounded-xl">
                     <div className="grid grid-cols-2">
                         <div className="flex flex-col">
                             <div className="m-4">

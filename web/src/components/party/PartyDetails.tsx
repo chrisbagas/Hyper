@@ -34,10 +34,10 @@ const PartyDetails = (props: PartyDetailsData) => {
     function leaveParty(e: any) {
         e.preventDefault()
 
-        const leavePartyDTO = {
-            userId: props.userId,
-            partyId: props.partyId
-        }
+    const leavePartyDTO = {
+      userId: props.userId,
+      partyId: props.partyId
+    }
 
         leavePartyMutation.mutate(leavePartyDTO)
 
@@ -121,4 +121,4 @@ const PartyDetails = (props: PartyDetailsData) => {
     )
 }
 
-export {PartyDetails};
+export { PartyDetails };
