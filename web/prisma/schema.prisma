@@ -188,4 +188,5 @@ enum ContentType {
 enum CommunityPostStatus {
   DRAFT
   PUBLISHED
+  TAKENDOWN
 }
