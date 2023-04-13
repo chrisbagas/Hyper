@@ -11,12 +11,14 @@ describe("Game Service", () => {
         id: "testGame1",
         name: "Valorant",
         logoUrl: "logoLink01",
+        teamCapacity: 5,
     }
 
     const mockedCSGO = {
         id: "testGame2",
         name: "CS:GO",
         logoUrl: "logoLink02",
+        teamCapacity: 5,
     }
 
     prisma.game.findMany.mockResolvedValue([
@@ -37,6 +39,7 @@ describe("Game Service", () => {
         id: "testGame1",
         name: "Valorant",
         logoUrl: "logoLink01",
+        teamCapacity: 5,
       }
 
     prisma.game.findUnique.mockResolvedValue(mockedValorant)

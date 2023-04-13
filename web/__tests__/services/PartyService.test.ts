@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest"
 import prisma from "../../src/server/__mocks__/db";
 import { PartyService } from "../../src/server/api/services/PartyService";
-import { PartyVisibility, PartyType, GameAccount, PartyMemberLevel } from "@prisma/client";
+import { PartyVisibility, PartyType, PartyMemberLevel } from "@prisma/client";
 
 describe("Party Service", () => {
     const mockParty = {
@@ -165,27 +165,95 @@ describe("Party Service", () => {
         )).rejects.toThrowError("duplicate")
     })
 
-    const mockPartyMember = {
+    const mockPartyLeader = {
         userId: "1",
         partyId: "1",
         gameId: "valorant",
+        level: PartyMemberLevel.leader
+    }
+
+    const mockPartyMember = {
+        userId: "2",
+        partyId: "2",
+        gameId: "valorant",
+        level: PartyMemberLevel.member
     }
 
     const mockUser = {
         id: "1",
         email: "google@gmail.com",
         image: "amogus.png",
+        username: "gamer123",
+        emailVerified: true,
+        name: "bob",
+        bio: "hello",
+        countryCode: "id"
     }
 
     const mockUserInParty = {
         id: "1",
         email: "google@gmail.com",
         image: "amogus.png",
+        username: "gamer123",
+        emailVerified: true,
+        name: "bob",
+        bio: "hello",
+        countryCode: "id",
         partyMember: {
             userId: "1",
             partyId: "1"
         }
     }
+
+    const mockGame = {
+        id: "valorant",
+        name: "valorant",
+        logoUrl: "valorant.png",
+        teamCapacity: 5
+    }
+    
+    it("getPartyMemberDetails test", async () => {
+        prisma.user.findUnique.mockResolvedValue(
+            mockUser
+        )
+
+        const user = await PartyService.getPartyMemberDetails(
+            prisma,
+            "1"
+        )
+
+        expect(user).toEqual(mockUser)
+    })
+
+    it("getUserParty positive test", async () => {
+        prisma.user.findUnique.mockResolvedValue(
+            mockUserInParty
+        )
+
+        prisma.party.findUnique.mockResolvedValue(
+            mockParty
+        )
+
+        const party = await PartyService.getUserParty(
+            prisma,
+            "1"
+        )
+
+        expect(party).toStrictEqual(mockParty)
+    })
+
+    it("getUserParty negative test", async () => {
+        prisma.user.findUnique.mockResolvedValue(
+            null
+        )
+
+        const party = await PartyService.getUserParty(
+            prisma,
+            "1"
+        )
+
+        expect(party).toStrictEqual(null)
+    })
 
     it("joinParty positive test", async () => {
         prisma.party.findUnique.mockResolvedValue(
@@ -200,6 +268,10 @@ describe("Party Service", () => {
             mockUser
         )
 
+        prisma.game.findUnique.mockResolvedValue(
+            mockGame
+        )
+
         const partyMember = await PartyService.joinParty(
             prisma,
             mockPartyMember
@@ -208,20 +280,55 @@ describe("Party Service", () => {
         expect(partyMember).toStrictEqual(mockPartyMember)
     })
 
+    it("joinParty negative test: game not found", async () => {
+        prisma.party.findUnique.mockResolvedValue(
+            null
+        )
+
+        prisma.user.findUnique.mockResolvedValue(
+            mockUser
+        )
+
+        prisma.game.findUnique.mockResolvedValue(
+            null
+        )
+
+        expect(PartyService.joinParty(
+            prisma,
+            mockPartyMember
+        )).rejects.toThrowError("Game not found")
+    })
+
     it("joinParty negative test: party not found", async () => {
         prisma.party.findUnique.mockResolvedValue(
             null
+        )
+
+        prisma.user.findUnique.mockResolvedValue(
+            mockUser
+        )
+
+        prisma.game.findUnique.mockResolvedValue(
+            mockGame
         )
         
         expect(PartyService.joinParty(
             prisma,
             mockPartyMember
-        )).rejects.toThrowError("not found")
+        )).rejects.toThrowError("Party not found")
     })
 
     it("joinParty negative test: party full", async () => {
         prisma.party.findUnique.mockResolvedValue(
             mockPartyFull
+        )
+
+        prisma.user.findUnique.mockResolvedValue(
+            mockUser
+        )
+
+        prisma.game.findUnique.mockResolvedValue(
+            mockGame
         )
         
         expect(PartyService.joinParty(
@@ -238,6 +345,10 @@ describe("Party Service", () => {
         prisma.user.findUnique.mockResolvedValue(
             null
         )
+
+        prisma.game.findUnique.mockResolvedValue(
+            mockGame
+        )
         
         expect(PartyService.joinParty(
             prisma,
@@ -252,6 +363,10 @@ describe("Party Service", () => {
         
         prisma.user.findUnique.mockResolvedValue(
             mockUserInParty
+        )
+
+        prisma.game.findUnique.mockResolvedValue(
+            mockGame
         )
         
         expect(PartyService.joinParty(
@@ -288,5 +403,122 @@ describe("Party Service", () => {
                 partyId: mockPartyMember.partyId
             }
         )).rejects.toThrowError("not found")
+    })
+
+    it("updateParty positive test", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyLeader
+        )
+
+        prisma.party.update.mockResolvedValue(
+            mockParty
+        )
+
+        const party = await PartyService.updateParty(
+            prisma,
+            {
+                partyId: "1",
+                userId: "1",
+                partyTitle: "gaming",
+                partyType: PartyType.Casual,
+                partyVisibility: PartyVisibility.Public,
+            }
+        )
+
+        expect(party).toStrictEqual(mockParty)
+    })
+
+    it("updateParty negative test: user not found", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            null
+        )
+
+        expect(PartyService.updateParty(
+            prisma,
+            {
+                partyId: "1",
+                userId: "1",
+                partyTitle: "gaming",
+                partyType: PartyType.Casual,
+                partyVisibility: PartyVisibility.Public,
+            }
+        )).rejects.toThrowError("not found")
+    })
+
+    it("updateParty negative test: permission denied", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyMember
+        )
+
+        expect(PartyService.updateParty(
+            prisma,
+            {
+                partyId: "1",
+                userId: "2",
+                partyTitle: "gaming",
+                partyType: PartyType.Casual,
+                partyVisibility: PartyVisibility.Public,
+            }
+        )).rejects.toThrowError("denied")
+    })
+
+    it("deleteParty positive test", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyLeader
+        )
+        
+        prisma.party.delete.mockResolvedValue(
+            mockParty
+        )
+
+        prisma.party.update.mockResolvedValue(
+            mockParty
+        )
+
+        const party = await PartyService.deleteParty(
+            prisma,
+            {
+                partyId: "1",
+                userId: "1",
+            }
+        )
+
+        expect(party).toStrictEqual(mockParty)
+    })
+
+    it("deleteParty negative test: user not found", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            null
+        )
+        
+        prisma.party.delete.mockResolvedValue(
+            mockParty
+        )
+
+        expect(PartyService.deleteParty(
+            prisma,
+            {
+                partyId: "1",
+                userId: "1",
+            }
+        )).rejects.toThrowError("not found")
+    })
+
+    it("deleteParty negative test: permission denied", async () => {
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyMember
+        )
+        
+        prisma.party.delete.mockResolvedValue(
+            mockParty
+        )
+
+        expect(PartyService.deleteParty(
+            prisma,
+            {
+                partyId: "1",
+                userId: "2",
+            }
+        )).rejects.toThrowError("denied")
     })
 })
