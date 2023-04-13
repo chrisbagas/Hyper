@@ -14,9 +14,9 @@ export interface GuideCardProps {
 }
 
 export const GuideCard: React.FC<GuideCardProps> = ({ title, username, createdAt, content, status, gameId, postId, guidesLoc, headerUrl }) => (
-  <Link href={`/${gameId}/${guidesLoc}/${postId}`} className="h-full">
-    <div className="card w-full h-full bg-base-100 shadow-xl">
-      <figure className="h-full"><img src={headerUrl} alt="Header" /></figure>
+  <Link href={`/${gameId}/${guidesLoc}/${postId}`} className="md:h-full">
+    <div className="card flex flex-col justify-between w-full h-full bg-base-100 shadow-xl">
+      <img src={headerUrl} className="aspect-video object-cover rounded-t-xl" alt="Header" />
       <div className="card-body">
         <div>
           {status === "PUBLISHED" ? (
@@ -26,7 +26,7 @@ export const GuideCard: React.FC<GuideCardProps> = ({ title, username, createdAt
           )}
           <div className="badge badge-warning">Guide</div>
         </div>
-        <h2 className="card-title">
+        <h2 className="card-title truncate">
           {title}
         </h2>
         <p>Created by {username} | Posted {createdAt.toLocaleString()}</p>

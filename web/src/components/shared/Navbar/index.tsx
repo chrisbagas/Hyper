@@ -28,6 +28,9 @@ const NavWrapper: React.FC<NavWrapperProps> = ({ children, className }) => {
     <div className="drawer drawer-mobile">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content bg-base-1">
+        <div className="bg-base-1 w-full flex items-center h-12">
+          <img src="/hyper-logo-text.svg" className="h-8" />
+        </div>
         <div className={className}>
           {children}
         </div>
