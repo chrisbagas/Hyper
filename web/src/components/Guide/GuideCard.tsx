@@ -30,7 +30,7 @@ export const GuideCard: React.FC<GuideCardProps> = ({ title,username,createdAt,c
                 {title}
             </h2>
             <p>Created by {username} | Posted { createdAt.toLocaleString() }</p>
-            <p>{content}</p>
+            <p className="truncate">{content}</p>
         </div>
     </div>
     </Link>
