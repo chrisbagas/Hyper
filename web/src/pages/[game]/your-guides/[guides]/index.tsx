@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { api } from "../../../../utils/api";
 import React, { useState } from "react";
 import { GameDashboardNav } from "../../../../components/shared/GameDashboard/GameDashboardNav";
-import { GuideConfirmationModal } from "../../../../components/Guide/GuideConfirmationModal";
+import { ConfirmationModal } from "../../../../components/shared/ConfirmationModal";
 
 const ShowMyGuides: NextPage = () => {
   const router = useRouter()
@@ -127,7 +127,7 @@ const ShowMyGuides: NextPage = () => {
         </div>}
       </div>
 
-      <GuideConfirmationModal
+      <ConfirmationModal
         headerText="Publish this post?"
         contentText="You cannot make any more changes and this action is irreversible"
         isModalOpen={isModalOpen}
@@ -142,7 +142,7 @@ const ShowMyGuides: NextPage = () => {
         >
           <PaperAirplaneIcon className="w-4"/> Publish Post
         </button>
-      </GuideConfirmationModal>
+      </ConfirmationModal>
     </>
   )
 }
