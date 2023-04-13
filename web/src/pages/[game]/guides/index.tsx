@@ -18,7 +18,7 @@ const Guides: NextPage = () => {
             <div className="p-16">
             <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
                 <div className="flex justify-between items-center content-center my-6">
-                    <h1 className="text-3xl text-white">See What Other Players Have Created</h1>
+                    <h1 className="text-2xl font-bold text-white">See What Other Players Have Created</h1>
                     <Link href={`/${gameId}/your-guides/create`}><button className="btn bg-primary-main text-white">Create New Post &nbsp;<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
