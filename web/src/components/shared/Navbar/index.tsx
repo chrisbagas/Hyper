@@ -1,3 +1,4 @@
+import { Bars3Icon } from "@heroicons/react/24/solid"
 import React from "react"
 
 
@@ -28,6 +29,12 @@ const NavWrapper: React.FC<NavWrapperProps> = ({ children, className }) => {
     <div className="drawer drawer-mobile">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content bg-base-1">
+        <div className="block lg:hidden bg-base-1 w-full flex items-center h-16 px-4 space-x-4">
+          <label htmlFor="my-drawer">
+            <Bars3Icon className="h-8 text-neutral-4" />
+          </label>
+          <img src="/hyper-logo-text.svg" className="h-8" />
+        </div>
         <div className={className}>
           {children}
         </div>
