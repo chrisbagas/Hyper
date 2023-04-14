@@ -18,10 +18,10 @@ export default function Home() {
   const { data } = api.guides.getAllbyGame.useQuery({ id: gameId as string })
   const session = useSession()
   const userId = session.data?.user.id ?? ""
-  const userParty = api.party.getUserParty.useQuery(userId).data ?? null
+  const { data: userParty, refetch } = api.party.getUserParty.useQuery(userId)
 
   return <>
-    <div className="p-16">
+    <div className="p-8 lg:p-16">
       <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
       <div className="flex justify-between items-center content-center my-6 text-neutral-0">
         <h1 className="text-2xl font-bold">
@@ -52,6 +52,7 @@ export default function Home() {
                   type={userParty?.partyType ?? PartyType.Casual}
                   partyMembers={userParty.partyMembers}
                   alreadyJoined={true}
+                  refetch={refetch}
                 />
               </div>
               <div className="m-4">
@@ -93,7 +94,10 @@ export default function Home() {
                   visibility={party?.partyVisibility ?? PartyVisibility.Public}
                   type={party?.partyType ?? PartyType.Casual}
                   partyMembers={party.partyMembers}
-                  alreadyJoined={false} />
+                  alreadyJoined={false}
+                  refetch={refetch}
+                />
+
               </div>
             </>
           })}
@@ -106,8 +110,8 @@ export default function Home() {
           <ArrowRightIcon className="w-4 ml-2" />
         </div>
       </div>
-      <div className="grid xl:grid-cols-2 grid-flow-row gap-8 content-center justify-center items-center my-6">
-        {data?.slice(0, 4).map((guide) => {
+      <div className="grid xl:grid-cols-2 grid-flow-row gap-8 content-center justify-center items-center my-6 2xl:grid-cols-3">
+        {data?.slice(0, 6).map((guide) => {
           return (
             <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status} gameId={gameId as string} postId={guide.id} guidesLoc="guides" headerUrl={guide.header?.url as string} />
           )

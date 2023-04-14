@@ -15,15 +15,14 @@ const menu = [
 ]
 export const GameDashboardNav: React.FC<GameDashboardProps> = ({ id, logoUrl, name, page }) => (
   <div key={id}>
-    <div className="flex flex-col sm:flex-row gap-4">
-      <div className=" mt-4">
-        <div className=" rounded-full h-24 w-24">
+    <div className="flex flex-col items-center md:items-start sm:flex-row gap-4">
+      <div className="mt-4">
+        <div className="rounded-full h-24 w-24">
           <img src={logoUrl} />
         </div>
-
       </div>
-      <div className=" ml-8 mt-4" >
-        <h1 className="text-4xl my-2 font-bold font text-white">
+      <div className="xl:ml-8 mt-4" >
+        <h1 className="text-4xl text-center lg:text-left my-2 font-bold font text-white">
           {name}
         </h1>
         <div className="flex flex-row items-center gap-2">

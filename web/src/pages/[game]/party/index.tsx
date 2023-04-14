@@ -16,7 +16,7 @@ const Party: NextPage = () => {
   const userId = session.data?.user.id
   const { data: game } = api.games.getById.useQuery({ id: gameId as string })
   const parties = api.party.getByGame.useQuery({ id: gameId as string }).data
-  const userParty = userId ? api.party.getUserParty.useQuery(userId).data : null
+  const { data: userParty, refetch } = userId ? api.party.getUserParty.useQuery(userId) : null
 
   return (
     <>
@@ -56,7 +56,9 @@ const Party: NextPage = () => {
                     visibility={party?.partyVisibility ?? PartyVisibility.Public}
                     type={party?.partyType ?? PartyType.Casual}
                     partyMembers={party.partyMembers}
-                    alreadyJoined={false} />
+                    alreadyJoined={false}
+                    refetch={refetch}
+                  />
                 </div>
               </>
             })}
