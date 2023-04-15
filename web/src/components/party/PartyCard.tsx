@@ -44,7 +44,6 @@ const PartyCard = (props: PartyCardData) => {
   const memberAvatars = props.partyMembers.map((partyMember) =>
     <div className="avatar" key={partyMember.userId}>
       <div className="w-12 rounded-full">
-        {/* <img src="https://media.hitekno.com/thumbs/2022/09/20/49670-meme-amogus/730x480-img-49670-meme-amogus.jpg" /> */}
         <img src={partyMember.user.image} />
       </div>
     </div>

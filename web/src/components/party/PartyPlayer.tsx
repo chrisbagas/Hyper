@@ -12,7 +12,9 @@ export interface PartyPlayerData {
 }
 
 const PartyPlayer = (props: PartyPlayerData) => {
-    const enableKickButton = (props.partyMember.level == PartyMemberLevel.member) && (props.userId != props.partyMember.userId)
+    // enable kick buttons if the viewer is the leader of the party and the party member level is member
+    const isLeader = props.partyMember.level == PartyMemberLevel.leader && props.userId == props.partyMember.userId
+    const enableKickButton = isLeader && (props.partyMember.level == PartyMemberLevel.member)
     return (
         <>
             <div className="flex flex-row max-w-full h-auto justify-between bg-gray-500 p-4 my-4 rounded-xl align-bottom">

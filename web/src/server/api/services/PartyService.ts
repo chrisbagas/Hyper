@@ -27,6 +27,12 @@ export interface EditPartyData {
     partyVisibility: PartyVisibility
 }
 
+export interface KickPartyMemberData {
+    leaderUserId: string,
+    memberUserId: string,
+    partyId: string
+}
+
 export class PartyService {
     public static async getParties(prisma: PrismaClient, gameId: string) {
         return prisma.party.findMany({
@@ -229,5 +235,9 @@ export class PartyService {
                 id: data.partyId
             }
         })
+    }
+
+    public static async kickPartyMember(prisma: PrismaClient, data: KickPartyMemberData) {
+        return {}
     }
 }
