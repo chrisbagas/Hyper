@@ -84,6 +84,6 @@ export const partyRouter = createTRPCRouter({
         partyId: z.string()
       }))
       .mutation(async ({ ctx, input }) => {
-        return {}
+        return PartyService.kickPartyMember(ctx.prisma, input)
     }),
 })

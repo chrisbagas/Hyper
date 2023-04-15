@@ -238,6 +238,36 @@ export class PartyService {
     }
 
     public static async kickPartyMember(prisma: PrismaClient, data: KickPartyMemberData) {
-        return {}
+        const partyLeader = await prisma.partyMember.findFirst({
+            where: {
+                userId: data.leaderUserId
+            }
+        })
+
+        const partyMember = await prisma.partyMember.findUnique({
+            where: {
+                userId_partyId: {
+                    userId: data.memberUserId,
+                    partyId: data.partyId
+                }
+            }
+        })
+
+        if (!partyMember || !partyLeader) {
+            throw Error("Error: party member not found")
+        }
+
+        if (partyLeader.level !== PartyMemberLevel.leader || partyMember.level !== PartyMemberLevel.member) {
+            throw Error("Error: you are unauthorized to kick this person")
+        }
+
+        return await prisma.partyMember.delete({
+            where: {
+                userId_partyId: {
+                    userId: data.memberUserId,
+                    partyId: data.partyId
+                }
+            }
+        })
     }
 }
