@@ -261,7 +261,7 @@ export class PartyService {
             throw Error("Error: you are unauthorized to kick this person")
         }
 
-        return await prisma.partyMember.delete({
+        return prisma.partyMember.delete({
             where: {
                 userId_partyId: {
                     userId: data.memberUserId,
