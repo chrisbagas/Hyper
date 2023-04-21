@@ -162,9 +162,10 @@ export const guideRouter = createTRPCRouter({
   getAllbyGame: publicProcedure
     .input(z.object({
       id: z.string(),
+      tagId: z.string().optional()
     }))
     .query(async ({ ctx, input }) => {
-      return GuideService.getAllbyGame(input.id, ctx.prisma)
+      return GuideService.getAllbyGame(input.id, ctx.prisma, input.tagId)
     }),
   getAllbyUser: publicProcedure
     .input(z.object({

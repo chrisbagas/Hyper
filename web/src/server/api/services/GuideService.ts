@@ -1,7 +1,7 @@
 import { CommunityPostStatus, PrismaClient} from "@prisma/client";
 
 export class GuideService {
-    public static async getAllbyGame(id: string, prisma: PrismaClient) {
+    public static async getAllbyGame(id: string, prisma: PrismaClient, tagId?: string) {
         const guides = await prisma.game.findUnique({
             where: {
                 id:id
@@ -9,7 +9,13 @@ export class GuideService {
             select:{
                 communityPosts:{
                     where:{
-                        status:CommunityPostStatus.PUBLISHED
+                        status:CommunityPostStatus.PUBLISHED,
+                        tags:tagId?
+                        {
+                            some:{
+                                tagId:tagId
+                            }
+                        } : undefined
                     },
                     include:{
                         author:true,
