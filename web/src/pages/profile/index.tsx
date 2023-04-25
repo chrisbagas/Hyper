@@ -8,16 +8,22 @@ import { ArrowLeftIcon, PencilSquareIcon} from "@heroicons/react/24/solid"
 import { ProfileHeader } from "../../components/profile/ProfileHeader";
 import { ProfileCard } from "../../components/profile/ProfileCard";
 
-const Statistic: NextPage = () => {
-    const { data, refetch } = api.profiles.getProfile.useQuery()
-    const connectAcc = api.profiles.getConnectionAccount.useQuery()
-    const session = useSession()
-
+const Statistic = () => {
+    const { data, isLoading, refetch } = api.profiles.getProfile.useQuery();
+    const connectAcc = api.profiles.getConnectionAccount.useQuery();
+    const session = useSession();
+  
     useEffect(() => {
-        refetch()
-    }, [session])
-
-    
+      if (!isLoading) {
+        refetch();
+      }
+    }, [isLoading]);
+  
+    if (isLoading) {
+      return <div>Loading...</div>
+  
+    }
+  
 
     return (
         <>

@@ -25,6 +25,18 @@ export const partyRouter = createTRPCRouter({
         return PartyService.createParty(ctx.prisma, input);
     }),
 
+    getUserParty: publicProcedure
+      .input(z.string())
+      .query(async ({ ctx, input }) => {
+        return PartyService.getUserParty(ctx.prisma, input)
+    }),
+
+    getPartyMemberDetails: publicProcedure
+      .input(z.string())
+      .query(async ({ ctx, input }) => {
+        return PartyService.getPartyMemberDetails(ctx.prisma, input)
+    }),
+
     joinParty: publicProcedure
       .input(z.object({
         userId: z.string(),
@@ -42,5 +54,26 @@ export const partyRouter = createTRPCRouter({
       }))
       .mutation(async ({ ctx, input }) => {
         return PartyService.leaveParty(ctx.prisma, input)
+    }),
+
+    updateParty: publicProcedure
+      .input(z.object({
+        partyId: z.string(),
+        userId: z.string(),
+        partyTitle: z.string(),
+        partyType: z.nativeEnum(PartyType),
+        partyVisibility: z.nativeEnum(PartyVisibility)
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return PartyService.updateParty(ctx.prisma, input)
+    }),
+
+    deleteParty: publicProcedure
+      .input(z.object({
+        userId: z.string(),
+        partyId: z.string()
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return PartyService.deleteParty(ctx.prisma, input)
     }),
 })

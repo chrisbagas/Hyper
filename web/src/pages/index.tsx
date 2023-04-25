@@ -9,6 +9,7 @@ import { api } from "../utils/api";
 const Home: NextPage = () => {
 
   const games = api.games.getAll.useQuery()
+  const connectAccount = api.users.createConnectionAccount.useQuery()
   const session = useSession()
 
   return (
