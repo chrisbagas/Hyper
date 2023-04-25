@@ -45,7 +45,10 @@ export class PartyService {
                         user: true
                     }
                 }
-            }
+            },
+            orderBy: [{
+                id: "asc"
+            }]
         })
     }
 
