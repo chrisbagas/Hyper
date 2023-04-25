@@ -17,7 +17,7 @@ export interface PartyPlayerData {
 
 const PartyPlayer = (props: PartyPlayerData) => {
     // enable kick buttons if the viewer is the leader of the party and the party member level is member
-    const enableKickButton = props.isLeader && (props.partyMember.level == PartyMemberLevel.member)
+    const enableKickButton = props.isLeader && (props.partyMember.level != PartyMemberLevel.leader)
     const kickMutation = api.party.kickPartyMember.useMutation()
 
     function kick(e: any) {
