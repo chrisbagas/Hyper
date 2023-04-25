@@ -1,4 +1,4 @@
-import { type NextPage } from "next"
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, type NextPage } from "next"
 import Head from "next/head"
 import { api } from "../../../../utils/api"
 import { useRouter } from 'next/router'
@@ -7,11 +7,34 @@ import { CommunityPostStatus } from "@prisma/client"
 import { GuideForm, Post } from "../../../../components/Guide/GuideForm"
 import ErrorPage from 'next/error'
 import { GameDashboardNav } from "../../../../components/shared/GameDashboard/GameDashboardNav"
+import { createSSG } from "../../../../utils/ssghelper"
 
-const EditGuides: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const ssg = createSSG()
+  const gameId = ctx.params?.game as string
+  const postId = ctx.params?.guides as string
+
+  try {
+    await Promise.all([ssg.games.getById.fetch({ id: gameId }), ssg.guides.getPostById.fetch({ id: postId })])
+  } catch(e) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      gameId: gameId,
+      postId: postId,
+    },
+  }
+}
+
+const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
-  const gameId = router.query.game
-  const postId = router.query.guides
+  const gameId = props.gameId
+  const postId = props.postId
   const { data: game } = api.games.getById.useQuery({ id: gameId as string })
   const postMutation = api.guides.updatePostById.useMutation()
   const [post, setPost] = useState({
