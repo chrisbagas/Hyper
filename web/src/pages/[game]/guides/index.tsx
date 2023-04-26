@@ -5,7 +5,7 @@ import Link from "next/link";
 import { api } from "../../../utils/api";
 import { useRouter } from "next/router";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
-import { PencilSquareIcon } from "@heroicons/react/24/solid";
+import { FunnelIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
 
 
 const Guides: NextPage = () => {
@@ -16,8 +16,6 @@ const Guides: NextPage = () => {
 
   const { data } = api.guides.getAllbyGame.useQuery({ id: gameId as string, tagId })
   const tags = api.tag.getAll.useQuery()
-
-  console.log(tags)
 
   return (
     <>
@@ -61,22 +59,25 @@ const Guides: NextPage = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between align-center items-center">
           <p className="text-white">Currently showing {data?.length} guides</p>
 
 
-          <div className="flex">
-            <p className="mx-2">Filter Result</p>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z" />
-            </svg>
-          </div>
-
           {/* HERE TODO */}
-          <button onClick={ ()=> setTagId("guide") } className="btn bg-primary-main text-white">
-              <span className="hidden lg:block">A &nbsp;</span>
-              <PencilSquareIcon className="w-5 h-5" />
-          </button>
+          <div className="dropdown dropdown-hover dropdown-bottom dropdown-end">
+            <label tabIndex={0} className="btn btn-ghost text-white gap-x-2">
+              <FunnelIcon className="h-6" />
+              <p>Filter Result</p>
+            </label>
+            <ul tabIndex={0} className="dropdown-content menu !bg-base-2 border border-base-3 shadow-xl p-2 shadow bg-base-100 rounded-box w-60">
+            <li onClick={ ()=> setTagId("") }><a className="text-base-5 text-base">None</a></li>
+              {tags?.data?.map(tag => 
+
+                <li key={tag.id} onClick={ ()=> setTagId(tag.id) }><a className="text-base-5 text-base">{ tag.name }</a></li>
+
+              )}
+            </ul>
+          </div>
 
 
         </div>
