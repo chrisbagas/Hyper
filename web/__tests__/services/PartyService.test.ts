@@ -521,4 +521,74 @@ describe("Party Service", () => {
             }
         )).rejects.toThrowError("denied")
     })
+
+    it("kickPartyMember positive test", async () => {
+        prisma.partyMember.findFirst.mockResolvedValue(
+            mockPartyLeader
+        )
+
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyMember
+        )
+
+        prisma.partyMember.delete.mockResolvedValue(
+            mockPartyMember
+        )
+
+        const partyMember = await PartyService.kickPartyMember(
+            prisma,
+            {
+                leaderUserId: mockPartyLeader.userId,
+                memberUserId: mockPartyMember.userId,
+                partyId: "1"
+            }
+        )
+
+        expect(partyMember).toStrictEqual(mockPartyMember)
+    })
+
+    it("kickPartyMember negative test: party member does not exist", async () => {
+        prisma.partyMember.findFirst.mockResolvedValue(
+            mockPartyLeader
+        )
+        
+        prisma.partyMember.findUnique.mockResolvedValue(
+            null
+        )
+        
+        expect(PartyService.kickPartyMember(
+            prisma,
+            {
+                leaderUserId: mockPartyLeader.userId,
+                memberUserId: mockPartyMember.userId,
+                partyId: "1"
+            }
+        )).rejects.toThrowError("not found")
+    })
+
+    it("kickPartyMember negative test: unauthorized error", async () => {
+        const mockOtherPartyMember = {
+            userId: "3",
+            partyId: "1",
+            level: PartyMemberLevel.member
+        }
+
+        prisma.partyMember.findFirst.mockResolvedValue(
+            mockPartyMember
+        )
+        
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockOtherPartyMember
+        )
+
+
+        expect(PartyService.kickPartyMember(
+            prisma,
+            {
+                leaderUserId: mockPartyMember.userId,
+                memberUserId: mockOtherPartyMember.userId,
+                partyId: "1"
+            }
+        )).rejects.toThrowError("unauthorized")
+    })
 })

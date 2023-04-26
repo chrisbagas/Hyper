@@ -32,7 +32,6 @@ const PartyCard = (props: PartyCardData) => {
 
     partyMutation.mutateAsync(joinPartyDTO).then(() => {
       if (router.asPath.slice(-4) == "home") {
-        // use refetch instead after refactor
         props.refetch()
       }
       else {
@@ -44,7 +43,6 @@ const PartyCard = (props: PartyCardData) => {
   const memberAvatars = props.partyMembers.map((partyMember) =>
     <div className="avatar" key={partyMember.userId}>
       <div className="w-12 rounded-full">
-        {/* <img src="https://media.hitekno.com/thumbs/2022/09/20/49670-meme-amogus/730x480-img-49670-meme-amogus.jpg" /> */}
         <img src={partyMember.user.image} />
       </div>
     </div>
@@ -107,7 +105,7 @@ const PartyCard = (props: PartyCardData) => {
         <div>
           {props.alreadyJoined
             ? <button className="btn bg-gray-400 hover:bg-gray-500">Already In Party</button>
-            : <button onClick={joinParty} className="btn bg-green-500 hover:bg-green-600">Join Party</button>
+            : <button onClick={joinParty} className="btn bg-green-500 hover:bg-green-600 text-lg normal-case">Join Party</button>
           }
         </div>
       </div>

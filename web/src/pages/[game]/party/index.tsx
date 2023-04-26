@@ -5,7 +5,7 @@ import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameD
 import { PartyCard } from "../../../components/party/PartyCard";
 import { PartyType, PartyVisibility } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 
 const Party: NextPage = () => {
@@ -16,7 +16,7 @@ const Party: NextPage = () => {
   const userId = session.data?.user.id
   const { data: game } = api.games.getById.useQuery({ id: gameId as string })
   const parties = api.party.getByGame.useQuery({ id: gameId as string }).data
-  const { data: userParty, refetch } = api.party.getUserParty.useQuery(userId)
+  const { data: userParty, refetch } = api.party.getUserParty.useQuery(userId as string)
 
   return (
     <>
@@ -25,13 +25,13 @@ const Party: NextPage = () => {
         <div className="my-4">
           <div className=" flex justify-between mb-4 mr-4">
             <div>
-              <h1 className="text-2xl font-bold text-neutral-0">List Of All Parties</h1>
+              <h1 className="text-2xl font-bold mt-4 text-neutral-0">List Of All Parties</h1>
             </div>
             <div>
               {userParty
                 ? <></>
                 : <Link href={`/${gameId}/party/create`}>
-                  <button className="btn bg-blue-500 hover:bg-blue-600">
+                  <button className="btn bg-blue-500 hover:bg-blue-600 normal-case text-lg">
                     Create New Party
                     &nbsp;
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
