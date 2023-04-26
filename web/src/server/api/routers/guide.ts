@@ -60,6 +60,7 @@ export const guideRouter = createTRPCRouter({
       headerType: z.nativeEnum(ContentType),
       headerUrl: z.string(),
       gameId: z.string(),
+      tagId: z.string(),
     })
   )
   .mutation(async ({ ctx, input }) => {
@@ -82,6 +83,11 @@ export const guideRouter = createTRPCRouter({
               url: input.headerUrl,
             },
           },
+          tags: {
+            create: {
+              tagId: input.tagId,
+            }
+          }
         }
       })
       return {

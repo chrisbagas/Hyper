@@ -1,5 +1,6 @@
-import { CommunityPostStatus, CommunityPostType, ContentType } from "@prisma/client"
+import { CommunityPostStatus, CommunityPostType, ContentType, CommunityTag } from "@prisma/client"
 import React, { useState } from "react"
+import { api } from "../../utils/api";
 import { ExclamationTriangleIcon, LinkIcon, XCircleIcon } from "@heroicons/react/24/solid"
 import { GuideTopButtonGroup } from "./GuideTopButtonGroup"
 import { EyeIcon, FolderPlusIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline"
@@ -11,6 +12,7 @@ export interface Post {
   content:string,
   headerType:ContentType|undefined,
   headerUrl:string,
+  tagId: string,
 }
 
 export interface GuideFormProps {
@@ -26,6 +28,7 @@ export interface GuideFormProps {
 
 export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, isSuccess, isSubmitting, onChange, onSubmit, gameId, postId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const tags = api.tag.getAll.useQuery()
 
   return (
     <>
@@ -97,6 +100,18 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
             <option disabled selected value={undefined}>Select post type</option>
             <option value={CommunityPostType.CLIP}>Clip</option>
             <option value={CommunityPostType.GUIDE}>Guide</option>
+          </select>
+        </div>
+
+        <div className="form-control w-full px-16">
+          <label className="label">
+            <span className="label-text text-neutral-0">Select Post Tags</span>
+          </label>
+          <select id="tagId" className={`select w-full bg-base-2 border-base-3 ${postData.tagId === undefined ? "text-base-4" : "text-neutral-0"}`} value={postData.tagId} onChange={onChange}>
+            <option disabled selected value={undefined}>Select post tag</option>
+            {tags?.data?.map(tag => 
+              <option key={tag.id} value={tag.id}>{ tag.name }</option>
+            )}
           </select>
         </div>
 

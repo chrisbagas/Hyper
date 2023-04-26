@@ -3,7 +3,7 @@ import Head from "next/head"
 import { api } from "../../../utils/api"
 import { useRouter } from 'next/router'
 import React, { useState } from "react"
-import { CommunityPostStatus } from "@prisma/client"
+import type { CommunityPostStatus } from "@prisma/client"
 import { GuideForm } from "../../../components/Guide/GuideForm"
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav"
 
@@ -18,6 +18,7 @@ const CreateGuides: NextPage = () => {
     content: "",
     headerType: undefined,
     headerUrl: "",
+    tagId: ""
   })
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)
@@ -52,6 +53,7 @@ const CreateGuides: NextPage = () => {
         headerType: post.headerType,
         headerUrl: post.headerUrl,
         gameId: gameId as string,
+        tagId: post.tagId as string,
       })
 
       console.log(result)
