@@ -15,7 +15,9 @@ const Guides: NextPage = () => {
   const [ tagId, setTagId ] = React.useState("")
 
   const { data } = api.guides.getAllbyGame.useQuery({ id: gameId as string, tagId })
-  console.log(data)
+  const tags = api.tag.getAll.useQuery()
+
+  console.log(tags)
 
   return (
     <>
