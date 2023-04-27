@@ -75,7 +75,7 @@ export const ValorantStatistic: React.FC<GameCardProps> = ({ status, accountData
 
                     {competitiveHistory?.map(match => 
                     
-                        <ValorantMatchHistory key={match.index} match={ match }> </ValorantMatchHistory>
+                        <ValorantMatchHistory key={match.index} match={ match } username={ accountData.name } tag = { accountData.tag }> </ValorantMatchHistory>
                     
                     )}
 
