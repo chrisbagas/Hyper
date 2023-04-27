@@ -66,6 +66,7 @@ export class PlayerStatisticsService {
         for (let i = 0; i < 5; i++) {
             const item = mmrHistory.data[i];
             let item2 = matchHistory.data[i].players.all_players;
+            let match_id = matchHistory.data[i].metadata.matchid
 
             for (let j = 0; j < 10; j++) {
                 if (item2[j].name === username && item2[j].tag === tagline) {
@@ -81,6 +82,7 @@ export class PlayerStatisticsService {
             const rounds_lost = teams[player_team].rounds_lost
 
             valorantData.competitiveHistory.push({
+                "match_id": match_id,
                 "rank": item.currenttierpatched,
                 "rank_image": item.images.large,
                 "elo_change": item.mmr_change_to_last_game,
