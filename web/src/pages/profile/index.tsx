@@ -12,7 +12,8 @@ const Statistic = () => {
     const { data, isLoading, refetch } = api.profiles.getProfile.useQuery();
     const connectAcc = api.profiles.getConnectionAccount.useQuery();
     const session = useSession();
-  
+    
+
     useEffect(() => {
       if (!isLoading) {
         refetch();
@@ -42,9 +43,15 @@ const Statistic = () => {
 
             <div className="mx-16">
                 <ProfileHeader data={data} connectAcc={connectAcc}/>
-                <div className="tabs my-4 ">
-                    <a className="tab tab-bordered tab-active">Overview</a>
-                </div>
+                <div className="flex flex-nowrap tabs border-b border-base-4 my-4 overflow-x-auto ">
+          
+                        <div
+                            className={`tab tab-lg cursor-pointer text-neutral-0 w-52 border-b-[2px] font-bold border-neutral-0`}
+                        >
+                            Overview
+                        </div>
+          
+        </div>
                 <ProfileCard connectAcc={connectAcc}/>
             </div>
         </>
