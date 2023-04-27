@@ -12,7 +12,7 @@ export interface ValorantMatchHistoryProps {
 export const ValorantMatchHistory: React.FC<ValorantMatchHistoryProps> = ({ match, username, tag }) => {
     const router = useRouter()
     return (
-    <div key={match.index} onClick={() => router.push(`/player_statistics?id=${username},${tag}/match_details?match_id=${match.match_id}`)}>
+    <div key={match.index} onClick={() => router.push(`/match_details?match_id=${match.match_id}&id=${username},${tag}`)}>
         {
             match.victory ? (
                 <div className="flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row p-4 bg-base-1 lg:grid lg:grid-cols-4 rounded-md border border-success-main">
