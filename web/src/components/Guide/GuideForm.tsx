@@ -13,6 +13,7 @@ export interface Post {
   headerType:ContentType|undefined,
   headerUrl:string,
   tagId: string,
+  tagId: string,
 }
 
 export interface GuideFormProps {
