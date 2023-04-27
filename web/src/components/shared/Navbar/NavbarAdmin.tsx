@@ -1,9 +1,8 @@
-import { Bars3Icon } from "@heroicons/react/24/solid"
+import { Bars3Icon, EllipsisVerticalIcon, UserCircleIcon } from "@heroicons/react/24/solid"
 import { useRouter } from "next/router"
 import React from "react"
 import { HyperLogoAdmin } from "./HyperLogoAdmin"
 import { SidebarMenuAdmin } from "./SidebarMenuAdmin"
-import { EllipsisVerticalIcon, UserCircleIcon } from "@heroicons/react/24/solid"
 
 export interface NavWrapperProps {
     children: React.ReactNode

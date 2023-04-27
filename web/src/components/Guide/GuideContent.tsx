@@ -1,6 +1,7 @@
 import React from "react"
 import ReactMarkdown from "react-markdown"
 import { CommunityPostType, ContentType } from "@prisma/client"
+import Link from "next/link"
 
 export interface GuideContentProps {
   type: CommunityPostType
@@ -9,6 +10,7 @@ export interface GuideContentProps {
   headerType: ContentType
   headerUrl: string
   author: string
+  authorId: string
   postedAt: Date
 }
 
@@ -24,14 +26,14 @@ const GuideHeader: React.FC<{type:ContentType, url:string}> = ({ type, url }) =>
   return <iframe className="w-full aspect-video rounded-lg" src={url}></iframe>
 }
 
-export const GuideContent: React.FC<GuideContentProps> = ({ type, title, content, headerType, headerUrl, author, postedAt }) => {
+export const GuideContent: React.FC<GuideContentProps> = ({ type, title, content, headerType, headerUrl, author, authorId, postedAt }) => {
   return (
     <div className="flex flex-col gap-y-8 px-16 pb-16">
       <GuideHeader type={headerType} url={headerUrl}/>
       <div className="flex flex-col gap-y-3">
         <GuideTypeBadge type={type}/>
         <h1 className="text-xl text-neutral-0 font-bold">{title}</h1>
-        <p className="text-sm text-base-4">{`Created by ${author} | Posted ${postedAt.getDate()}/${postedAt.getMonth()+1}/${postedAt.getFullYear()} ${('0'+postedAt.getHours()).slice(-2)}:${('0'+postedAt.getMinutes()).slice(-2)}`}</p>
+        <p className="text-sm text-base-4">Created by <Link href={`/profile/${authorId}`}>{`${author}`}</Link> {`| Posted ${postedAt.getDate()}/${postedAt.getMonth()+1}/${postedAt.getFullYear()} ${('0'+postedAt.getHours()).slice(-2)}:${('0'+postedAt.getMinutes()).slice(-2)}`}</p>
         <ReactMarkdown 
           className="flex flex-col space-y-4"
           components={{

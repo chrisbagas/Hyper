@@ -9,12 +9,14 @@ vi.mock("../../src/server/db")
 
 describe("Community Post RPC", () => {
   it("getPostById should return a CommunityPost object with header url and author name", async () => {
+    const mockedDate = new Date()
+
     const mockedPost = {
       id: "post-1",
       type: CommunityPostType.CLIP,
       status: CommunityPostStatus.DRAFT,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: mockedDate,
+      updatedAt: mockedDate,
       title: "a",
       content: "a",
       authorId: "user-1",
@@ -34,11 +36,12 @@ describe("Community Post RPC", () => {
       id: "post-1",
       type: CommunityPostType.CLIP,
       status: CommunityPostStatus.DRAFT,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: mockedDate,
+      updatedAt: mockedDate,
       title: "a",
       content: "a",
       authorName: "kenshin",
+      authorId: "user-1",
       header: mockedPost.header
     }
 
@@ -73,6 +76,8 @@ describe("Community Post RPC", () => {
   })
 
   it("create should return a success message and the post id if post is successfully created", async () => {
+    const mockedDate = new Date()
+
     const input = {
       type: CommunityPostType.GUIDE,
       status: CommunityPostStatus.DRAFT,
@@ -88,8 +93,8 @@ describe("Community Post RPC", () => {
       id: "a",
       type: CommunityPostType.GUIDE,
       status: CommunityPostStatus.DRAFT,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: mockedDate,
+      updatedAt: mockedDate,
       title: "title",
       content: "guide",
       authorId: "1",
@@ -147,6 +152,8 @@ describe("Community Post RPC", () => {
   })
 
   it("updatePostById should return a success message if update is successful", async () => {
+    const mockedDate = new Date()
+
     const input = {
       id: "post-1",
       type: CommunityPostType.GUIDE,
@@ -162,8 +169,8 @@ describe("Community Post RPC", () => {
       id: "post-1",
       type: CommunityPostType.GUIDE,
       status: CommunityPostStatus.DRAFT,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: mockedDate,
+      updatedAt: mockedDate,
       title: "title new",
       content: "guide new",
       authorId: "1",
