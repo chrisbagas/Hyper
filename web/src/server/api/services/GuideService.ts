@@ -53,6 +53,9 @@ export class GuideService {
 
     public static async getAll(prisma: PrismaClient) {
         return prisma.communityPost.findMany({
+            orderBy: {
+                title: 'desc',
+            },
             include: {
                 author: true,
                 header: true,
