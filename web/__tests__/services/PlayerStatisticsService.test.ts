@@ -217,7 +217,8 @@ describe("Get Combined Valorant Data Successfully", () => {
             data: [
                 {
                     metadata: {
-                        map: "Lotus"
+                        map: "Lotus",
+                        matchid: 1
                     },
                     teams: {
                         blue: {
@@ -251,7 +252,8 @@ describe("Get Combined Valorant Data Successfully", () => {
                 },
                 {
                     metadata: {
-                        map: "Haven"
+                        map: "Haven",
+                        matchid: 2
                     },
                     teams: {
                         blue: {
@@ -285,7 +287,8 @@ describe("Get Combined Valorant Data Successfully", () => {
                 },
                 {
                     metadata: {
-                        map: "Icebox"
+                        map: "Icebox",
+                        matchid: 3
                     },
                     teams: {
                         blue: {
@@ -319,7 +322,8 @@ describe("Get Combined Valorant Data Successfully", () => {
                 },
                 {
                     metadata: {
-                        map: "Split"
+                        map: "Split",
+                        matchid: 4
                     },
                     teams: {
                         blue: {
@@ -353,7 +357,8 @@ describe("Get Combined Valorant Data Successfully", () => {
                 },
                 {
                     metadata: {
-                        map: "Haven"
+                        map: "Haven",
+                        matchid: 5
                     },
                     teams: {
                         blue: {
@@ -405,6 +410,7 @@ describe("Get Combined Valorant Data Successfully", () => {
             },
             competitiveHistory: [
                 {
+                    match_id: 1,
                     rank: "Ascendant 2",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
                     elo_change: -14,
@@ -420,6 +426,7 @@ describe("Get Combined Valorant Data Successfully", () => {
                     rounds_lost: 13
                 },
                 {
+                    match_id: 2,
                     rank: "Ascendant 2",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
                     elo_change: 25,
@@ -435,6 +442,7 @@ describe("Get Combined Valorant Data Successfully", () => {
                     rounds_lost: 13
                 },
                 {
+                    match_id: 3,
                     rank: "Ascendant 2",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/22/largeicon.png",
                     elo_change: 29,
@@ -450,6 +458,7 @@ describe("Get Combined Valorant Data Successfully", () => {
                     rounds_lost: 4
                 },
                 {
+                    match_id: 4,
                     rank: "Ascendant 1",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
                     elo_change: 27,
@@ -465,6 +474,7 @@ describe("Get Combined Valorant Data Successfully", () => {
                     rounds_lost: 6
                 },
                 {
+                    match_id: 5,
                     rank: "Ascendant 1",
                     rank_image: "https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/21/largeicon.png",
                     elo_change: 18,
