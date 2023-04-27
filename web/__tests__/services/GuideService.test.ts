@@ -221,5 +221,11 @@ describe("Community Post RPC", () => {
 
         await expect(GuideService.getAllbyUser(input, userId, mockPrisma)).rejects.toThrowError("Game not found")
     })
+
+    it("getAllbyTags should return List of all guides with the current tags", async () => {
+    })
+
+    it("getAllbyTags should throw error when no post with tags appear", async () => {
+    })
 })
 
