@@ -47,6 +47,7 @@ export const guideRouter = createTRPCRouter({
         title: data.title,
         content: data.content,
         authorName: data.author.name,
+        authorId: data.author.id,
         header: data.header
       }
     }),

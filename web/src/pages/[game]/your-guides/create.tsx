@@ -3,8 +3,8 @@ import Head from "next/head"
 import { api } from "../../../utils/api"
 import { useRouter } from 'next/router'
 import React, { useState } from "react"
-import type { CommunityPostStatus } from "@prisma/client"
-import { GuideForm } from "../../../components/Guide/GuideForm"
+import { CommunityPostStatus } from "@prisma/client"
+import { GuideForm, Post } from "../../../components/Guide/GuideForm"
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav"
 
 const CreateGuides: NextPage = () => {
@@ -12,7 +12,7 @@ const CreateGuides: NextPage = () => {
   const gameId = router.query.game
   const postMutation = api.guides.create.useMutation()
   const { data: game } = api.games.getById.useQuery({ id: gameId as string })
-  const [post, setPost] = useState({
+  const [post, setPost] = useState<Post>({
     type: undefined,
     title: "",
     content: "",
@@ -85,9 +85,12 @@ const CreateGuides: NextPage = () => {
       </div>
       <GuideForm 
         postData={post}
+        setPostData={setPost}
         errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
         isSuccess={success}
         isSubmitting={isSubmitting}
+        setIsSubmitting={setIsSubmitting}
         onChange={handleChange}
         onSubmit={savePost}
         gameId={gameId as string}

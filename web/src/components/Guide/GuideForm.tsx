@@ -1,10 +1,10 @@
-import { CommunityPostStatus, CommunityPostType, ContentType, CommunityTag } from "@prisma/client"
-import React, { useState } from "react"
-import { api } from "../../utils/api";
-import { ExclamationTriangleIcon, LinkIcon, XCircleIcon } from "@heroicons/react/24/solid"
+import { CommunityPostStatus, CommunityPostType, ContentType } from "@prisma/client"
+import React, { ChangeEvent, useState } from "react"
+import { LinkIcon } from "@heroicons/react/24/solid"
 import { GuideTopButtonGroup } from "./GuideTopButtonGroup"
 import { EyeIcon, FolderPlusIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import { GuideConfirmationModal } from "./GuideConfirmationModal"
+import { api } from "../../utils/api"
 
 export interface Post {
   type:CommunityPostType|undefined,
@@ -17,16 +17,146 @@ export interface Post {
 
 export interface GuideFormProps {
   postData:Post,
+  setPostData:React.Dispatch<React.SetStateAction<Post>>,
   errorMessage:string,
+  setErrorMessage:React.Dispatch<React.SetStateAction<string>>,
   isSuccess:boolean,
   isSubmitting:boolean,
+  setIsSubmitting:React.Dispatch<React.SetStateAction<boolean>>,
   onChange:(event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>)=>void,
   onSubmit:(event: React.SyntheticEvent, status: CommunityPostStatus, isPreview: boolean)=>Promise<void>,
   gameId:string,
   postId?:string,
 }
 
-export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, isSuccess, isSubmitting, onChange, onSubmit, gameId, postId }) => {
+interface HeaderFieldProps {
+  postData:Post,
+  setPostData:React.Dispatch<React.SetStateAction<Post>>,
+  onChange:(event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>)=>void,
+  setErrorMessage:React.Dispatch<React.SetStateAction<string>>,
+  setIsSubmitting:React.Dispatch<React.SetStateAction<boolean>>,
+}
+
+const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChange, setIsSubmitting, setErrorMessage }) => {
+  const onFileUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const fileInput = e.target
+
+    if (!fileInput.files || fileInput.files.length == 0) {
+      return
+    }
+
+    const file = fileInput.files[0]
+
+    if (!file){
+      return
+    }
+
+    if (!file.type.startsWith("image")){
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+
+      const res = await fetch("/api/media/upload", {
+        method: "POST",
+        body: formData,
+      })
+
+      const {
+        url,
+        error,
+      }: {
+        url: string;
+        error: string | null;
+      } = await res.json();
+
+      if (error || !url) {
+        console.log("File Upload Failed")
+        setIsSubmitting(false)
+        setErrorMessage("Image upload failed, try again later")
+        return
+      }
+
+      console.log("File uploaded successfully")
+
+      setPostData({
+        ...postData,
+        ["headerUrl"]: url,
+      })
+
+    } catch(error) {
+      console.error(error)
+      setErrorMessage("Image upload failed, try again later")
+    }
+    setIsSubmitting(false)
+  }
+
+  switch(postData.headerType) {
+    case ContentType.IMAGE:
+      return (
+        <div className="form-control w-3/4">
+          <label className="label">
+            <span className="label-text text-neutral-0">Header Attachment Link</span>
+          </label>
+          <input 
+            type="file"
+            id="file"
+            className="file-input file-input-bordered w-full bg-base-2 border-base-3 text-base-4 file:bg-base-1 file:border-0 file:text-base-4"
+            onChange={onFileUploadChange}
+          />
+          <label className="label">
+            <span className="label-text-alt text-base-5">Only supports JPEG or PNG format with maximum 2MB and optimal ratio of 16:9</span>
+          </label>
+        </div>
+      )
+    case ContentType.VIDEO:
+      return (
+        <div className="form-control w-3/4">
+          <label className="label">
+            <span className="label-text text-neutral-0">Header Attachment Link</span>
+          </label>
+          <label className="input-group">
+            <span className="bg-base-1"><LinkIcon className="w-4 text-base-4"/></span>
+            <input 
+              type="text" 
+              id="headerUrl"
+              placeholder="www.medal.tv/001ojiad0983q09" 
+              className="input input-bordered w-full bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0" 
+              value={postData.headerUrl}
+              onChange={onChange}
+            />
+          </label>
+          <label className="label">
+            <span className="label-text-alt text-base-5">Only link for the video you uploaded to a video uploading platform</span>
+          </label>
+        </div>
+      )
+    default:
+      return (
+        <div className="form-control w-3/4">
+          <label className="label">
+            <span className="label-text text-neutral-0">Header Attachment Link</span>
+          </label>
+          <input 
+              type="text" 
+              id="headerUrl"
+              placeholder="Please select attachment type first" 
+              className="input input-bordered w-full disabled:bg-base-1 disabled:placeholder:text-base-4" 
+              disabled
+            />
+          <label className="label">
+            <span className="label-text-alt text-base-5">Only supports link or files provided by selected attachment type</span>
+          </label>
+        </div>
+      )
+  }
+}
+
+export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, errorMessage, setErrorMessage, isSuccess, isSubmitting, setIsSubmitting, onChange, onSubmit, gameId, postId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const tags = api.tag.getAll.useQuery()
 
@@ -71,25 +201,13 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, errorMessage, is
             </label>
           </div>
 
-          <div className="form-control w-3/4">
-            <label className="label">
-              <span className="label-text text-neutral-0">Header Attachment Link</span>
-            </label>
-            <label className="input-group">
-              <span className="bg-base-1"><LinkIcon className="w-4 text-base-4"/></span>
-              <input 
-                type="text" 
-                id="headerUrl"
-                placeholder="www.medal.tv/001ojiad0983q09" 
-                className="input input-bordered w-full bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0" 
-                value={postData.headerUrl}
-                onChange={onChange}
-              />
-            </label>
-            <label className="label">
-              <span className="label-text-alt text-base-5">Only supports link or files provided by selected attachment type</span>
-            </label>
-          </div>
+          <HeaderField 
+            postData={postData}
+            setPostData={setPostData}
+            onChange={onChange}
+            setErrorMessage={setErrorMessage}
+            setIsSubmitting={setIsSubmitting}
+          />
         </div>
 
         <div className="form-control w-full px-16">
