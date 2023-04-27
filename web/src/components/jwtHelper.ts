@@ -7,7 +7,7 @@ interface TokenPayload {
     exp: number
 }
 function jwtCheck() {
-    var isLogin = false
+    let isLogin = false
     if (typeof window !== 'undefined') {
         // Perform localStorage action
         if (typeof localStorage.getItem("token") === 'string') {
