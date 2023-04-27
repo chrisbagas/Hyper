@@ -15,7 +15,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   const postId = ctx.params?.guides as string
 
   try {
-    await Promise.all([ssg.games.getById.fetch({ id: gameId }), ssg.guides.getPostById.fetch({ id: postId })])
+    await Promise.all([ssg.games.getById.fetch({ id: gameId }), ssg.guides.getPostById.fetch({ id: postId }), ssg.tag.getAll.prefetch()])
   } catch(e) {
     return {
       notFound: true,
@@ -43,6 +43,7 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
     content: '',
     headerType: undefined,
     headerUrl: '',
+    tagId: ''
   } as Post)
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)
@@ -57,6 +58,7 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
           content: data.content as string,
           headerType: data.header?.type,
           headerUrl: data.header?.url as string,
+          tagId: post.tagId as string,
         })
         if (data.status === CommunityPostStatus.PUBLISHED) {
           setIsPublished(true)

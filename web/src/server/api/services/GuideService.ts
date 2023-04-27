@@ -2,15 +2,21 @@ import { CommunityPostStatus, PrismaClient } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 
 export class GuideService {
-    public static async getAllbyGame(id: string, prisma: PrismaClient) {
+    public static async getAllbyGame(id: string, prisma: PrismaClient, tagId?: string) {
         const guides = await prisma.game.findUnique({
             where: {
                 id: id
             },
-            select: {
-                communityPosts: {
-                    where: {
-                        status: CommunityPostStatus.PUBLISHED
+            select:{
+                communityPosts:{
+                    where:{
+                        status:CommunityPostStatus.PUBLISHED,
+                        tags:tagId?
+                        {
+                            some:{
+                                tagId:tagId
+                            }
+                        } : undefined
                     },
                     include: {
                         author: true,

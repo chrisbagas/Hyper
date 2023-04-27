@@ -6,6 +6,7 @@ import profileRouter from "./routers/profileRouter";
 import { createTRPCRouter } from "./trpc";
 import { partyRouter } from "./routers/party"
 import { adminRouter } from "./routers/admin";
+import { tagRouter } from "./routers/tag";
 
 /**
  * This is the primary router for your server.
@@ -19,6 +20,7 @@ export const appRouter = createTRPCRouter({
   users: userRouter,
   guides: guideRouter,
   discord: discordRouter,
+  tag: tagRouter,
   admin: adminRouter
 });
 

@@ -29,6 +29,9 @@ describe("Community Post RPC", () => {
         postId: "post-1",
         type: ContentType.IMAGE,
         url: "linktoimage"
+      },
+      tags: {
+          tagId: "tag",
       }
     }
 
@@ -85,7 +88,8 @@ describe("Community Post RPC", () => {
       content: "guide",
       headerType: ContentType.VIDEO,
       headerUrl: "url",
-      gameId: "game-1"
+      gameId: "game-1",
+      tagId: "tag"
     }
 
     // Prisma returning anythin mean the query is a success
@@ -132,7 +136,8 @@ describe("Community Post RPC", () => {
       content: "guide",
       headerType: ContentType.VIDEO,
       headerUrl: "url",
-      gameId: "game-1"
+      gameId: "game-1",
+      tagId: "tag"
     }
 
     const ctx = {
@@ -208,7 +213,8 @@ describe("Community Post RPC", () => {
       content: "guide new",
       headerType: ContentType.VIDEO,
       headerUrl: "url new",
-      gameId: "game-1"
+      gameId: "game-1",
+      tagId: "tag"
     }
 
     const ctx = {
@@ -267,7 +273,8 @@ describe("Community Post RPC", () => {
       content: "guide new",
       headerType: ContentType.VIDEO,
       headerUrl: "url new",
-      gameId: "game-1"
+      gameId: "game-1",
+      tagId: "tag"
     }
 
     const ctx = {

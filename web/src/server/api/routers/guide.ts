@@ -51,7 +51,7 @@ export const guideRouter = createTRPCRouter({
         header: data.header
       }
     }),
-  create: publicProcedure
+    create: publicProcedure
     .input(
       z.object({
         type: z.nativeEnum(CommunityPostType),
@@ -61,6 +61,7 @@ export const guideRouter = createTRPCRouter({
         headerType: z.nativeEnum(ContentType),
         headerUrl: z.string(),
         gameId: z.string(),
+        tagId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -83,6 +84,11 @@ export const guideRouter = createTRPCRouter({
                 url: input.headerUrl,
               },
             },
+            tags: {
+              create: {
+                tagId: input.tagId,
+              }
+            }
           }
         })
         return {
@@ -95,7 +101,6 @@ export const guideRouter = createTRPCRouter({
           message: 'Failed to create new post, try again later.'
         })
       }
-
     }),
   updatePostById: publicProcedure
     .input(
@@ -163,9 +168,10 @@ export const guideRouter = createTRPCRouter({
   getAllbyGame: publicProcedure
     .input(z.object({
       id: z.string(),
+      tagId: z.string().optional()
     }))
     .query(async ({ ctx, input }) => {
-      return GuideService.getAllbyGame(input.id, ctx.prisma)
+      return GuideService.getAllbyGame(input.id, ctx.prisma, input.tagId)
     }),
   getAllbyUser: publicProcedure
     .input(z.object({
