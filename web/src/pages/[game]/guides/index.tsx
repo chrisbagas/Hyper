@@ -62,8 +62,6 @@ const Guides: NextPage = () => {
         <div className="flex justify-between align-center items-center">
           <p className="text-white">Currently showing {data?.length} guides</p>
 
-
-          {/* HERE TODO */}
           <div className="dropdown dropdown-hover dropdown-bottom dropdown-end">
             <label tabIndex={0} className="btn btn-ghost text-white gap-x-2">
               <FunnelIcon className="h-6" />
@@ -78,7 +76,6 @@ const Guides: NextPage = () => {
               )}
             </ul>
           </div>
-
 
         </div>
         <div className="grid xl:grid-cols-3 grid-flow-row gap-8 content-center justify-center items-center my-6">

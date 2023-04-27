@@ -15,7 +15,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSideP
   const postId = ctx.params?.guides as string
 
   try {
-    await Promise.all([ssg.games.getById.fetch({ id: gameId }), ssg.guides.getPostById.fetch({ id: postId })])
+    await Promise.all([ssg.games.getById.fetch({ id: gameId }), ssg.guides.getPostById.fetch({ id: postId }), ssg.tag.getAll.prefetch()])
   } catch(e) {
     return {
       notFound: true,
