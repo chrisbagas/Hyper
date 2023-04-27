@@ -56,7 +56,7 @@ const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChan
     setIsSubmitting(true)
 
     try {
-      var formData = new FormData()
+      const formData = new FormData()
       formData.append("file", file)
 
       const res = await fetch("/api/media/upload", {
