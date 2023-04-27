@@ -20,7 +20,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ data, connectAcc }
             </div>
             <div className=" ml-8 mt-4" >
                 <h1 className="text-4xl font-bold font text-white">
-                    {data?.username}
+                    {data?.name}
                 </h1>
                 <div className="flex flex-col sm:flex-row gap-4 mt-4">
                     <div className="flex flex-col sm:flex-row ">
