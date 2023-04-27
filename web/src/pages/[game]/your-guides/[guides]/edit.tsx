@@ -23,6 +23,7 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
     content: '',
     headerType: undefined,
     headerUrl: '',
+    tagId: ''
   } as Post)
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)
@@ -37,6 +38,7 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
           content: data.content as string,
           headerType: data.header?.type,
           headerUrl: data.header?.url as string,
+          tagId: post.tagId as string,
         })
         if (data.status === CommunityPostStatus.PUBLISHED) {
           setIsPublished(true)
