@@ -14,6 +14,13 @@ export const config = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const data: any = await new Promise((resolve, reject) => {
     const form = formidable()
+   
+    // @ts-ignore
+    form.maxFileSize = 8000000;
+    // @ts-ignore
+    form.uploadDir = "/tmp"
+    // @ts-ignore
+    form.keepExtensions = false
 
     form.parse(req, (err, fields, files) => {
       if (err) reject({ err })
