@@ -19,7 +19,7 @@ describe("ADMIN RPC", () => {
           username: "test",
           password: "$argon2d$v=19$m=12,t=3,p=1$NDY2NnVvYXdsZjAwMDAwMA$9Uu34rA5YBkEjN26dySJCA"
         }
-    
+        env.JWT_SECRET = 'test'
         const ctx = {
           session: {
             user: {
