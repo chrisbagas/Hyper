@@ -124,6 +124,7 @@ const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getSer
         headerType={data?.header?.type as ContentType}
         headerUrl={data?.header?.url as string}
         author={data?.authorName as string}
+        authorId={data?.authorId as string}
         postedAt={data?.updatedAt}
       />
 
