@@ -9,29 +9,9 @@ import { api } from "../../../../utils/api";
 import React, { useState } from "react";
 import { GameDashboardNav } from "../../../../components/shared/GameDashboard/GameDashboardNav";
 import { GuideConfirmationModal } from "../../../../components/Guide/GuideConfirmationModal";
-import { createSSG } from "../../../../utils/ssghelper";
+import { ssgPrefetchGuidesContent } from "../../../../utils/ssgPrefetch";
 
-export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const ssg = createSSG()
-  const gameId = ctx.params?.game as string
-  const postId = ctx.params?.guides as string
-
-  try {
-    await Promise.all([ssg.games.getById.fetch({ id: gameId }), ssg.guides.getPostById.fetch({ id: postId })])
-  } catch(e) {
-    return {
-      notFound: true,
-    }
-  }
-
-  return {
-    props: {
-      trpcState: ssg.dehydrate(),
-      gameId: gameId,
-      postId: postId,
-    },
-  }
-}
+export const getServerSideProps: GetServerSideProps = ssgPrefetchGuidesContent
 
 const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
@@ -58,8 +38,8 @@ const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getSer
     event.preventDefault()
     setErrorMessage('')
     setIsSubmitting(true)
-    
-    try{
+
+    try {
       await postMutation.mutateAsync({
         id: postId as string,
         type: data.type,
@@ -72,8 +52,8 @@ const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getSer
       })
 
       setIsSuccess(true)
-      
-      setTimeout(()=>{
+
+      setTimeout(() => {
         router.reload()
       }, 1000)
     } catch (e) {
@@ -97,27 +77,27 @@ const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getSer
 
       {data.status === CommunityPostStatus.DRAFT && <GuideTopButtonGroup returnUrl={`/${gameId}/your-guides`} className="px-16 pb-6">
         <div className="flex justify-between gap-2">
-          <button className={`flex btn btn-ghost normal-case gap-2 text-neutral-0 ${isSubmitting && 'btn-disabled'}`} onClick={()=>router.push(`/${gameId}/your-guides/${postId}/edit`)}><PencilSquareIcon className="w-4"/> Edit Post</button>
-          <button className={`flex btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={()=>setIsModalOpen(true)}><PaperAirplaneIcon className="w-4"/> Publish Post</button>
+          <button className={`flex btn btn-ghost normal-case gap-2 text-neutral-0 ${isSubmitting && 'btn-disabled'}`} onClick={() => router.push(`/${gameId}/your-guides/${postId}/edit`)}><PencilSquareIcon className="w-4" /> Edit Post</button>
+          <button className={`flex btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2 ${isSubmitting && 'btn-disabled'}`} onClick={() => setIsModalOpen(true)}><PaperAirplaneIcon className="w-4" /> Publish Post</button>
         </div>
       </GuideTopButtonGroup>}
 
       {data.status === CommunityPostStatus.PUBLISHED && <GuideTopButtonGroup returnUrl={`/${gameId}/your-guides`} className="px-16 pb-6">
-        <button 
-          className="flex btn btn-ghost normal-case gap-2 text-neutral-0" 
-          onClick={()=>{
+        <button
+          className="flex btn btn-ghost normal-case gap-2 text-neutral-0"
+          onClick={() => {
             navigator.clipboard.writeText(`${window.location.host}/${gameId}/guides/${postId}`)
             setIsTooltipOpen(true)
-            setTimeout(()=>{
+            setTimeout(() => {
               setIsTooltipOpen(false)
             }, 2000)
           }
-        }>
-          Share This Post <ShareIcon className="w-4"/>
+          }>
+          Share This Post <ShareIcon className="w-4" />
         </button>
       </GuideTopButtonGroup>}
 
-      <GuideContent 
+      <GuideContent
         type={data?.type}
         title={data?.title}
         content={data?.content as string}
@@ -157,14 +137,14 @@ const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getSer
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
       >
-        <button 
-          className="btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2" 
-          onClick={(e)=>{
+        <button
+          className="btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2"
+          onClick={(e) => {
             setIsModalOpen(false)
             publishPost(e)
           }}
         >
-          <PaperAirplaneIcon className="w-4"/> Publish Post
+          <PaperAirplaneIcon className="w-4" /> Publish Post
         </button>
       </GuideConfirmationModal>
     </>
