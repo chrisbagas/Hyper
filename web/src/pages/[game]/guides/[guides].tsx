@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Head from "next/head"
 import { GuideContent } from "../../../components/Guide/GuideContent"
 import { GuideTopButtonGroup } from "../../../components/Guide/GuideTopButtonGroup"
-import { ShareIcon } from "@heroicons/react/24/solid"
+import { ShareIcon } from "@heroicons/react/24/outline"
 import { useRouter } from "next/router";
 import { api } from "../../../utils/api";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
@@ -44,7 +44,7 @@ const ShowGuides: NextPage = () => {
 
       <GuideTopButtonGroup returnUrl={`/${gameId}/guides`} className="px-16 pb-6">
         <button 
-          className="flex btn btn-ghost normal-case gap-2" 
+          className="flex btn btn-ghost normal-case text-neutral-0 gap-2" 
           onClick={()=>{
             navigator.clipboard.writeText(`${window.location.host}/${gameId}/guides/${postId}`)
             setIsTooltipOpen(true)

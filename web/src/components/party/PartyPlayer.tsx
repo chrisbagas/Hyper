@@ -1,16 +1,40 @@
 import React from "react"
-import { PartyMember, PartyMemberLevel } from "@prisma/client"
+import { PartyMember, PartyMemberLevel, User } from "@prisma/client"
+import { api } from "../../utils/api";
 
 export interface PartyPlayerData {
     userId: string
+    partyId: string
+    isLeader: boolean
     matches: number | undefined
     kdr: number | undefined
     winrate: number | undefined
-    partyMember: PartyMember
+    partyMember: PartyMember & {
+        user: User
+    }
+    refetch: () => void
 }
 
 const PartyPlayer = (props: PartyPlayerData) => {
-    const enableKickButton = (props.partyMember.level == PartyMemberLevel.member) && (props.userId != props.partyMember.userId)
+    // enable kick buttons if the viewer is the leader of the party and the party member level is member
+    const enableKickButton = props.isLeader && (props.partyMember.level != PartyMemberLevel.leader)
+    const kickMutation = api.party.kickPartyMember.useMutation()
+
+    function kick(e: any) {
+        e.preventDefault()
+
+        const kickDTO = {
+            leaderUserId: props.userId,
+            memberUserId: props.partyMember.userId,
+            partyId: props.partyId
+        }
+        
+        kickMutation.mutate(kickDTO)
+        
+        // refetch after 100 milliseconds
+        setTimeout(() => props.refetch(), 100);
+    }
+
     return (
         <>
             <div className="flex flex-row max-w-full h-auto justify-between bg-gray-500 p-4 my-4 rounded-xl align-bottom">
@@ -50,7 +74,7 @@ const PartyPlayer = (props: PartyPlayerData) => {
                 </div>
                 </div>
                 {enableKickButton
-                    ? <button className="btn btn-circle bg-red-600 border-red-700 hover:bg-red-700">
+                    ? <button className="btn btn-circle bg-red-600 border-red-700 hover:bg-red-700" onClick={kick}>
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                     : <></>

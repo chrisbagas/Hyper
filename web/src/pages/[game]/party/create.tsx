@@ -5,6 +5,7 @@ import { PartyType, PartyVisibility } from "@prisma/client";
 import { api } from "../../../utils/api";
 import { useSession } from "next-auth/react";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
+import Link from "next/link";
 
 const PartyForm: NextPage = () => {
     const router = useRouter()
@@ -44,6 +45,10 @@ const PartyForm: NextPage = () => {
         }
 
         setError("")
+ 
+        if (typeof gameId !== "string") {
+            return
+        }
 
         const createPartyDTO = {
             userId: userId,
@@ -62,6 +67,29 @@ const PartyForm: NextPage = () => {
         <>
             <div className="p-16">
                 <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
+                <div className=" flex justify-between my-4 mr-4">
+                    <div>
+                    <Link href={`/${gameId}/party`}>
+                        <button className="btn bg-opacity-0 hover:bg-opacity-0 border-0 normal-case">
+                            Go Back
+                            &nbsp;
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                            </svg>
+                        </button>
+                    </Link>
+                        
+                    </div>
+                    <div>
+                        <button onClick={createParty} className="btn bg-blue-500 hover:bg-blue-600 text-lg normal-case">
+                            Create Party
+                            &nbsp;
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                <path fillRule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clipRule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
                 <div className="flex flex-col justify-start w-full h-full p-8 bg-gray-700 text-white m-4 rounded-xl">
                     <div>
                         <h2 className="text-4xl font-bold mt-4 mb-12">
@@ -70,9 +98,9 @@ const PartyForm: NextPage = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-10">
                         <div>
-                            <h3 className="font-semibold text-xl mb-2">Party Name</h3>
+                            <h3 className="text-lg mb-2">Party Name</h3>
                             <input
-                                className="bg-gray-500 w-full text-xl pl-4 py-4"
+                                className="bg-gray-500 w-full text-xl pl-4 py-4 border border-gray-400 rounded-lg"
                                 id="partyName"
                                 value={name}
                                 name="name"
@@ -85,22 +113,19 @@ const PartyForm: NextPage = () => {
                             }
                         </div>
                         <div>
-                            <h3 className="font-semibold text-xl mb-2">Party Type</h3>
-                            <select className="bg-gray-500 w-full text-xl pl-4 py-4 font-bold" id="partyType" value={type} onChange={handlePartyTypeChange}>
+                            <h3 className="text-lg mb-2">Party Type</h3>
+                            <select className="bg-gray-500 w-full text-xl pl-4 py-4 font-bold border border-gray-400 rounded-lg" id="partyType" value={type} onChange={handlePartyTypeChange}>
                                 <option value={PartyType.Casual}>Casual</option>
                                 <option value={PartyType.Competitive}>Competitive</option>
                             </select>
                         </div>
                         <div>
-                            <h3 className="font-semibold text-xl mb-2">Party Visibility</h3>
-                            <select className="bg-gray-500 w-full text-xl pl-4 py-4 font-bold" id="partyVisibility" value={visibility} onChange={handlePartyVisibilityChange}>
+                            <h3 className="text-lg mb-2">Party Visibility</h3>
+                            <select className="bg-gray-500 w-full text-xl pl-4 py-4 font-bold border border-gray-400 rounded-lg" id="partyVisibility" value={visibility} onChange={handlePartyVisibilityChange}>
                                 <option value={PartyVisibility.Public}>Public</option>
                                 <option value={PartyVisibility.Private}>Private</option>
                             </select> 
                         </div>
-                    </div>
-                    <div className="my-16">
-                        <button onClick={createParty} className="btn bg-blue-500 hover:bg-blue-600 text-xl">Create Party</button>
                     </div>
                 </div>
             </div>

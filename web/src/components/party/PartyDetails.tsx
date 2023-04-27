@@ -58,12 +58,11 @@ const PartyDetails = (props: PartyDetailsData) => {
     // use refetch after refactor
     router.reload()
   }
-
   return (
     <>
       <div className="flex flex-col justify-start w-full h-full p-8 bg-gray-700 text-white">
         <div className="mb-4">
-          <h1 className="text-3xl font-bold">Party Detail</h1>
+          <h1 className="text-2xl font-bold">Party Detail</h1>
         </div>
         <div>
           <h2 className="my-4 text-xl">Party Name: {props.title}</h2>

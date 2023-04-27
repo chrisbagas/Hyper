@@ -90,7 +90,6 @@ describe("Profile Service", () => {
         }
 
 
-
         const expectedProfile: Profile = {
             id: "TEST-1",
             username: "Asyraf#6942",
@@ -169,7 +168,6 @@ describe("Profile Service", () => {
             name: "Indonesia",
             imageUrl: "lala"
         }
-
         const mockedUser: UserMock = {
             id: "TEST-1",
             username: "Asyraf#6942",
@@ -223,7 +221,6 @@ describe("Profile Service", () => {
                 logoUrl: "lala"
             }
         };
-
 
 
         const expectedProfile: Profile = {

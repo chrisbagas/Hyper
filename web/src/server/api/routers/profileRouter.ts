@@ -26,7 +26,7 @@ const profileRouter = createTRPCRouter({
     getConnectionAccount: protectedProcedure
     .query(async ({ ctx }) => {
        
-      return await ProfileService.getConnectionAccount(ctx.session.user.id, ctx.prisma)
+      return ProfileService.getConnectionAccount(ctx.session.user.id, ctx.prisma)
     }),
   
 });
