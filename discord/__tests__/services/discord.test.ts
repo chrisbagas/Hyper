@@ -155,3 +155,67 @@ describe("DiscordService createChannel method", () => {
 
   })
 })
+
+describe("DiscordService addUserToChannel method", () => {
+  it("should call fetch DiscordService getChannelById", async () => {
+    const tempGetChannelById = DiscordService.getChannelById
+    const mockGetChannelById = vi.fn()
+    DiscordService.getChannelById = mockGetChannelById
+
+    // @ts-ignore
+    DiscordService.getChannelById.mockResolvedValue(channel);
+
+    await DiscordService.addUserToChannel("TEST-CHANNEL", "TEST-USER")
+
+
+    DiscordService.getChannelById = tempGetChannelById
+    expect(mockGetChannelById).toHaveBeenCalledOnce()
+  })
+
+  it("should not throw error when channel does not exist", async () => {
+    const tempGetChannelById = DiscordService.getChannelById
+    const mockGetChannelById = vi.fn()
+    DiscordService.getChannelById = mockGetChannelById
+
+    // @ts-ignore
+    DiscordService.getChannelById.mockResolvedValue(null);
+
+    await DiscordService.addUserToChannel("TEST-CHANNEL", "TEST-USER")
+
+    DiscordService.getChannelById = tempGetChannelById
+    expect(mockGetChannelById).toHaveBeenCalledOnce()
+  })
+})
+
+
+describe("DiscordService removeUserFromChannel method", () => {
+  it("should call fetch DiscordService getChannelById", async () => {
+    const tempGetChannelById = DiscordService.getChannelById
+    const mockGetChannelById = vi.fn()
+    DiscordService.getChannelById = mockGetChannelById
+
+    // @ts-ignore
+    DiscordService.getChannelById.mockResolvedValue(channel);
+
+    await DiscordService.removeUserFromChannel("TEST-CHANNEL", "TEST-USER")
+
+
+    DiscordService.getChannelById = tempGetChannelById
+    expect(mockGetChannelById).toHaveBeenCalledOnce()
+  })
+
+
+  it("should not throw error when channel does not exist", async () => {
+    const tempGetChannelById = DiscordService.getChannelById
+    const mockGetChannelById = vi.fn()
+    DiscordService.getChannelById = mockGetChannelById
+
+    // @ts-ignore
+    DiscordService.getChannelById.mockResolvedValue(null);
+
+    await DiscordService.removeUserFromChannel("TEST-CHANNEL", "TEST-USER")
+
+    DiscordService.getChannelById = tempGetChannelById
+    expect(mockGetChannelById).toHaveBeenCalledOnce()
+  })
+})
