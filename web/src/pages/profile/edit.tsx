@@ -14,7 +14,7 @@ const EditProfile: NextPage = () => {
     const profileMutation = api.profiles.updateProfile.useMutation()
     
     const [profile, setProfile] = useState({
-        username: "",
+        name: "",
         countryCode: "",
         bio: ""
     });
@@ -28,9 +28,9 @@ const EditProfile: NextPage = () => {
         e.preventDefault();
         
          // Create a new object that only includes the fields that have been modified
-         const updatedProfile: { username?: string, bio?: string, countryCode?: string } = {};
-        if (profile.username !== "") {
-            updatedProfile.username = profile.username;
+         const updatedProfile: { name?: string, bio?: string, countryCode?: string } = {};
+        if (profile.name !== "") {
+            updatedProfile.name = profile.name;
         }
         if (profile.bio !== "") {
             updatedProfile.bio = profile.bio;
@@ -69,11 +69,11 @@ const EditProfile: NextPage = () => {
                 <div className="flex flex-col gap-2 w-full justify-center">
                     <div className="form-control w-full ">
                         <label className="label">
-                            <span className="label-text">Username</span>
+                            <span className="label-text">Name</span>
 
                         </label>
-                        <input type="text" id="username"
-                            value={profile.username}
+                        <input type="text" id="name"
+                            value={profile.name}
                             onChange={(e) => handleChange(e)} placeholder="Type here" className="input input-bordered w-full" />
 
                     </div>
