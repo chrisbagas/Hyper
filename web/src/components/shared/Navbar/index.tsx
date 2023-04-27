@@ -1,7 +1,6 @@
 import { Bars3Icon } from "@heroicons/react/24/solid"
+import { useRouter } from "next/router"
 import React from "react"
-
-
 import { HyperLogo } from "./HyperLogo"
 import { SidebarMenu } from "./SidebarMenu"
 import { UserDetail } from "./UserDetail"
@@ -25,6 +24,9 @@ const SidebarContent: React.FC = () => {
 }
 
 const NavWrapper: React.FC<NavWrapperProps> = ({ children, className }) => {
+  const router = useRouter()
+
+
   return (
     <div className="drawer drawer-mobile">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
@@ -39,10 +41,13 @@ const NavWrapper: React.FC<NavWrapperProps> = ({ children, className }) => {
           {children}
         </div>
       </div>
-      <SidebarContent />
+      {
+        !router.pathname.startsWith("/admin") && (
+          <SidebarContent />
+        )
+      }
     </div>
   )
 }
-
 
 export default NavWrapper

@@ -1,5 +1,5 @@
 import { CommunityPostStatus, ContentType } from "@prisma/client";
-import { NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
 import Head from "next/head"
 import { GuideContent } from "../../../../components/Guide/GuideContent"
 import { GuideTopButtonGroup } from "../../../../components/Guide/GuideTopButtonGroup"
@@ -8,12 +8,35 @@ import { useRouter } from "next/router";
 import { api } from "../../../../utils/api";
 import React, { useState } from "react";
 import { GameDashboardNav } from "../../../../components/shared/GameDashboard/GameDashboardNav";
-import { GuideConfirmationModal } from "../../../../components/Guide/GuideConfirmationModal";
+import { ConfirmationModal } from "../../../../components/shared/ConfirmationModal";
+import { createSSG } from "../../../../utils/ssghelper";
 
-const ShowMyGuides: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const ssg = createSSG()
+  const gameId = ctx.params?.game as string
+  const postId = ctx.params?.guides as string
+
+  try {
+    await Promise.all([ssg.games.getById.fetch({ id: gameId }), ssg.guides.getPostById.fetch({ id: postId })])
+  } catch(e) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      gameId: gameId,
+      postId: postId,
+    },
+  }
+}
+
+const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
-  const gameId = router.query.game
-  const postId = router.query.guides
+  const gameId = props.gameId
+  const postId = props.postId
   const postMutation = api.guides.updatePostById.useMutation()
   const { data: game } = api.games.getById.useQuery({ id: gameId as string })
   const { data, isError, isLoading, error } = api.guides.getPostById.useQuery({ id: postId as string })
@@ -101,6 +124,7 @@ const ShowMyGuides: NextPage = () => {
         headerType={data?.header?.type as ContentType}
         headerUrl={data?.header?.url as string}
         author={data?.authorName as string}
+        authorId={data?.authorId as string}
         postedAt={data?.updatedAt}
       />
 
@@ -127,7 +151,7 @@ const ShowMyGuides: NextPage = () => {
         </div>}
       </div>
 
-      <GuideConfirmationModal
+      <ConfirmationModal
         headerText="Publish this post?"
         contentText="You cannot make any more changes and this action is irreversible"
         isModalOpen={isModalOpen}
@@ -142,7 +166,7 @@ const ShowMyGuides: NextPage = () => {
         >
           <PaperAirplaneIcon className="w-4"/> Publish Post
         </button>
-      </GuideConfirmationModal>
+      </ConfirmationModal>
     </>
   )
 }

@@ -47,10 +47,11 @@ export const guideRouter = createTRPCRouter({
         title: data.title,
         content: data.content,
         authorName: data.author.name,
+        authorId: data.author.id,
         header: data.header
       }
     }),
-  create: publicProcedure
+    create: publicProcedure
     .input(
       z.object({
         type: z.nativeEnum(CommunityPostType),
@@ -60,6 +61,7 @@ export const guideRouter = createTRPCRouter({
         headerType: z.nativeEnum(ContentType),
         headerUrl: z.string(),
         gameId: z.string(),
+        tagId: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -82,6 +84,11 @@ export const guideRouter = createTRPCRouter({
                 url: input.headerUrl,
               },
             },
+            tags: {
+              create: {
+                tagId: input.tagId,
+              }
+            }
           }
         })
         return {
@@ -94,7 +101,6 @@ export const guideRouter = createTRPCRouter({
           message: 'Failed to create new post, try again later.'
         })
       }
-
     }),
   updatePostById: publicProcedure
     .input(
@@ -162,9 +168,10 @@ export const guideRouter = createTRPCRouter({
   getAllbyGame: publicProcedure
     .input(z.object({
       id: z.string(),
+      tagId: z.string().optional()
     }))
     .query(async ({ ctx, input }) => {
-      return GuideService.getAllbyGame(input.id, ctx.prisma)
+      return GuideService.getAllbyGame(input.id, ctx.prisma, input.tagId)
     }),
   getAllbyUser: publicProcedure
     .input(z.object({
@@ -174,4 +181,16 @@ export const guideRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       return GuideService.getAllbyUser(input.gameId, input.userId, ctx.prisma)
     }),
+  getAll: publicProcedure
+    .query(async ({ ctx }) => {
+      return GuideService.getAll(ctx.prisma)
+    }),
+  updateStatusModerationById: publicProcedure
+  .input(z.object({
+    id: z.string(),
+    status: z.nativeEnum(CommunityPostStatus)
+  }))
+  .mutation(async ({ ctx, input }) => {
+    return GuideService.updateStatusModerationById(input.id, input.status, ctx.prisma)
+  }),
 })
