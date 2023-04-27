@@ -107,7 +107,7 @@ const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChan
             onChange={onFileUploadChange}
           />
           <label className="label">
-            <span className="label-text-alt text-base-5">Only link for the video you uploaded to a video uploading platform</span>
+            <span className="label-text-alt text-base-5">Only supports JPEG or PNG format with maximum 2MB and optimal ratio of 16:9</span>
           </label>
         </div>
       )
