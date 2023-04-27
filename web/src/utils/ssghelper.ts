@@ -4,13 +4,11 @@ import { createInnerTRPCContext } from "../server/api/trpc";
 import superjson from "superjson";
 
 export const createSSG = () => {
-  const ssg = createProxySSGHelpers({
+  return createProxySSGHelpers({
     router: appRouter,
     ctx: createInnerTRPCContext({
       session: null,
     }),
     transformer: superjson,
   })
-
-  return ssg
 }

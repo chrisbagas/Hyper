@@ -86,8 +86,8 @@ const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChan
         ["headerUrl"]: url,
       })
 
-    } catch(e) {
-      console.error(e)
+    } catch(error) {
+      console.error(error)
       setErrorMessage("Image upload failed, try again later")
     }
     setIsSubmitting(false)
