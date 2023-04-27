@@ -74,8 +74,10 @@ export default function Home() {
             <div className="m-4">
               <PartyPlayerList
                 userId={userId ?? ""}
+                partyId={userParty.id}
                 partyCapacity={userParty.game.teamCapacity}
                 partyMembers={userParty.partyMembers}
+                refetch={refetch}
               />
             </div>
           </div>
