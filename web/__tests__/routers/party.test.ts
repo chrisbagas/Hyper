@@ -91,11 +91,18 @@ describe("Party RPC", () => {
         expect(user).toEqual(mockUser)
     })
 
-    const mockPartyMember = {
+    const mockPartyLeader = {
         userId: "1",
         partyId: "1",
         gameId: "valorant",
         level: PartyMemberLevel.leader
+    }
+
+    const mockPartyMember = {
+        userId: "2",
+        partyId: "1",
+        gameId: "valorant",
+        level: PartyMemberLevel.member
     }
 
     const mockUser = {
@@ -199,7 +206,7 @@ describe("Party RPC", () => {
 
     it("updateParty test", async () => {
         prisma.partyMember.findUnique.mockResolvedValue(
-            mockPartyMember
+            mockPartyLeader
         )
 
         prisma.party.update.mockResolvedValue(
@@ -219,7 +226,7 @@ describe("Party RPC", () => {
 
     it("deleteParty test", async () => {
         prisma.partyMember.findUnique.mockResolvedValue(
-            mockPartyMember
+            mockPartyLeader
         )
         
         prisma.party.delete.mockResolvedValue(
@@ -233,5 +240,27 @@ describe("Party RPC", () => {
         })
 
         expect(party).toStrictEqual(mockParty)
+    })
+
+    it("kickPartyMember test", async () => {
+        prisma.partyMember.findFirst.mockResolvedValue(
+            mockPartyLeader
+        )
+
+        prisma.partyMember.findUnique.mockResolvedValue(
+            mockPartyMember
+        )
+
+        prisma.partyMember.delete.mockResolvedValue(
+            mockPartyMember
+        )
+
+        const partyMember = await caller.party.kickPartyMember({
+            leaderUserId: mockPartyLeader.userId,
+            memberUserId: mockPartyMember.userId,
+            partyId: "1"
+        })
+
+        expect(partyMember).toStrictEqual(mockPartyMember)
     })
 })
