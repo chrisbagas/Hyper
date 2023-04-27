@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline"
 import { signIn, signOut, useSession } from "next-auth/react"
-import { EllipsisVerticalIcon, UserCircleIcon,ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid"
+import { EllipsisVerticalIcon, UserCircleIcon } from "@heroicons/react/24/solid"
 import { api } from "../../../utils/api"
 import { useRouter } from "next/router"
-import Link from "next/link"
-import { MediaLink } from "../MediaLink/MediaLink"
+
+import { MediaLinks } from "../MediaLink/MediaLink"
 
 const AuthorizedUserDetail: React.FC = () => {
   const { data, refetch } = api.users.getProfile.useQuery()
@@ -60,7 +60,18 @@ const AuthorizedUserDetail: React.FC = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-2 mt-2">
-              {connectAccs?.data && (<MediaLink accs = {connectAccs?.data}/>)}
+              {connectAccs?.data && (
+                <div className="flex flex-col gap-2 mt-2">
+                  {connectAccs?.data?.length > 4 && (
+                    <div className="max-h-28 overflow-y-auto">
+                      <MediaLinks accs={connectAccs?.data} />
+                    </div>
+                  )}
+                  {connectAccs?.data?.length <= 4 && (
+                    <MediaLinks accs={connectAccs?.data} />
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>

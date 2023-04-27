@@ -78,7 +78,7 @@ describe("Profile RPC", () => {
     }
     const expectedProfile: Profile = {
         id: "TEST-1",
-        username: "Asyraf#6942",
+        name: "Muhammad Asyraf",
         bio: "No information provided",
         image: "https://google.com/",
         countryCode: "id-ID",
@@ -91,7 +91,7 @@ describe("Profile RPC", () => {
 
 
     const caller = appRouter.createCaller(ctx)
-    const profile = await caller.profiles.getProfile()
+    const profile = await caller.profiles.getProfile({})
 
     expect(profile).toStrictEqual(expectedProfile)
     expect(profile.games.length).toBe(1)
@@ -109,7 +109,7 @@ describe("Profile RPC", () => {
     }
 
     const input = {
-      username: "Asyraf#6942",
+      name: "Asyraf#6942",
       bio: "Updated bio",
       countryCode: "us-US"
     };
@@ -117,7 +117,7 @@ describe("Profile RPC", () => {
     const expectedUser = {
       id: "TEST-1",
       username: "Asyraf#6942",
-      name: "Muhammad Asyraf",
+      name: "Asyraf#6942",
       bio: "Updated bio",
       image: "https://google.com/",
       countryCode: "us-US",
@@ -133,7 +133,7 @@ describe("Profile RPC", () => {
     expect(prisma.user.update).toHaveBeenCalledWith({
       where: { id: ctx.session.user.id },
       data: {
-        username: input.username,
+        name: input.name,
         bio: input.bio,
         countryCode: input.countryCode
       },
@@ -215,7 +215,7 @@ describe("Profile RPC", () => {
         prisma.gameAccount.upsert.mockResolvedValue(gameAkun);
         prisma.gameAccount.findMany.mockResolvedValue(gameAkuns);
         const caller = appRouter.createCaller(ctx)
-        const data = await caller.profiles.getConnectionAccount()
+        const data = await caller.profiles.getConnectionAccount({})
         const expectedData = { connected: expectedConnections, gameAkuns: gameAkuns };
 
         expect(data).toStrictEqual(expectedData)

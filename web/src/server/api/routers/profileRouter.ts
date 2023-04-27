@@ -4,13 +4,16 @@ import { ProfileService } from '../services/ProfileService';
 
 const profileRouter = createTRPCRouter({
   getProfile: protectedProcedure
-  .query(({ ctx }) => {
-    return ProfileService.getProfile(ctx.session.user.id, ctx.prisma)
+  .input(z.object({
+    userId: z.string().optional()
+  }))
+  .query(({ ctx , input}) => {
+    return ProfileService.getProfile(input.userId || ctx.session.user.id, ctx.prisma)
   }),
 
   updateProfile: protectedProcedure
     .input(z.object({
-      username: z.string().optional(),
+      name: z.string().optional(),
       bio: z.string().optional(),
       countryCode: z.string().optional(),
     }))
@@ -23,10 +26,13 @@ const profileRouter = createTRPCRouter({
       return ProfileService.getAllCountries(ctx.prisma)
     }),
 
-    getConnectionAccount: protectedProcedure
-    .query(async ({ ctx }) => {
+  getConnectionAccount: protectedProcedure
+    .input(z.object({
+      userId: z.string().optional()
+    }))
+    .query(async ({ ctx, input  }) => {
        
-      return ProfileService.getConnectionAccount(ctx.session.user.id, ctx.prisma)
+      return ProfileService.getConnectionAccount(input.userId || ctx.session.user.id, ctx.prisma)
     }),
   
 });
