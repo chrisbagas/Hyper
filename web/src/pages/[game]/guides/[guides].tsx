@@ -1,5 +1,5 @@
 import { CommunityPostStatus, ContentType } from "@prisma/client";
-import { NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
 import Head from "next/head"
 import { GuideContent } from "../../../components/Guide/GuideContent"
 import { GuideTopButtonGroup } from "../../../components/Guide/GuideTopButtonGroup"
@@ -9,11 +9,34 @@ import { api } from "../../../utils/api";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
 import React, { useState } from "react";
 import ErrorPage from 'next/error'
+import { createSSG } from "../../../utils/ssghelper";
 
-const ShowGuides: NextPage = () => {
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const ssg = createSSG()
+  const gameId = ctx.params?.game as string
+  const postId = ctx.params?.guides as string
+
+  try {
+    await Promise.all([ssg.games.getById.fetch({ id: gameId }), ssg.guides.getPostById.fetch({ id: postId })])
+  } catch(e) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      gameId: gameId,
+      postId: postId,
+    },
+  }
+}
+
+const ShowGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
-  const gameId = router.query.game
-  const postId = router.query.guides
+  const gameId = props.gameId
+  const postId = props.postId
   const { data, isError, isLoading, error } = api.guides.getPostById.useQuery({ id: postId as string })
   const [isTooltipOpen, setIsTooltipOpen] = useState(false)
   const { data: game } = api.games.getById.useQuery({ id: gameId as string })
@@ -64,6 +87,7 @@ const ShowGuides: NextPage = () => {
         headerType={data?.header?.type as ContentType}
         headerUrl={data?.header?.url as string}
         author={data?.authorName as string}
+        authorId={data?.authorId as string}
         postedAt={data?.updatedAt}
       />
 
