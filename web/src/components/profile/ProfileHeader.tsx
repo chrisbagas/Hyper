@@ -1,6 +1,4 @@
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid"
-import Link from "next/link"
-import { MediaLink } from "../shared/MediaLink/MediaLink"
+import { MediaLinks } from "../shared/MediaLink/MediaLink"
 
 interface ProfileHeaderProps {
     data: any,
@@ -41,7 +39,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ data, connectAcc }
                 <h3 className="mt-4 text-white">{data?.bio}</h3>
 
                 <div className="flex flex-col sm:flex-row gap-8 mt-4">
-                    {connectAcc?.data?.connected && (<MediaLink accs = {connectAcc?.data?.connected}/>)}
+                    {connectAcc?.data?.connected && (<MediaLinks accs = {connectAcc?.data?.connected}/>)}
                     
                 </div>
 
