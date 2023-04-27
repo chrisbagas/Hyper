@@ -138,9 +138,12 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
       </div>
       <GuideForm
         postData={post}
+        setPostData={setPost}
         errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
         isSuccess={success}
         isSubmitting={isSubmitting}
+        setIsSubmitting={setIsSubmitting}
         onChange={handleChange}
         onSubmit={savePost}
         gameId={gameId as string}
