@@ -3,7 +3,7 @@ import { DiscordService } from "./DiscordService";
 
 export interface Profile {
     id: string
-    username: string | null
+    name: string | null
     bio: string
     image: string
     countryCode: string | null
@@ -46,7 +46,7 @@ export class ProfileService {
 
         return {
             id: user.id,
-            username: user.username ?? user.name,
+            name: user.name ?? user.username,
             bio: user.bio ?? "No information provided",
             image: user.image ,
             countryCode: user.countryCode,
@@ -61,7 +61,7 @@ export class ProfileService {
         const user = await prisma.user.update({
             where: { id },
             data: {
-                username: data.username,
+                name: data.name,
                 bio: data.bio,
                 countryCode: data.countryCode,
             },

@@ -92,7 +92,7 @@ describe("Profile Service", () => {
 
         const expectedProfile: Profile = {
             id: "TEST-1",
-            username: "Asyraf#6942",
+            name: "Muhammad Asyraf",
             bio: "No information provided",
             image: "https://google.com",
             countryCode: "id-ID",
@@ -110,7 +110,7 @@ describe("Profile Service", () => {
         expect(profile.games[0]).toStrictEqual(mockGameAccount.game)
     })
 
-    it("getProfile user without username should return name user", async () => {
+    it("getProfile user without name should return name user", async () => {
         const mockGameAccount = {
             userId: "TEST-1",
             gameId: "1",
@@ -132,7 +132,7 @@ describe("Profile Service", () => {
 
         const mockedUser: UserMock = {
             id: "TEST-1",
-            name: "Muhammad Asyraf",
+            username: "Muhammad Asyraf",
             bio: null,
             image: "https://google.com",
             countryCode: "id-ID",
@@ -143,7 +143,7 @@ describe("Profile Service", () => {
 
         const expectedProfile: Profile = {
             id: "TEST-1",
-            username: "Muhammad Asyraf",
+            name: "Muhammad Asyraf",
             bio: "No information provided",
             image: "https://google.com",
             countryCode: "id-ID",
@@ -182,7 +182,7 @@ describe("Profile Service", () => {
 
         const expectedProfile: Profile = {
             id: "TEST-1",
-            username: "Asyraf#6942",
+            name: "Muhammad Asyraf",
             bio: "Hello, World!",
             image: "https://google.com",
             countryCode: "id-ID",
@@ -225,7 +225,7 @@ describe("Profile Service", () => {
 
         const expectedProfile: Profile = {
             id: "TEST-1",
-            username: "NewUsername",
+            name: "NewUsername",
             image: "https://google.com",
             bio: "Hello, World!",
             countryCode: "en-US",
@@ -233,7 +233,7 @@ describe("Profile Service", () => {
         };
 
         const input = {
-            username: "NewUsername",
+            name: "NewUsername",
             bio: "Hello, World!",
             countryCode: "en-US"
         }
@@ -249,7 +249,7 @@ describe("Profile Service", () => {
         expect(prisma.user.update).toHaveBeenCalledWith({
             where: { id: expectedProfile.id },
             data: {
-                username: input.username,
+                name: input.name,
                 bio: input.bio,
                 countryCode: input.countryCode
             },
