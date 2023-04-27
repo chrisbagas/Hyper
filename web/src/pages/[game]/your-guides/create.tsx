@@ -18,6 +18,7 @@ const CreateGuides: NextPage = () => {
     content: "",
     headerType: undefined,
     headerUrl: "",
+    tagId: ""
   })
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)
@@ -52,6 +53,7 @@ const CreateGuides: NextPage = () => {
         headerType: post.headerType,
         headerUrl: post.headerUrl,
         gameId: gameId as string,
+        tagId: post.tagId as string,
       })
 
       console.log(result)
