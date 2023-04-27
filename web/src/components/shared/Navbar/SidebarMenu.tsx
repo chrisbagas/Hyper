@@ -14,16 +14,17 @@ const SidebarMenuButton: React.FC<SidebarMenuButtonProps> = ({ children, path })
   const router = useRouter()
   return (
     <Link href={path}>
-      <button
+      <label
         className={
           [
             `btn w-full gap-4 px-6 text-left justify-start space-x-4`,
             router.pathname == path ? "bg-base-3" : `bg-transparent border-none !outline-none`
           ].join(" ")
         }
+        htmlFor="my-drawer"
       >
         {children}
-      </button>
+      </label>
     </Link>
   )
 }
@@ -38,7 +39,7 @@ export const SidebarMenu: React.FC = () => {
       </SidebarMenuButton>
       <Divider />
       {games?.data?.map(game =>
-        <SidebarMenuButton key={game.id}path={"/"+game.id+"/home"}>
+        <SidebarMenuButton key={game.id} path={"/" + game.id + "/home"}>
           <img className="bg-white rounded-md w-6 h-6" src={game.logoUrl} />
           {game.name}
         </SidebarMenuButton>

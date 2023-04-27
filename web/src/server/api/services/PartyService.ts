@@ -27,6 +27,12 @@ export interface EditPartyData {
     partyVisibility: PartyVisibility
 }
 
+export interface KickPartyMemberData {
+    leaderUserId: string,
+    memberUserId: string,
+    partyId: string
+}
+
 export class PartyService {
     public static async getParties(prisma: PrismaClient, gameId: string) {
         return prisma.party.findMany({
@@ -39,7 +45,10 @@ export class PartyService {
                         user: true
                     }
                 }
-            }
+            },
+            orderBy: [{
+                id: "asc"
+            }]
         })
     }
 
@@ -227,6 +236,40 @@ export class PartyService {
         return prisma.party.delete({
             where: {
                 id: data.partyId
+            }
+        })
+    }
+
+    public static async kickPartyMember(prisma: PrismaClient, data: KickPartyMemberData) {
+        const partyLeader = await prisma.partyMember.findFirst({
+            where: {
+                userId: data.leaderUserId
+            }
+        })
+
+        const partyMember = await prisma.partyMember.findUnique({
+            where: {
+                userId_partyId: {
+                    userId: data.memberUserId,
+                    partyId: data.partyId
+                }
+            }
+        })
+
+        if (!partyMember || !partyLeader) {
+            throw Error("Error: party member not found")
+        }
+
+        if (partyLeader.level !== PartyMemberLevel.leader || partyMember.level !== PartyMemberLevel.member) {
+            throw Error("Error: you are unauthorized to kick this person")
+        }
+
+        return prisma.partyMember.delete({
+            where: {
+                userId_partyId: {
+                    userId: data.memberUserId,
+                    partyId: data.partyId
+                }
             }
         })
     }
