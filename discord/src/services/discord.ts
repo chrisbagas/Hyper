@@ -1,4 +1,4 @@
-import { ChannelType, Collection, PermissionsBitField } from "discord.js";
+import { ChannelType, Collection, PermissionsBitField, VoiceChannel } from "discord.js";
 import discordBotClient from "../engines/discord/discordBotClient";
 import { CreateChannelPayload, CreateChannelResult } from "../types/discord";
 
@@ -57,6 +57,23 @@ export default class DiscordService {
       userLimit: channel?.userLimit,
       inviteLink: channelInvite?.url,
     }
+  }
+
+  public static async addUserToChannel(channelId: string, userId: string) {
+    const channel = await DiscordService.getChannelById(channelId) as VoiceChannel
+
+    if (!channel) return
+    await channel.permissionOverwrites.edit(userId, {
+      ViewChannel: true,
+      Connect: true,
+    })
+  }
+
+  public static async removeUserFromChannel(channelId: string, userId: string) {
+    const channel = await DiscordService.getChannelById(channelId) as VoiceChannel
+
+    if (!channel) return
+    await channel.permissionOverwrites.delete(userId)
   }
 
   public static removeChannel(id: string) {

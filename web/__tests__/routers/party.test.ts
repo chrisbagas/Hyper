@@ -25,17 +25,18 @@ describe("Party RPC", () => {
     partyMembers: []
   }
 
-  const ctx = {
-    session: {
-      user: {
-        id: "HELLO"
-      }
-    },
-    prisma
-  }
-  const caller = appRouter.createCaller(ctx)
-
   it("getByGame positive test", async () => {
+
+
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
     prisma.party.findMany.mockResolvedValue(
       [mockParty]
     )
@@ -47,6 +48,16 @@ describe("Party RPC", () => {
   })
 
   it("getByGame negative test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.party.findMany.mockResolvedValue(
       []
     )
@@ -57,13 +68,30 @@ describe("Party RPC", () => {
   })
 
   it("createParty positive test", async () => {
+    fetchMocker.mockResponses(
+      [
+        JSON.stringify({
+          inviteLink: "www.discord.com"
+        }), { status: 200 }
+      ],
+      [
+        "", { status: 204 }
+      ]
+    )
+
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.party.create.mockResolvedValue(
       mockParty
     )
-
-    fetchMocker.mockResponseOnce(JSON.stringify({
-      inviteLink: "www.discord.com"
-    }))
 
     const party = await caller.party.createParty({
       userId: "1",
@@ -77,6 +105,16 @@ describe("Party RPC", () => {
   })
 
   it("createParty negative test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.party.create.mockRejectedValue(
       new Error("duplicate error: same ID already exists")
     )
@@ -91,6 +129,16 @@ describe("Party RPC", () => {
   })
 
   it("getPartyMemberDetails test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.user.findUnique.mockResolvedValue(
       mockUser
     )
@@ -124,7 +172,12 @@ describe("Party RPC", () => {
     emailVerified: true,
     name: "bob",
     bio: "hello",
-    countryCode: "id"
+    countryCode: "id",
+    accounts: [
+      {
+        providerAccountId: "105901925"
+      }
+    ]
   }
 
   const mockUserInParty = {
@@ -140,6 +193,16 @@ describe("Party RPC", () => {
   }
 
   it("getUserParty test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.user.findUnique.mockResolvedValue(
       mockUserInParty
     )
@@ -152,6 +215,16 @@ describe("Party RPC", () => {
   })
 
   it("joinParty positive test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.party.findUnique.mockResolvedValue(
       mockParty
     )
@@ -176,6 +249,16 @@ describe("Party RPC", () => {
   })
 
   it("joinParty negative test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.party.findUnique.mockRejectedValue(
       new Error("Error: Party not found")
     )
@@ -190,6 +273,16 @@ describe("Party RPC", () => {
   })
 
   it("leaveParty positive test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.partyMember.delete.mockResolvedValue(
       mockPartyMember
     )
@@ -205,6 +298,16 @@ describe("Party RPC", () => {
   })
 
   it("leaveParty negative test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.partyMember.delete.mockRejectedValue(
       new Error("Error: party member not found")
     )
@@ -216,6 +319,16 @@ describe("Party RPC", () => {
   })
 
   it("updateParty test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.partyMember.findUnique.mockResolvedValue(
       mockPartyLeader
     )
@@ -236,6 +349,16 @@ describe("Party RPC", () => {
   })
 
   it("deleteParty test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.partyMember.findUnique.mockResolvedValue(
       mockPartyLeader
     )
@@ -254,6 +377,16 @@ describe("Party RPC", () => {
   })
 
   it("kickPartyMember test", async () => {
+    const ctx = {
+      session: {
+        user: {
+          id: "HELLO"
+        }
+      },
+      prisma
+    }
+    const caller = appRouter.createCaller(ctx)
+
     prisma.partyMember.findFirst.mockResolvedValue(
       mockPartyLeader
     )

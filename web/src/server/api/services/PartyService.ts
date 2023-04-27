@@ -90,7 +90,7 @@ export class PartyService {
       })
     }).then((res) => res.json())
 
-    await this.updateDiscordPartyLink(prisma, newParty.id, party.inviteLink)
+    await this.updateDiscordPartyLink(prisma, newParty.id, party)
 
     return {
       ...newParty,
@@ -98,13 +98,14 @@ export class PartyService {
     }
   }
 
-  private static async updateDiscordPartyLink(prisma: PrismaClient, partyId: string, link: string) {
+  private static async updateDiscordPartyLink(prisma: PrismaClient, partyId: string, party: any) {
     return prisma.party.update({
       where: {
         id: partyId,
       },
       data: {
-        discordInviteLink: link,
+        discordInviteLink: party.inviteLink,
+        discordChannelId: party.id,
       }
     })
   }
@@ -165,7 +166,8 @@ export class PartyService {
         id: data.userId
       },
       include: {
-        partyMember: true
+        partyMember: true,
+        accounts: true,
       }
     })
 
@@ -199,6 +201,17 @@ export class PartyService {
     if (user.partyMember != null && user.partyMember != undefined) {
       throw Error("You are already in party. Please leave the current party if you want to join another one.")
     }
+
+    await fetch(`${env.DISCORD_SERVICE_URL}/discord/user-permission`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        channelId: party.discordChannelId,
+        userId: user.accounts[0]?.providerAccountId,
+      })
+    })
 
     return prisma.partyMember.create({
       data: {

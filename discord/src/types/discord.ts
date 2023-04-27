@@ -13,10 +13,20 @@ export interface CreateChannelResult {
   inviteLink?: string
 }
 
+export interface AddRemoveUserPermissionPayload {
+  channelId: string
+  userId: string
+}
+
 export const createChannelSchema = z.object({
   name: z.string(),
   authorizedUserIds: z.array(
     z.string()
   ).min(1)
+})
+
+export const addRemoveUserPermissionSchema = z.object({
+  channelId: z.string(),
+  userId: z.string(),
 })
 
