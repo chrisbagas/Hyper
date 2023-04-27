@@ -25,6 +25,7 @@ const server = z.object({
   APPLICATION_KEY: z.string(),
   BUCKET_URL: z.string(),
   BUCKET_ID: z.string(),
+  JWT_SECRET: z.string()
 });
 
 /**
@@ -52,6 +53,7 @@ const processEnv = {
   APPLICATION_KEY_ID: process.env.APPLICATION_KEY_ID,
   BUCKET_ID: process.env.BUCKET_ID,
   BUCKET_URL: process.env.BUCKET_URL,
+  JWT_SECRET: process.env.JWT_SECRET
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 
