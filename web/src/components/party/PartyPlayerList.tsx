@@ -1,22 +1,36 @@
 import React from "react"
 import { PartyPlayer } from "./PartyPlayer"
-import { PartyMember, User } from "@prisma/client"
+import { PartyMember, User, PartyMemberLevel } from "@prisma/client"
 
 export interface PartyPlayerListData {
   userId: string
+  partyId: string
   partyCapacity: number
   partyMembers: (PartyMember & { user: User })[]
+  refetch: () => void
 }
 
-const PartyPlayerList = (props: PartyPlayerListData) => {
+const PartyPlayerList = (props: PartyPlayerListData) => { 
+  // find the ID of the leader
+  let leaderId = "";
+  for (const partyMember of props.partyMembers) {
+    if (partyMember.level == PartyMemberLevel.leader) {
+      leaderId = partyMember.userId
+      break
+    }
+  }  
+
   const partyPlayers = props.partyMembers.map((partyMember) =>
     <PartyPlayer
       key={partyMember.userId}
       userId={props.userId}
+      partyId={props.partyId}
+      isLeader={props.userId == leaderId}
       matches={undefined}
       kdr={undefined}
       winrate={undefined}
       partyMember={partyMember}
+      refetch={props.refetch}
     />
   )
   let i = props.partyMembers.length
