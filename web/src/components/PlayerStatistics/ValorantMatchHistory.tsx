@@ -1,14 +1,18 @@
 import React from "react"
+import { useRouter } from "next/router"
 
 export interface ValorantMatchHistoryProps {
     children:string
     match:any
     key:number
+    username:any
+    tag:any
 }
 
-export const ValorantMatchHistory: React.FC<ValorantMatchHistoryProps> = ({ match }) => (
-
-    <div key={match.index}>
+export const ValorantMatchHistory: React.FC<ValorantMatchHistoryProps> = ({ match, username, tag }) => {
+    const router = useRouter()
+    return (
+    <div key={match.index} onClick={() => router.push(`/match_details?match_id=${match.match_id}&id=${username},${tag}`)}>
         {
             match.victory ? (
                 <div className="flex flex-col gap-y-2 lg:gap-y-0 lg:flex-row p-4 bg-base-1 lg:grid lg:grid-cols-4 rounded-md border border-success-main">
@@ -94,5 +98,5 @@ export const ValorantMatchHistory: React.FC<ValorantMatchHistoryProps> = ({ matc
                 </div>
             )
         }
-    </div>
-)
+    </div>)
+}
