@@ -1,3 +1,5 @@
+import React from "react";
+
 import { GameDashboardNav } from "../../components/shared/GameDashboard/GameDashboardNav";
 import { useRouter } from "next/router";
 import { api } from "../../utils/api";
@@ -10,15 +12,27 @@ import { GuideCard } from "../../components/Guide/GuideCard";
 import { PartyPlayerList } from "../../components/party/PartyPlayerList";
 import { PartyDetails } from "../../components/party/PartyDetails";
 
+import { useAtom } from "jotai"
+import { ssgLoadingAtom } from "../_app";
+
 export default function Home() {
   const router = useRouter()
   const gameId = router.query.game
-  const { data: game } = api.games.getById.useQuery({ id: gameId as string })
+  const { data: game, isLoading: gameIsLoading } = api.games.getById.useQuery({ id: gameId as string })
   const parties = api.party.getByGame.useQuery({ id: gameId as string }).data
-  const { data } = api.guides.getAllbyGame.useQuery({ id: gameId as string })
+  const { data, isLoading: guideIsLoading } = api.guides.getAllbyGame.useQuery({ id: gameId as string })
   const session = useSession()
   const userId = session.data?.user.id ?? ""
-  const { data: userParty, refetch } = api.party.getUserParty.useQuery(userId)
+  const { data: userParty, isLoading: userPartyIsLoading, refetch } = api.party.getUserParty.useQuery(userId)
+
+  const [ssgLoading, setSsgLoading] = useAtom(ssgLoadingAtom)
+
+  React.useEffect(() => {
+    if (gameIsLoading || guideIsLoading || userPartyIsLoading) {
+      return setSsgLoading(true)
+    }
+    return setSsgLoading(false)
+  }, [gameIsLoading, guideIsLoading, userPartyIsLoading])
 
   return <>
     <div className="p-8 lg:p-16">
