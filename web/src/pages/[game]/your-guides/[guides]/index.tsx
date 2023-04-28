@@ -1,5 +1,5 @@
 import { CommunityPostStatus, ContentType } from "@prisma/client";
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import Head from "next/head"
 import { GuideContent } from "../../../../components/Guide/GuideContent"
 import { GuideTopButtonGroup } from "../../../../components/Guide/GuideTopButtonGroup"
@@ -8,8 +8,8 @@ import { useRouter } from "next/router";
 import { api } from "../../../../utils/api";
 import React, { useState } from "react";
 import { GameDashboardNav } from "../../../../components/shared/GameDashboard/GameDashboardNav";
-import { GuideConfirmationModal } from "../../../../components/Guide/GuideConfirmationModal";
 import { ssgPrefetchGuidesContent } from "../../../../utils/ssgPrefetch";
+import { ConfirmationModal } from "../../../../components/shared/ConfirmationModal";
 
 export const getServerSideProps: GetServerSideProps = ssgPrefetchGuidesContent
 
@@ -131,7 +131,7 @@ const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getSer
         </div>}
       </div>
 
-      <GuideConfirmationModal
+      <ConfirmationModal
         headerText="Publish this post?"
         contentText="You cannot make any more changes and this action is irreversible"
         isModalOpen={isModalOpen}
@@ -146,7 +146,7 @@ const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getSer
         >
           <PaperAirplaneIcon className="w-4" /> Publish Post
         </button>
-      </GuideConfirmationModal>
+      </ConfirmationModal>
     </>
   )
 }

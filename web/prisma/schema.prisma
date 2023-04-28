@@ -51,20 +51,26 @@ model VerificationToken {
 }
 
 model User {
-  id             String           @id @default(cuid())
-  username       String?          @unique
-  email          String           @unique
+  id             String          @id @default(cuid())
+  username       String?         @unique
+  email          String          @unique
   image          String
   emailVerified  Boolean?
   name           String?
   bio            String?
   countryCode    String?
-  country        Country?         @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
+  country        Country?        @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
   partyMember    PartyMember?
   accounts       Account[]
   sessions       Session[]
   GameAccount    GameAccount[]
   communityPosts CommunityPost[]
+}
+
+model Admin {
+  id       String  @id @default(cuid())
+  username String? @unique
+  password String
 }
 
 model Country {
@@ -104,6 +110,7 @@ model Party {
   partyType         PartyType?
   partyVisibility   PartyVisibility?
   discordInviteLink String?
+  discordChannelId  String?
   game              Game             @relation(fields: [gameId], references: [id])
   partyMembers      PartyMember[]
 }
@@ -124,7 +131,7 @@ model PartyMember {
   level   PartyMemberLevel @default(member)
   user    User             @relation(fields: [userId], references: [id])
   party   Party            @relation(fields: [partyId], references: [id], onDelete: Cascade)
-  
+
   @@id([userId, partyId])
 }
 
@@ -150,7 +157,7 @@ model CommunityPost {
 }
 
 model CommunityPostHeader {
-  postId String     
+  postId String
   type   ContentType
   url    String
   post   CommunityPost @relation(fields: [postId], references: [id])
@@ -188,4 +195,5 @@ enum ContentType {
 enum CommunityPostStatus {
   DRAFT
   PUBLISHED
+  TAKENDOWN
 }

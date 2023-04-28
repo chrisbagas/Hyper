@@ -1,7 +1,7 @@
 import React from "react"
 import { ExclamationTriangleIcon, XCircleIcon } from "@heroicons/react/24/solid"
 
-export interface GuideConfirmationModalProps {
+export interface ConfirmationModalProps {
   children: React.ReactNode
   headerText: string
   contentText: string
@@ -9,7 +9,7 @@ export interface GuideConfirmationModalProps {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const GuideConfirmationModal: React.FC<GuideConfirmationModalProps> = ({ children, headerText, contentText, isModalOpen, setIsModalOpen }) => {
+export const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ children, headerText, contentText, isModalOpen, setIsModalOpen }) => {
   return (
     <>
       <input type="checkbox" id="my-modal" className="modal-toggle" />
