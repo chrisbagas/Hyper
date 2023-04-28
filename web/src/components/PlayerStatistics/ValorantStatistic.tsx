@@ -1,7 +1,7 @@
 import React from "react"
 import { ValorantMatchHistory } from "./ValorantMatchHistory";
 
-export interface GameCardProps {
+export interface ValorantStatisticsProps {
     status:number
     accountData?:any
     mmrData?:any
@@ -9,7 +9,7 @@ export interface GameCardProps {
 }
 
 // For game type, please call Valorant game instead of hardcode
-export const ValorantStatistic: React.FC<GameCardProps> = ({ status, accountData, mmrData, competitiveHistory }) => (
+export const ValorantStatistic: React.FC<ValorantStatisticsProps> = ({ status, accountData, mmrData, competitiveHistory }) => (
     <div className="flex flex-col">
 
         <div className="card bg-base-2 shadow-xl m-4">
@@ -75,7 +75,7 @@ export const ValorantStatistic: React.FC<GameCardProps> = ({ status, accountData
 
                     {competitiveHistory?.map(match => 
                     
-                        <ValorantMatchHistory key={match.index} match={ match }> </ValorantMatchHistory>
+                        <ValorantMatchHistory key={match.index} match={ match } username={ accountData.name } tag = { accountData.tag }> </ValorantMatchHistory>
                     
                     )}
 
