@@ -101,7 +101,7 @@ const PartyDetails = (props: PartyDetailsData) => {
           </div>
         </div>
         <div className="flex flex-row mt-8 mb-4">
-          <a href={props.discordVoiceLink ?? "#"} target="_blank">
+          <a href={props.discordVoiceLink ?? "#"} target="_blank" rel="noreferrer">
             <button className="btn bg-blue-500 hover:bg-blue-600 mr-4">Join Discord Voice</button>
           </a>
           {isLeader
