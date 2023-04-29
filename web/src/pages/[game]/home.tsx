@@ -11,9 +11,7 @@ import { PartyType, PartyVisibility } from "@prisma/client";
 import { GuideCard } from "../../components/Guide/GuideCard";
 import { PartyPlayerList } from "../../components/party/PartyPlayerList";
 import { PartyDetails } from "../../components/party/PartyDetails";
-
-import { useAtom } from "jotai"
-import { ssgLoadingAtom } from "../_app";
+import { useGlobalLoader } from "../../components/shared/Loader";
 
 export default function Home() {
   const router = useRouter()
@@ -25,13 +23,9 @@ export default function Home() {
   const userId = session.data?.user.id ?? ""
   const { data: userParty, isLoading: userPartyIsLoading, refetch } = api.party.getUserParty.useQuery(userId)
 
-  const [ssgLoading, setSsgLoading] = useAtom(ssgLoadingAtom)
-
+  const { setLoadingStates } = useGlobalLoader()
   React.useEffect(() => {
-    if (gameIsLoading || guideIsLoading || userPartyIsLoading) {
-      return setSsgLoading(true)
-    }
-    return setSsgLoading(false)
+    setLoadingStates([gameIsLoading, guideIsLoading, userPartyIsLoading])
   }, [gameIsLoading, guideIsLoading, userPartyIsLoading])
 
   return <>
