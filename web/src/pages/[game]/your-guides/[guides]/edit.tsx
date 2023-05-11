@@ -23,7 +23,7 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
     content: '',
     headerType: undefined,
     headerUrl: '',
-    tagId: ''
+    tagId: undefined
   } as Post)
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)

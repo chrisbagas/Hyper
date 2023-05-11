@@ -12,7 +12,7 @@ export interface Post {
   content:string,
   headerType:ContentType|undefined,
   headerUrl:string,
-  tagId: string,
+  tagId: string|undefined,
 }
 
 export interface GuideFormProps {
