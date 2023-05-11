@@ -1,10 +1,16 @@
 import { type NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import Head from "next/head";
 
 const Landing: NextPage = () => {
 
-  const session = useSession()
+  const session = useSession();
+  const router =useRouter();
+
+  if (session.status === "authenticated") {
+    router.push('/')
+  }
   
   return (
     <>
