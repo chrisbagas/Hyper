@@ -5,6 +5,7 @@ import { GuideTopButtonGroup } from "./GuideTopButtonGroup"
 import { EyeIcon, FolderPlusIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import { ConfirmationModal } from "../shared/ConfirmationModal"
 import { api } from "../../utils/api"
+import { HyperMarkdownParser } from "../shared/HyperMarkdownParser"
 
 export interface Post {
   type:CommunityPostType|undefined,
@@ -245,6 +246,10 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
             onChange={onChange}
           >
           </textarea>
+        </div>
+
+        <div className="px-16">
+          <HyperMarkdownParser content={postData.content} />
         </div>
         
         <div className="toast">
