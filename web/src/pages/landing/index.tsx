@@ -3,17 +3,24 @@ import { type NextPage } from "next";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { handleSmoothScroll } from "next/dist/shared/lib/router/router";
 import { useAtom } from "jotai";
 import { scrollAtom } from "../../components/shared/Navbar";
 
+import useSWR from "swr"
+import { truncate } from "../../utils/truncate";
+import Link from "next/link";
 
 const Landing: NextPage = () => {
-
   const session = useSession();
   const router = useRouter();
 
   const [scroll] = useAtom(scrollAtom)
+
+  const { data, isLoading } = useSWR(process.env.NEXT_PUBLIC_GHOST_POSTS_URL, (url) => fetch(url).then((res) => res.json()))
+
+  React.useEffect(() => {
+    console.log(data)
+  }, [data])
 
   if (session.status === "authenticated") {
     router.push('/')
@@ -91,8 +98,40 @@ const Landing: NextPage = () => {
 
         <div className="relative flex flex-col items-center w-full h-px z-10 bg-base-5" />
 
-        <div className="m-24 items-center">
+        <div className="m-24 items-center space-y-12">
           <h1 className="text-3xl font-bold text-neutral-0 text-center">View Our Development Journey</h1>
+          <div className="grid grid-cols-4 gap-8">
+            {data?.posts?.map((item: any) => (
+              <Link target="_blank" rel="noreferrer" href={process.env.NEXT_PUBLIC_GHOST_URL + item.slug} className="h-full duration-300 transition-all hover:-translate-y-3">
+                <div className="card flex flex-col justify-between bg-base-100 shadow-xl h-full">
+                  <div className="relative aspect-square object-cover rounded-t-xl bg-base-1 flex items-center justify-center">
+                    {item.feature_image ? (
+                      <img src={item.feature_image} className="aspect-square object-cover rounded-t-xl" alt="Header" />
+                    ) : (
+                      <img src="/white-logo-only.svg" className="h-1/3 w-1/3 opacity-10" />
+                    )}
+                    <div className="bg-gradient-to-t from-base-100 to-transparent absolute w-full bottom-0 h-8 z-10" />
+                  </div>
+                  <div className="card-body">
+                    <div>
+                    </div>
+                    <h2 className="card-title text-white">
+                      {truncate(item.title, 30)}
+                    </h2>
+                    <p>Created by {item.authors[0].name}</p>
+                    <p className="truncate">
+                      {item.excerpt}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        <div className={`bg-base-1 transition-all z-20 w-full px-16 py-4 flex justify-between`}>
+          <img src="/white-horizontal-logo.svg" className="h-10" />
+          <img src="/rights.svg" className="h-10" />
         </div>
 
       </div>
