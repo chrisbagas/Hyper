@@ -102,7 +102,7 @@ const Landing: NextPage = () => {
           <h1 className="text-3xl font-bold text-neutral-0 text-center">View Our Development Journey</h1>
           <div className="grid grid-cols-4 gap-8">
             {data?.posts?.map((item: any) => (
-              <Link target="_blank" rel="noreferrer" href={process.env.NEXT_PUBLIC_GHOST_URL + item.slug} className="h-full duration-300 transition-all hover:-translate-y-3">
+              <Link key={item?.slug} target="_blank" rel="noreferrer" href={process.env.NEXT_PUBLIC_GHOST_URL + item.slug} className="h-full duration-300 transition-all hover:-translate-y-3">
                 <div className="card flex flex-col justify-between bg-base-100 shadow-xl h-full">
                   <div className="relative aspect-square object-cover rounded-t-xl bg-base-1 flex items-center justify-center">
                     {item.feature_image ? (
