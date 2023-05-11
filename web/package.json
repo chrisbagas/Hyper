@@ -26,6 +26,7 @@
     "chart.js": "^4.2.1",
     "daisyui": "^2.50.1",
     "formidable": "^2.1.1",
+    "jotai": "^2.1.0",
     "jsonwebtoken": "^9.0.0",
     "jwt-decode": "^3.1.2",
     "memoizee": "^0.4.15",
@@ -36,6 +37,7 @@
     "react-markdown": "^8.0.6",
     "sonar-scanner": "^3.1.0",
     "superjson": "1.9.1",
+    "swr": "^2.1.5",
     "zod": "^3.20.2"
   },
   "devDependencies": {
