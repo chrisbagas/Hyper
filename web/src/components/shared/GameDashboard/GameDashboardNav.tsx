@@ -18,7 +18,7 @@ const ImageBackground: React.FC<{ backgroundUrl: string }> = ({ backgroundUrl })
   return (
     <>
       <img src={backgroundUrl} className="absolute z-0" />
-      <div className="bg-base-0 bg-opacity-60 backdrop-blur-sm w-full h-full absolute" />
+      <div className="bg-base-0 bg-opacity-50 backdrop-blur-sm w-full h-full absolute" />
       <div className="bg-gradient-to-t from-base-0 to-transparent w-full h-1/4 absolute bottom-0" />
     </>
   )
