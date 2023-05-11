@@ -1,6 +1,5 @@
 import Chart from 'chart.js/auto';
 import { useEffect } from "react"
-import React from "react"
 
 export interface CardLineChartProps {
     dataset:any
