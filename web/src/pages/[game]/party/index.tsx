@@ -8,15 +8,22 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import Link from "next/link";
 
+import { useGlobalLoader } from "../../../components/shared/Loader"
+
 const Party: NextPage = () => {
   const router = useRouter()
   const session = useSession()
 
   const gameId = router.query.game
   const userId = session.data?.user.id
-  const { data: game } = api.games.getById.useQuery({ id: gameId as string })
+  const { data: game, isLoading: gameIsLoading } = api.games.getById.useQuery({ id: gameId as string })
   const parties = api.party.getByGame.useQuery({ id: gameId as string }).data
-  const { data: userParty, refetch } = api.party.getUserParty.useQuery(userId as string)
+  const { data: userParty, refetch, isLoading: userPartyIsLoading } = api.party.getUserParty.useQuery(userId as string)
+
+  const { setLoadingStates } = useGlobalLoader()
+  React.useEffect(() => {
+    setLoadingStates([gameIsLoading, userPartyIsLoading])
+  }, [gameIsLoading, userPartyIsLoading])
 
   return (
     <>

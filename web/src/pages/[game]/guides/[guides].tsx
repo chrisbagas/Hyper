@@ -9,30 +9,9 @@ import { api } from "../../../utils/api";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
 import React, { useState } from "react";
 import ErrorPage from 'next/error'
-import { createSSG } from "../../../utils/ssghelper";
+import { ssgPrefetchGuidesContent } from "../../../utils/ssgPrefetch";
 
-export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const ssg = createSSG()
-  const gameId = ctx.params?.game as string
-  const postId = ctx.params?.guides as string
-
-  try {
-    await Promise.all([ssg.games.getById.fetch({ id: gameId }), ssg.guides.getPostById.fetch({ id: postId })])
-  } catch(e) {
-    return {
-      notFound: true,
-    }
-  }
-
-  return {
-    props: {
-      trpcState: ssg.dehydrate(),
-      gameId: gameId,
-      postId: postId,
-    },
-  }
-}
-
+export const getServerSideProps: GetServerSideProps = ssgPrefetchGuidesContent
 const ShowGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
   const gameId = props.gameId
@@ -50,7 +29,7 @@ const ShowGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
   }
 
   if (data.status === CommunityPostStatus.DRAFT) {
-    return <ErrorPage statusCode={404}/>
+    return <ErrorPage statusCode={404} />
   }
 
   return (
@@ -66,21 +45,21 @@ const ShowGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
       </div>
 
       <GuideTopButtonGroup returnUrl={`/${gameId}/guides`} className="px-16 pb-6">
-        <button 
-          className="flex btn btn-ghost normal-case text-neutral-0 gap-2" 
-          onClick={()=>{
+        <button
+          className="flex btn btn-ghost normal-case text-neutral-0 gap-2"
+          onClick={() => {
             navigator.clipboard.writeText(`${window.location.host}/${gameId}/guides/${postId}`)
             setIsTooltipOpen(true)
-            setTimeout(()=>{
+            setTimeout(() => {
               setIsTooltipOpen(false)
             }, 2000)
           }
-        }>
-          Share This Post <ShareIcon className="w-4"/>
+          }>
+          Share This Post <ShareIcon className="w-4" />
         </button>
       </GuideTopButtonGroup>
 
-      <GuideContent 
+      <GuideContent
         type={data?.type}
         title={data?.title}
         content={data?.content as string}
