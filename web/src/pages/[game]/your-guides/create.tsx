@@ -18,7 +18,7 @@ const CreateGuides: NextPage = () => {
     content: "",
     headerType: undefined,
     headerUrl: "",
-    tagId: ""
+    tagId: undefined
   })
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)
