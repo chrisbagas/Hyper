@@ -42,7 +42,7 @@ const NavWrapper: React.FC<NavWrapperProps> = ({ children, className }) => {
         </div>
       </div>
       {
-        !router.pathname.startsWith("/admin") && (
+        !router.pathname.startsWith("/admin") && !router.pathname.startsWith("/landing") && (
           <SidebarContent />
         )
       }
