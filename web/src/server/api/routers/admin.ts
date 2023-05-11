@@ -1,9 +1,9 @@
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod"
 import { AdminService } from "../services/AdminService";
 
 export const adminRouter = createTRPCRouter({
-    login: protectedProcedure
+    login: publicProcedure
     .input(z.object({
       usernameInput: z.string(),
       passwordInput: z.string()
