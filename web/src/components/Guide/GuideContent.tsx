@@ -1,5 +1,4 @@
 import React from "react"
-import ReactMarkdown from "react-markdown"
 import { CommunityPostType, ContentType } from "@prisma/client"
 import Link from "next/link"
 import { HyperMarkdownParser } from "../shared/HyperMarkdownParser"
