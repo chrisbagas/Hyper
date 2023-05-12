@@ -359,7 +359,7 @@ describe("Party Service", () => {
     )).rejects.toThrowError("full")
   })
 
-  it("joinParty negative test: user not found", async () => {
+  it("joinParty negative test: user not yet login", async () => {
     prisma.party.findUnique.mockResolvedValue(
       mockParty
     )
@@ -375,7 +375,7 @@ describe("Party Service", () => {
     expect(PartyService.joinParty(
       prisma,
       mockPartyMember
-    )).rejects.toThrowError("not found")
+    )).rejects.toThrowError("login")
   })
 
   it("joinParty negative test: user already in party", async () => {

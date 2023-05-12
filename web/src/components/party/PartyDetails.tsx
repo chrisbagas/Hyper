@@ -1,7 +1,8 @@
-import React from "react"
+import React, {useState} from "react"
 import { api } from "../../utils/api";
 import { useRouter } from "next/router";
 import { PartyMember, PartyMemberLevel, Game } from "@prisma/client";
+import { ConfirmationModal } from "../shared/ConfirmationModal";
 
 export interface PartyDetailsData {
   userId: string,
@@ -21,6 +22,7 @@ const PartyDetails = (props: PartyDetailsData) => {
   const leavePartyMutation = api.party.leaveParty.useMutation()
   const deletePartyMutation = api.party.deleteParty.useMutation()
   const router = useRouter()
+  const [isModalOpen, setIsModalOpen] = useState(false)
   let isLeader = false
 
   // check if the user is the leader of the party or not
@@ -30,6 +32,8 @@ const PartyDetails = (props: PartyDetailsData) => {
       break
     }
   }
+
+  const deleteOrLeaveString = isLeader ? "delete" : "leave"
 
   function leaveParty(e: any) {
     e.preventDefault()
@@ -61,6 +65,27 @@ const PartyDetails = (props: PartyDetailsData) => {
   return (
     <>
       <div className="flex flex-col justify-start w-full h-full p-8 bg-gray-700 text-white">
+
+      <ConfirmationModal {...{
+        headerText: "Confirm Action",
+        contentText: `Are you sure you want to ` + deleteOrLeaveString  + " " + props.title + "?",
+        isModalOpen,
+        setIsModalOpen,
+      }}>
+        <button 
+          className="btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2" 
+          onClick={(e)=>{
+            if (isLeader)
+              deleteParty(e)
+            else
+              leaveParty(e)
+            setIsModalOpen(false)
+          }}
+        >
+          {`${deleteOrLeaveString.toUpperCase()} PARTY`}
+        </button>
+      </ConfirmationModal>
+
         <div className="mb-4">
           <h1 className="text-2xl font-bold">Party Detail</h1>
         </div>
@@ -104,10 +129,7 @@ const PartyDetails = (props: PartyDetailsData) => {
           <a href={props.discordVoiceLink ?? "#"} target="_blank" rel="noreferrer">
             <button className="btn bg-blue-500 hover:bg-blue-600 mr-4">Join Discord Voice</button>
           </a>
-          {isLeader
-            ? <button onClick={deleteParty} className="btn bg-red-600 bg-opacity-25 border-red-500 hover:bg-opacity-100 hover:bg-red-600">Delete Party</button>
-            : <button onClick={leaveParty} className="btn bg-red-600 bg-opacity-25 border-red-500 hover:bg-opacity-100 hover:bg-red-600">Leave Party</button>
-          }
+          <button onClick={() => {setIsModalOpen(true)}} className="btn bg-red-600 bg-opacity-25 border-red-500 hover:bg-opacity-100 hover:bg-red-600">{`${deleteOrLeaveString} Party`}</button>
         </div>
         <div>
           {props.discordVoiceID

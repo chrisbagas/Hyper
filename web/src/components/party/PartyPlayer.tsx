@@ -64,7 +64,7 @@ const PartyPlayer = (props: PartyPlayerData) => {
                             </>
                             : <></>
                         }
-                        {props.partyMember.user.username ?? "Unnamed Player"}
+                        {props.partyMember.user.name ?? props.partyMember.user.username ?? "Unnamed Player"}
                     </h2>
                     <h3>
                         {props.matches ? <>Matches: {props.matches}</> : <></>}

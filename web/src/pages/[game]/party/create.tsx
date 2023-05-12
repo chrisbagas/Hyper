@@ -6,6 +6,7 @@ import { api } from "../../../utils/api";
 import { useSession } from "next-auth/react";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
 import Link from "next/link";
+import { ConfirmationModal } from "../../../components/shared/ConfirmationModal";
 
 const PartyForm: NextPage = () => {
     const router = useRouter()
@@ -14,6 +15,7 @@ const PartyForm: NextPage = () => {
     const [type, setType] = useState(PartyType.Casual)
     const [visibility, setVisibility] = useState(PartyVisibility.Public)
     const [error, setError] = useState("")
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     const partyMutation = api.party.createParty.useMutation()
     const gameId = router.query.game
@@ -28,31 +30,13 @@ const PartyForm: NextPage = () => {
         setVisibility(event.target.value);
     };
 
+
     function createParty(e: any) {
         e.preventDefault()
-        if (!userId) {
-            alert("Please login before you create a party.")
-            return
-        }
-
-        if (!name) {
-            setError("Please fill the party name.")
-            return
-        }
-        if (name.length > 50) {
-            setError("Party name too long: must be less than 50 characters.")
-            return
-        }
-
-        setError("")
- 
-        if (typeof gameId !== "string") {
-            return
-        }
 
         const createPartyDTO = {
-            userId: userId,
-            gameId: gameId,
+            userId: userId as string,
+            gameId: gameId as string,
             partyTitle: name,
             partyType: type,
             partyVisibility: visibility
@@ -67,6 +51,24 @@ const PartyForm: NextPage = () => {
         <>
             <div className="p-16">
                 <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
+                
+                <ConfirmationModal {...{
+                    headerText: "Confirm Action",
+                    contentText: "Are you sure you want to create new party?",
+                    isModalOpen,
+                    setIsModalOpen,
+                }}>
+                    <button 
+                        className="btn btn-primary bg-primary-main border-primary-border hover:bg-primary-pressed hover:border-primary-pressed normal-case gap-2" 
+                        onClick={(e)=>{
+                            createParty(e)
+                            setIsModalOpen(false)
+                        }}
+                    >
+                        CREATE PARTY
+                    </button>
+                </ConfirmationModal>
+
                 <div className=" flex justify-between my-4 mr-4">
                     <div>
                     <Link href={`/${gameId}/party`}>
@@ -81,7 +83,27 @@ const PartyForm: NextPage = () => {
                         
                     </div>
                     <div>
-                        <button onClick={createParty} className="btn bg-blue-500 hover:bg-blue-600 text-lg normal-case">
+                        <button className="btn bg-blue-500 hover:bg-blue-600 text-lg normal-case"
+                            onClick={() => {
+                                if (!userId) {
+                                    alert("Please login before you create a party.")
+                                    return
+                                }
+                                if (!name) {
+                                    setError("Please fill the party name.")
+                                    return
+                                }
+                                if (name.length > 50) {
+                                    setError("Party name too long: must be less than 50 characters.")
+                                    return
+                                }
+                                if (typeof gameId !== "string") {
+                                    return
+                                }
+                                setError("")
+                                setIsModalOpen(true)
+                            }}
+                        >
                             Create Party
                             &nbsp;
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">

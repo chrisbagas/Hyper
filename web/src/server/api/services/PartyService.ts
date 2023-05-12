@@ -196,7 +196,7 @@ export class PartyService {
 
     // check if user exists and is not already in a party, if not then throw error
     if (!user) {
-      throw Error("Error: User not found")
+      throw Error("You are not logged in. Please login before joining a party.")
     }
     if (user.partyMember != null && user.partyMember != undefined) {
       throw Error("You are already in party. Please leave the current party if you want to join another one.")
