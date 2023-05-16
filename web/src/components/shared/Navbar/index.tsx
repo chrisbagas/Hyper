@@ -23,7 +23,7 @@ const CollapsedSidebarContent: React.FC = () => {
   const router = useRouter()
 
   return (
-    (!router.pathname.startsWith("/admin") && router.pathname !== "/landing") ?
+    (!router.pathname.startsWith("/admin") && !router.pathname.startsWith("/auth") && router.pathname !== "/landing") ?
       <ul className={`menu fixed h-full z-10 px-6 py-6 transition-all w-24 bg-base-1 text-base-content space-y-6 flex flex-col items-center justify-between`}>
         <div className="space-y-6">
           <label htmlFor="my-drawer" className="cursor-pointer">
@@ -80,7 +80,7 @@ const NavWrapper: React.FC<NavWrapperProps> = ({ children, className }) => {
   const [scroll, setScroll] = useAtom(scrollAtom)
 
   React.useEffect(() => {
-    if (!router.pathname.startsWith("/admin") && router.pathname !== "/landing" && session.status === "unauthenticated") {
+    if (!router.pathname.startsWith("/admin") && !router.pathname.startsWith("/auth") && router.pathname !== "/landing" && session.status === "unauthenticated") {
       router.push("/landing")
     }
   }, [router.pathname, session.status])
@@ -97,13 +97,13 @@ const NavWrapper: React.FC<NavWrapperProps> = ({ children, className }) => {
         </div>
         <div className="flex">
           <CollapsedSidebarContent />
-          <div className={`${className} ${!router.pathname.startsWith("/admin") && router.pathname !== "/landing" && "pl-20"}`}>
+          <div className={`${className} ${!router.pathname.startsWith("/admin") && !router.pathname.startsWith("/auth") && router.pathname !== "/landing" && "pl-20"}`}>
             {children}
           </div>
         </div>
       </div>
       {
-        !router.pathname.startsWith("/admin") && !router.pathname.startsWith("/landing") && (
+        !router.pathname.startsWith("/admin") && !router.pathname.startsWith("/landing") && !router.pathname.startsWith("/auth") && (
           <SidebarContent />
         )
       }
