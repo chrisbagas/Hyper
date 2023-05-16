@@ -24,7 +24,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <>
       <Head>
-        <script type="text/javascript" src="/js/maze.js" />
+        <script type="text/javascript" src="/js/maze.js" defer />
       </Head>
       <SessionProvider session={session}>
         <Loader />
