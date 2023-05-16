@@ -5,10 +5,12 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { useAtom } from "jotai";
 import { scrollAtom } from "../../components/shared/Navbar";
+import { Transition } from "@headlessui/react"
 
 import useSWR from "swr"
 import { truncate } from "../../utils/truncate";
 import Link from "next/link";
+import TransitionContainer from "../../components/Landing/TransitionContainer";
 
 const Landing: NextPage = () => {
   const session = useSession();
@@ -76,23 +78,21 @@ const Landing: NextPage = () => {
 
         <section className="flex pb-32 pt-40 items-center justify-center h-fit bg-fixed bg-center bg-cover bg-[url('/lpbg2.jpg')]">
           <div className="flex flex-col gap-y-16 items-center text-neutral-0">
-
-            <div className="flex flex-col gap-y-8 lg:flex-row lg:gap-x-24 w-2/3 items-center">
+            <TransitionContainer enterClasses="-translate-x-32 opacity-0">
               <img src="/feature-party.png" className="h-64 md:h-96" />
               <div className="flex flex-col gap-y-4 w-full">
                 <h1 className="text-3xl font-bold">Join or create parties on your favorite game</h1>
                 <p className="text-base text-base-5">Team up with other people in your favorite game and play together, whether it is random or someone with a similar rank</p>
               </div>
-            </div>
+            </TransitionContainer>
 
-            <div className="flex flex-col-reverse gap-y-8 lg:flex-row lg:gap-x-24 w-2/3 items-center">
+            <TransitionContainer enterClasses="translate-x-32 opacity-0">
               <div className="flex flex-col gap-y-4 w-full">
                 <h1 className="text-3xl font-bold">Create or share guides or clips to other players</h1>
                 <p className="text-base text-base-5">Write blog-like guides using our powerful markdown tool so you can express your knowledge freely</p>
               </div>
               <img src="/feature-post.png" className="h-64 md:h-96" />
-            </div>
-
+            </TransitionContainer>
           </div>
         </section>
 

@@ -1,5 +1,5 @@
 import { type NextPage } from "next";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { PartyType, PartyVisibility } from "@prisma/client";
 import { api } from "../../../utils/api";
@@ -25,13 +25,13 @@ const PartyForm: NextPage = () => {
     const [error, setError] = useState("")
     const [isModalOpen, setIsModalOpen] = useState(false)
 
-    const handlePartyTypeChange = (event: any) => {
-        setType(event.target.value);
-    };
+  const handlePartyTypeChange = (event: any) => {
+    setType(event.target.value);
+  };
 
-    const handlePartyVisibilityChange = (event: any) => {
-        setVisibility(event.target.value);
-    };
+  const handlePartyVisibilityChange = (event: any) => {
+    setVisibility(event.target.value);
+  };
 
     function createParty(e: any) {
         e.preventDefault()

@@ -12,15 +12,15 @@ const Guides: NextPage = () => {
   const router = useRouter()
   const gameId = router.query.game
   const { data: game } = api.games.getById.useQuery({ id: gameId as string })
-  const [ tagId, setTagId ] = React.useState("")
+  const [tagId, setTagId] = React.useState("")
 
   const { data } = api.guides.getAllbyGame.useQuery({ id: gameId as string, tagId })
   const tags = api.tag.getAll.useQuery()
 
   return (
     <>
-      <div className="p-16">
-        <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
+      <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
+      <div className="px-16 py-8">
         <div className="flex justify-between items-center content-center my-6">
           <h1 className="text-2xl font-bold text-white">See What Other Players Have Created</h1>
           <Link href={`/${gameId}/your-guides/create`}>
@@ -68,10 +68,10 @@ const Guides: NextPage = () => {
               <p>Filter Result</p>
             </label>
             <ul tabIndex={0} className="dropdown-content menu !bg-base-2 border border-base-3 shadow-xl p-2 shadow bg-base-100 rounded-box w-60">
-            <li onClick={ ()=> setTagId("") }><a className="text-base-5 text-base">None</a></li>
-              {tags?.data?.map(tag => 
+              <li onClick={() => setTagId("")}><a className="text-base-5 text-base">None</a></li>
+              {tags?.data?.map(tag =>
 
-                <li key={tag.id} onClick={ ()=> setTagId(tag.id) }><a className="text-base-5 text-base">{ tag.name }</a></li>
+                <li key={tag.id} onClick={() => setTagId(tag.id)}><a className="text-base-5 text-base">{tag.name}</a></li>
 
               )}
             </ul>
