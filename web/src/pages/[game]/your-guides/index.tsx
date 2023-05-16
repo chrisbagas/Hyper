@@ -1,3 +1,4 @@
+import React from "react";
 import { type NextPage } from "next";
 import { GuideCard } from "../../../components/Guide/GuideCard";
 import Link from "next/link";
@@ -6,14 +7,19 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
+import { useGlobalLoader } from "../../../components/shared/Loader";
 
 const Guides: NextPage = () => {
   const router = useRouter()
   const id = router.query.game
   const session = useSession()
-  const { data: game } = api.games.getById.useQuery({ id: id as string })
-  const { data } = api.guides.getAllbyUser.useQuery({ gameId: id as string, userId: session.data?.user.id as string })
-  console.log(data)
+  const { data: game, isLoading: gameIsLoading } = api.games.getById.useQuery({ id: id as string })
+  const { data, isLoading: guideIsLoading } = api.guides.getAllbyUser.useQuery({ gameId: id as string, userId: session.data?.user.id as string })
+
+  const { setLoadingStates } = useGlobalLoader()
+  React.useEffect(() => {
+    setLoadingStates([gameIsLoading, guideIsLoading])
+  }, [gameIsLoading, guideIsLoading])
 
   return (
     <>

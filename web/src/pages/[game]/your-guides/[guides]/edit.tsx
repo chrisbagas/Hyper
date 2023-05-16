@@ -7,29 +7,9 @@ import { CommunityPostStatus } from "@prisma/client"
 import { GuideForm, Post } from "../../../../components/Guide/GuideForm"
 import ErrorPage from 'next/error'
 import { GameDashboardNav } from "../../../../components/shared/GameDashboard/GameDashboardNav"
-import { createSSG } from "../../../../utils/ssghelper"
+import { ssgPrefetchGuidesContent } from "../../../../utils/ssgPrefetch"
 
-export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
-  const ssg = createSSG()
-  const gameId = ctx.params?.game as string
-  const postId = ctx.params?.guides as string
-
-  try {
-    await Promise.all([ssg.games.getById.fetch({ id: gameId }), ssg.guides.getPostById.fetch({ id: postId }), ssg.tag.getAll.prefetch()])
-  } catch(e) {
-    return {
-      notFound: true,
-    }
-  }
-
-  return {
-    props: {
-      trpcState: ssg.dehydrate(),
-      gameId: gameId,
-      postId: postId,
-    },
-  }
-}
+export const getServerSideProps: GetServerSideProps = ssgPrefetchGuidesContent
 
 const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
@@ -43,7 +23,7 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
     content: '',
     headerType: undefined,
     headerUrl: '',
-    tagId: ''
+    tagId: undefined
   } as Post)
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)

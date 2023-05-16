@@ -14,22 +14,30 @@ discordRouter.post("/create-channel", async (req, res) => {
 })
 
 discordRouter.put("/user-permission", async (req, res) => {
-  const data = req.body as AddRemoveUserPermissionPayload;
-  console.log(data)
-  const validatedData = addRemoveUserPermissionSchema.parse(data)
+  try {
+    const data = req.body as AddRemoveUserPermissionPayload;
+    console.log(data)
+    const validatedData = addRemoveUserPermissionSchema.parse(data)
 
-  await discordService.addUserToChannel(validatedData.channelId, validatedData.userId)
+    await discordService.addUserToChannel(validatedData.channelId, validatedData.userId)
 
-  return res.status(204).json()
+    return res.status(204).json()
+  } catch {
+    return res.status(204).json()
+  }
 })
 
 discordRouter.delete("/user-permission", async (req, res) => {
-  const data = req.body as AddRemoveUserPermissionPayload;
-  const validatedData = addRemoveUserPermissionSchema.parse(data)
+  try {
+    const data = req.body as AddRemoveUserPermissionPayload;
+    const validatedData = addRemoveUserPermissionSchema.parse(data)
 
-  await discordService.removeUserFromChannel(validatedData.channelId, validatedData.userId)
+    await discordService.removeUserFromChannel(validatedData.channelId, validatedData.userId)
 
-  return res.status(204).json()
+    return res.status(204).json()
+  } catch {
+    return res.status(204).json()
+  }
 })
 
 export default discordRouter
