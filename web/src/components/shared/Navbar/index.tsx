@@ -40,7 +40,7 @@ const CollapsedSidebarContent: React.FC = () => {
 
           <div>
             {games?.data?.map(game =>
-              <Tooltip title={game.name} placement="right">
+              <Tooltip title={game.name} placement="right" key={game.id}>
                 <Link href={"/" + game.id + "/home"}>
                   <img className="bg-white rounded-md w-8 h-8 hover:scale-105 transition-all" src={game.logoUrl} />
                 </Link>
