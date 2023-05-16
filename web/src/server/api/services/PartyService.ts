@@ -208,16 +208,16 @@ export class PartyService {
       throw Error("You are already in party. Please leave the current party if you want to join another one.")
     }
 
-    // await fetch(`${env.DISCORD_SERVICE_URL}/discord/user-permission`, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({
-    //     channelId: party.discordChannelId,
-    //     userId: user.accounts[0]?.providerAccountId,
-    //   })
-    // })
+    await fetch(`${env.DISCORD_SERVICE_URL}/discord/user-permission`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        channelId: party.discordChannelId,
+        userId: user.accounts[0]?.providerAccountId,
+      })
+    })
 
     return prisma.partyMember.create({
       data: {

@@ -100,8 +100,16 @@ const PartyDetails = (props: PartyDetailsData) => {
             </h1>
         </div>
         <div>
-          <h2 className="my-4 text-xl">Party Name: {props.title}</h2>
-          <h2 className="my-4 text-xl">Game: {props.game.name}</h2>
+          <h2 className="my-4 text-xl flex flex-row">
+            <div className="text-white text-opacity-50">Party Name:</div> 
+            &nbsp;
+            {props.title}
+          </h2>
+          <h2 className="my-4 text-xl flex flex-row">
+            <div className="text-white text-opacity-50">Game: </div>
+            &nbsp;
+            {props.game.name}
+          </h2>
           <div className="grid grid-cols-2">
             {props.minimalRank
               ? <div className="flex flex-row">
@@ -137,7 +145,7 @@ const PartyDetails = (props: PartyDetailsData) => {
         </div>
         <div className="flex flex-row mt-8 mb-4">
           <a href={props.discordVoiceLink ?? "#"} target="_blank" rel="noreferrer">
-            <button className="btn bg-blue-500 hover:bg-blue-600 mr-4">Join Discord Voice</button>
+            <button className="btn bg-blue-500 hover:bg-blue-600 mr-4 normal-case text-lg">Join Discord Voice</button>
           </a>
           <button onClick={() => {setIsModalOpen(true)}} className="btn bg-red-600 bg-opacity-25 border-red-500 hover:bg-opacity-100 hover:bg-red-600">{`${deleteOrLeaveString} Party`}</button>
         </div>

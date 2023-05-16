@@ -32,7 +32,7 @@ export default function Home() {
     <div className="p-8 lg:p-16">
       <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
       <div className="flex justify-between items-center content-center my-6 text-neutral-0">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-3xl font-bold">
           {userParty
             ? "Party Dashboard"
             : "Find Party that Suits You"
