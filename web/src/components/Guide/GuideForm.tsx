@@ -234,22 +234,29 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
           </select>
         </div>
 
-        <div className="form-control w-full px-16">
-          <label className="label">
-            <span className="label-text text-neutral-0">Post Content</span>
-          </label>
-          <textarea 
-            id="content"
-            className="textarea bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0" 
-            placeholder="This post contains a match replay and ..."
-            value={postData.content}
-            onChange={onChange}
-          >
-          </textarea>
-        </div>
+        <div className="flex justify-between px-16 gap-6 h-[572px]">
+          <div className="form-control w-1/2 h-full">
+            <label className="label">
+              <span className="label-text text-neutral-0">Post Content</span>
+            </label>
+            <textarea 
+              id="content"
+              className="textarea bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0 h-full resize-none" 
+              placeholder="This post contains a match replay and ..."
+              value={postData.content}
+              onChange={onChange}
+            >
+            </textarea>
+          </div>
 
-        <div className="px-16">
-          <HyperMarkdownParser content={postData.content} />
+          <div className="w-1/2 h-full">
+            <label className="label">
+              <span className="label-text text-neutral-0">Content Live Preview</span>
+            </label>
+            <div className="h-[536px] overflow-y-auto">
+              <HyperMarkdownParser content={postData.content} />
+            </div>
+          </div>
         </div>
         
         <div className="toast">

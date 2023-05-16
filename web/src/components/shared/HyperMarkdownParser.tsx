@@ -16,7 +16,7 @@ export const HyperMarkdownParser: React.FC<{content: string}> = ({ content }) =>
         a: ({node, ...props}) => <a className="hover:underline text-accent-7 transition-all" {...props} />,
         ul: ({node, depth, ...props}) => <ul className={`text-neutral-0 list-disc list-inside ml-${depth*5}`} {...props} />,
         ol: ({node, depth, ...props}) => <ol className={`text-neutral-0 list-decimal list-inside ml-${depth*5}`} {...props} />,
-        pre: ({node, ...props}) => <pre className="p-4 bg-base-1 text-base-5" {...props} />,
+        pre: ({node, ...props}) => <pre className="p-4 bg-base-1 text-base-5 overflow-x-auto" {...props} />,
         blockquote: ({node, ...props}) => <blockquote className="p-4 my-4 border-l-4 border-gray-500 bg-gray-800" {...props}/>,
         code: ({node, ...props}) => <code className="px-1 bg-base-2" {...props}/>
       }}>
