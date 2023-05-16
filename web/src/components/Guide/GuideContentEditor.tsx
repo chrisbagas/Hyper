@@ -19,7 +19,7 @@ export const GuideContentEditor: React.FC<GuideContentEditorProps> = ({ classNam
     textAreaObject.focus()
     return {
       startIndex: textAreaObject.selectionStart, 
-      endIndex: textAreaObject.selectionStart
+      endIndex: textAreaObject.selectionEnd
     }
   }
 
