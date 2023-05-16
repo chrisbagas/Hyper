@@ -23,8 +23,8 @@ const Guides: NextPage = () => {
 
   return (
     <>
-      <div className="p-16">
-        <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
+      <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
+      <div className="px-16 py-8">
         <div className="flex justify-between items-center content-center my-6">
           <h1 className="text-2xl font-bold text-white">Your Posts</h1>
           <Link href={`/${id}/your-guides/create`}>

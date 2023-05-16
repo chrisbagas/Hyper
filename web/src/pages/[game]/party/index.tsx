@@ -27,8 +27,8 @@ const Party: NextPage = () => {
 
   return (
     <>
-      <div className="p-16">
-        <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
+      <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
+      <div className="px-16 py-8">
         <div className="my-4">
           <div className=" flex justify-between mb-4 mr-4">
             <div>

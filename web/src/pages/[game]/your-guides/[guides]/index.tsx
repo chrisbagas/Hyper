@@ -71,9 +71,7 @@ const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getSer
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="pt-16 px-16">
-        <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
-      </div>
+      <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
 
       {data.status === CommunityPostStatus.DRAFT && <GuideTopButtonGroup returnUrl={`/${gameId}/your-guides`} className="px-16 pb-6">
         <div className="flex justify-between gap-2">
