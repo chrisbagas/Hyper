@@ -1,5 +1,5 @@
 import { CommunityPostStatus, ContentType } from "@prisma/client";
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, NextPage } from "next";
+import { GetServerSideProps, InferGetServerSidePropsType, NextPage } from "next";
 import Head from "next/head"
 import { GuideContent } from "../../../components/Guide/GuideContent"
 import { GuideTopButtonGroup } from "../../../components/Guide/GuideTopButtonGroup"
