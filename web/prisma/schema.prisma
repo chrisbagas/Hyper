@@ -15,6 +15,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Game {
+  id      String @id @default(cuid())
+  name    String
+  logoUrl String
+}
+
 // Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
@@ -42,158 +48,20 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
 model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-model User {
-  id             String          @id @default(cuid())
-  username       String?         @unique
-  email          String          @unique
-  image          String
-  emailVerified  Boolean?
-  name           String?
-  bio            String?
-  countryCode    String?
-  country        Country?        @relation(fields: [countryCode], references: [localeCode], onDelete: NoAction)
-  partyMember    PartyMember?
-  accounts       Account[]
-  sessions       Session[]
-  GameAccount    GameAccount[]
-  communityPosts CommunityPost[]
-}
-
-model Admin {
-  id       String  @id @default(cuid())
-  username String? @unique
-  password String
-}
-
-model Country {
-  localeCode String @id
-  name       String
-  imageUrl   String
-  user       User[]
-}
-
-model Game {
-  id             String          @id @default(cuid())
-  name           String
-  logoUrl        String
-  teamCapacity   Int             @default(5)
-  GameAccount    GameAccount[]
-  parties        Party[]
-  communityPosts CommunityPost[]
-}
-
-model GameAccount {
-  userId                  String
-  gameId                  String
-  gameIdentifier          String
-  statisticsData          Json?
-  statisticsLastUpdatedAt DateTime?
-  createdAt               DateTime
-  game                    Game      @relation(fields: [gameId], references: [id])
-  user                    User      @relation(fields: [userId], references: [id])
-
-  @@id([userId, gameId])
-}
-
-model Party {
-  id                String           @id @default(cuid())
-  gameId            String
-  partyTitle        String
-  partyType         PartyType?
-  partyVisibility   PartyVisibility?
-  discordInviteLink String?
-  discordChannelId  String?
-  game              Game             @relation(fields: [gameId], references: [id])
-  partyMembers      PartyMember[]
-}
-
-enum PartyType {
-  Competitive
-  Casual
-}
-
-enum PartyVisibility {
-  Public
-  Private
-}
-
-model PartyMember {
-  userId  String           @unique
-  partyId String
-  level   PartyMemberLevel @default(member)
-  user    User             @relation(fields: [userId], references: [id])
-  party   Party            @relation(fields: [partyId], references: [id], onDelete: Cascade)
-
-  @@id([userId, partyId])
-}
-
-enum PartyMemberLevel {
-  member
-  leader
-}
-
-model CommunityPost {
-  id        String               @id @default(cuid())
-  type      CommunityPostType
-  status    CommunityPostStatus  @default(DRAFT)
-  createdAt DateTime             @default(now())
-  updatedAt DateTime             @updatedAt
-  title     String
-  content   String?
-  authorId  String
-  gameId    String
-  author    User                 @relation(fields: [authorId], references: [id])
-  game      Game                 @relation(fields: [gameId], references: [id])
-  header    CommunityPostHeader?
-  tags      CommunityPostTag[]
-}
-
-model CommunityPostHeader {
-  postId String
-  type   ContentType
-  url    String
-  post   CommunityPost @relation(fields: [postId], references: [id])
-
-  @@id([postId])
-}
-
-model CommunityPostTag {
-  id     String        @id @default(cuid())
-  postId String
-  tagId  String
-  post   CommunityPost @relation(fields: [postId], references: [id])
-  tag    CommunityTag  @relation(fields: [tagId], references: [id])
-
-  @@unique([postId, tagId])
-}
-
-model CommunityTag {
-  id       String             @id @default(cuid())
-  slug     String             @unique
-  name     String
-  postTags CommunityPostTag[]
-}
-
-enum CommunityPostType {
-  CLIP
-  GUIDE
-}
-
-enum ContentType {
-  IMAGE
-  VIDEO
-}
-
-enum CommunityPostStatus {
-  DRAFT
-  PUBLISHED
-  TAKENDOWN
 }
