@@ -40,9 +40,7 @@ const ShowGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="pt-16 px-16">
-        <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
-      </div>
+      <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
 
       <GuideTopButtonGroup returnUrl={`/${gameId}/guides`} className="px-16 pb-6">
         <button
