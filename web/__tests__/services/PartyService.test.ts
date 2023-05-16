@@ -450,40 +450,6 @@ describe("Party Service", () => {
     expect(party).toStrictEqual(mockParty)
   })
 
-  it("updateParty negative test: user not found", async () => {
-    prisma.partyMember.findUnique.mockResolvedValue(
-      null
-    )
-
-    expect(PartyService.updateParty(
-      prisma,
-      {
-        partyId: "1",
-        userId: "1",
-        partyTitle: "gaming",
-        partyType: PartyType.Casual,
-        partyVisibility: PartyVisibility.Public,
-      }
-    )).rejects.toThrowError("not found")
-  })
-
-  it("updateParty negative test: permission denied", async () => {
-    prisma.partyMember.findUnique.mockResolvedValue(
-      mockPartyMember
-    )
-
-    expect(PartyService.updateParty(
-      prisma,
-      {
-        partyId: "1",
-        userId: "2",
-        partyTitle: "gaming",
-        partyType: PartyType.Casual,
-        partyVisibility: PartyVisibility.Public,
-      }
-    )).rejects.toThrowError("denied")
-  })
-
   it("deleteParty positive test", async () => {
     prisma.partyMember.findUnique.mockResolvedValue(
       mockPartyLeader

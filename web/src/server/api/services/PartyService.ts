@@ -128,13 +128,19 @@ export class PartyService {
       where: {
         id: user.partyMember.partyId
       },
-      include: {
+      select: {
         partyMembers: {
           include: {
             user: true
           }
         },
-        game: true
+        game: true,
+        gameId: true,
+        id: true,
+        partyTitle: true,
+        partyType: true,
+        partyVisibility: true,
+        discordInviteLink: true
       }
     })
   }
@@ -202,16 +208,16 @@ export class PartyService {
       throw Error("You are already in party. Please leave the current party if you want to join another one.")
     }
 
-    await fetch(`${env.DISCORD_SERVICE_URL}/discord/user-permission`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        channelId: party.discordChannelId,
-        userId: user.accounts[0]?.providerAccountId,
-      })
-    })
+    // await fetch(`${env.DISCORD_SERVICE_URL}/discord/user-permission`, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({
+    //     channelId: party.discordChannelId,
+    //     userId: user.accounts[0]?.providerAccountId,
+    //   })
+    // })
 
     return prisma.partyMember.create({
       data: {
@@ -233,24 +239,6 @@ export class PartyService {
   }
 
   public static async updateParty(prisma: PrismaClient, data: EditPartyData) {
-    const partyMember = await prisma.partyMember.findUnique({
-      where: {
-        userId_partyId: {
-          userId: data.userId,
-          partyId: data.partyId
-        }
-      }
-    })
-
-    // throw error if the user doesn't exist or not in the party
-    if (!partyMember) {
-      throw Error("Error: User not found")
-    }
-    // throw error if the user is not leader
-    if (partyMember.level == PartyMemberLevel.member) {
-      throw Error("Error: Permission denied, the requesting user is a member")
-    }
-
     return prisma.party.update({
       where: {
         id: data.partyId
