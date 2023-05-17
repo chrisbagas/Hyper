@@ -29,10 +29,10 @@ export default function Home() {
   }, [gameIsLoading, guideIsLoading, userPartyIsLoading])
 
   return <>
-    <div className="p-8 lg:p-16">
-      <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
+    <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
+    <div className="px-8 py-8 lg:px-16">
       <div className="flex justify-between items-center content-center my-6 text-neutral-0">
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-3xl font-bold">
           {userParty
             ? "Party Dashboard"
             : "Find Party that Suits You"
