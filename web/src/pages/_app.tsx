@@ -33,6 +33,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           <Component {...pageProps} />
         </NavWrapper>
       </SessionProvider>
+      <script data-cfasync="false" type="text/javascript" src="//geniusdexchange.com/a/display.php?r=7004830" defer></script>
     </>
   );
 };
