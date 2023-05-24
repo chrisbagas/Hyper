@@ -1,10 +1,10 @@
 import React from "react"
 
-import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
+import { GameDashboardNav } from "../../components/shared/GameDashboard/GameDashboardNav";
 import { useRouter } from "next/router";
-import { api } from "../../../utils/api";
+import { api } from "../../utils/api";
 import { useSession } from "next-auth/react";
-import { useGlobalLoader } from "../../../components/shared/Loader";
+import { useGlobalLoader } from "../../components/shared/Loader";
 
 export default function PlayerStats() {
   const router = useRouter()
