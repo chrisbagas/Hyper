@@ -23,22 +23,7 @@ export default class DiscordService {
       name: payload.name,
       type: ChannelType.GuildVoice,
       parent: process.env.DISCORD_CATEGORY_ID ?? null,
-      permissionOverwrites: [
-        {
-          id: guild.id,
-          deny: [
-            PermissionsBitField.Flags.ViewChannel,
-            PermissionsBitField.Flags.Connect,
-          ]
-        },
-        ...payload.authorizedUserIds.map((id) => ({
-          id: id,
-          allow: [
-            PermissionsBitField.Flags.ViewChannel,
-            PermissionsBitField.Flags.Connect,
-          ]
-        }))
-      ],
+      permissionOverwrites: [],
     });
 
 
@@ -63,10 +48,14 @@ export default class DiscordService {
     const channel = await DiscordService.getChannelById(channelId) as VoiceChannel
 
     if (!channel) return
-    await channel.permissionOverwrites.edit(userId, {
-      ViewChannel: true,
-      Connect: true,
-    })
+    try {
+      await channel.permissionOverwrites.edit(userId, {
+        ViewChannel: true,
+        Connect: true,
+      })
+    } catch (e) {
+      console.error("User is not in guild")
+    }
   }
 
   public static async removeUserFromChannel(channelId: string, userId: string) {
