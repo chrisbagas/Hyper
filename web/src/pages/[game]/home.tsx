@@ -12,6 +12,7 @@ import { GuideCard } from "../../components/Guide/GuideCard";
 import { PartyPlayerList } from "../../components/party/PartyPlayerList";
 import { PartyDetails } from "../../components/party/PartyDetails";
 import { useGlobalLoader } from "../../components/shared/Loader";
+import Head from "next/head";
 
 export default function Home() {
   const router = useRouter()
@@ -29,6 +30,9 @@ export default function Home() {
   }, [gameIsLoading, guideIsLoading, userPartyIsLoading])
 
   return <>
+    <Head>
+      <title>Hyper - {game?.name ?? "Loading"}</title>
+    </Head>
     <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
     <div className="px-8 py-8 lg:px-16">
       <div className="flex justify-between items-center content-center my-6 text-neutral-0">

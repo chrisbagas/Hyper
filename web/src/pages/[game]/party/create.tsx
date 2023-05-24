@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
 import Link from "next/link";
 import { ConfirmationModal } from "../../../components/shared/ConfirmationModal";
+import Head from "next/head";
 
 const PartyForm: NextPage = () => {
     const router = useRouter()
@@ -67,6 +68,9 @@ const PartyForm: NextPage = () => {
 
     return (
         <>
+            <Head>
+              <title>Hyper - {game?.name ? `Create ${game.name} Party` : "Loading"}</title>
+            </Head>
             <div className="p-16">
                 <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
                 

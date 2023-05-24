@@ -10,7 +10,6 @@ import { ProfileCard } from "../../components/profile/ProfileCard";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { useGlobalLoader } from "../../components/shared/Loader";
-import { Skeleton } from "@mui/material";
 
 
 const ShowProfile: NextPage = () => {
@@ -36,6 +35,9 @@ const ShowProfile: NextPage = () => {
   if (isLoading) {
     return (
       <>
+        <Head>
+          <title>Hyper - Profile Page</title>
+        </Head>
         <div className="flex justify-between mx-16 pt-8">
           <Link href="/"> <button className="flex btn btn-ghost normal-case gap-2 text-white"><ArrowLeftIcon className="w-4" /> Go Back</button> </Link>
         </div>

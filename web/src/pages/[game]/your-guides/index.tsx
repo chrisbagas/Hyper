@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { useGlobalLoader } from "../../../components/shared/Loader";
+import Head from "next/head";
 
 const Guides: NextPage = () => {
   const router = useRouter()
@@ -23,6 +24,9 @@ const Guides: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Hyper - Your {game?.name ?? "Loading"} Guides</title>
+      </Head>
       <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
       <div className="px-16 py-8">
         <div className="flex justify-between items-center content-center my-6">

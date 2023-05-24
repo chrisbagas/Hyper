@@ -26,6 +26,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <Head>
         <script type="text/javascript" src="/js/maze.js" defer />
         <meta name="a.validate.02" content="r3rjOCiEvmEBvp_aPPX14a9RbC7ujZyKsc2g" />
+        <link rel="icon" href="/favicon.svg" />
       </Head>
       <SessionProvider session={session}>
         <Loader />

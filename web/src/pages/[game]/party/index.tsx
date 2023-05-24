@@ -9,6 +9,7 @@ import React from "react";
 import Link from "next/link";
 
 import { useGlobalLoader } from "../../../components/shared/Loader"
+import Head from "next/head";
 
 const Party: NextPage = () => {
   const router = useRouter()
@@ -27,6 +28,9 @@ const Party: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Hyper - {game?.name ? `${game.name} Parties` : "Loading"}</title> 
+      </Head>
       <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
       <div className="px-16 py-8">
         <div className="my-4">

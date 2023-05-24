@@ -6,6 +6,7 @@ import { api } from "../../../utils/api";
 import { useRouter } from "next/router";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
 import { FunnelIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
+import Head from "next/head";
 
 
 const Guides: NextPage = () => {
@@ -19,6 +20,9 @@ const Guides: NextPage = () => {
 
   return (
     <>
+      <Head>
+        <title>Hyper - {game?.name ? `${game.name} Guides` : "Loading"}</title>
+      </Head>
       <GameDashboardNav id={game?.id ?? ''} logoUrl={game?.logoUrl} name={game?.name} page={router.pathname} />
       <div className="px-16 py-8">
         <div className="flex justify-between items-center content-center my-6">
