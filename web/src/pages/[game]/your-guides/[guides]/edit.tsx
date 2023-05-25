@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, type NextPage } from "next"
+import { GetServerSideProps, InferGetServerSidePropsType, type NextPage } from "next"
 import Head from "next/head"
 import { api } from "../../../../utils/api"
 import { useRouter } from 'next/router'
@@ -43,7 +43,9 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
         if (data.status === CommunityPostStatus.PUBLISHED) {
           setIsPublished(true)
         }
-      }
+      },
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false
     })
   const [isPublished, setIsPublished] = useState(false)
 
