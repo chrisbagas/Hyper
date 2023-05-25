@@ -82,7 +82,7 @@ describe("Community Post RPC", () => {
 
         prisma.communityPost.findMany.mockResolvedValue(mockedPost)
 
-        const post = await GuideService.getAll(mockPrisma)
+        const post = await GuideService.getAll(1,1,mockPrisma)
         expect(post).toStrictEqual(expectedData)
     })
 
