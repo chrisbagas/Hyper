@@ -58,7 +58,7 @@ const Dashboard: NextPage = () => {
     return (
         <>
             <NavWrapperAdmin className="bg-base-0 min-h-screen w-full">
-                <div className={postId !== "" && "grid grid-cols-5"}>
+                <div className={postId !== "" ? "grid grid-cols-5":""}>
                     <div className="p-16 col-span-3 h-screen">
                         <div className="flex items-center content-center my-6">
                             <NewspaperIcon className="h-12 w-12 mr-2" />
