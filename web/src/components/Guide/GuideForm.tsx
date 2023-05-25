@@ -37,9 +37,10 @@ interface HeaderFieldProps {
   onChange:(event: React.ChangeEvent<HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement>)=>void,
   setErrorMessage:React.Dispatch<React.SetStateAction<string>>,
   setIsSubmitting:React.Dispatch<React.SetStateAction<boolean>>,
+  isSubmitting:boolean,
 }
 
-const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChange, setIsSubmitting, setErrorMessage }) => {
+const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChange, setIsSubmitting, setErrorMessage, isSubmitting }) => {
   const onFileUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const fileInput = e.target
 
@@ -109,6 +110,7 @@ const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChan
             id="file"
             className="file-input file-input-bordered w-full bg-base-2 border-base-3 text-base-4 file:bg-base-1 file:border-0 file:text-base-4 focus:outline-0"
             onChange={onFileUploadChange}
+            disabled={isSubmitting}
           />
           <label className="label">
             <span className="label-text-alt text-base-5">Only supports JPEG or PNG format with maximum 2MB and optimal ratio of 16:9</span>
@@ -130,6 +132,7 @@ const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChan
               className="input input-bordered w-full bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0 focus:outline-0" 
               value={postData.headerUrl}
               onChange={onChange}
+              disabled={isSubmitting}
             />
           </label>
           <label className="label">
@@ -185,6 +188,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
             className="input input-bordered w-full bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0 focus:outline-0" 
             value={postData.title} 
             onChange={onChange}
+            disabled={isSubmitting}
           />
         </div>
 
@@ -193,7 +197,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
             <label className="label">
               <span className="label-text text-neutral-0">Header Attachment Type</span>
             </label>
-            <select id="headerType" className={`select w-full bg-base-2 border-base-3 ${postData.headerType === undefined ? "text-base-4" : "text-neutral-0"} focus:outline-0`} value={postData.headerType} onChange={onChange}>
+            <select id="headerType" className={`select w-full bg-base-2 border-base-3 ${postData.headerType === undefined ? "text-base-4" : "text-neutral-0"} focus:outline-0`} value={postData.headerType} onChange={onChange} disabled={isSubmitting}>
               <option disabled selected value={undefined}>Select header type</option>
               <option value={ContentType.IMAGE}>Image</option>
               <option value={ContentType.VIDEO}>Video</option>
@@ -209,6 +213,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
             onChange={onChange}
             setErrorMessage={setErrorMessage}
             setIsSubmitting={setIsSubmitting}
+            isSubmitting={isSubmitting}
           />
         </div>
 
@@ -216,7 +221,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
           <label className="label">
             <span className="label-text text-neutral-0">Select Post Type</span>
           </label>
-          <select id="type" className={`select w-full bg-base-2 border-base-3 ${postData.type === undefined ? "text-base-4" : "text-neutral-0"} focus:outline-0`} value={postData.type} onChange={onChange}>
+          <select id="type" className={`select w-full bg-base-2 border-base-3 ${postData.type === undefined ? "text-base-4" : "text-neutral-0"} focus:outline-0`} value={postData.type} onChange={onChange} disabled={isSubmitting}>
             <option disabled selected value={undefined}>Select post type</option>
             <option value={CommunityPostType.CLIP}>Clip</option>
             <option value={CommunityPostType.GUIDE}>Guide</option>
@@ -227,7 +232,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
           <label className="label">
             <span className="label-text text-neutral-0">Select Post Tags</span>
           </label>
-          <select id="tagId" className={`select w-full bg-base-2 border-base-3 ${postData.tagId === undefined ? "text-base-4" : "text-neutral-0"} focus:outline-0`} value={postData.tagId} onChange={onChange}>
+          <select id="tagId" className={`select w-full bg-base-2 border-base-3 ${postData.tagId === undefined ? "text-base-4" : "text-neutral-0"} focus:outline-0`} value={postData.tagId} onChange={onChange} disabled={isSubmitting}>
             <option disabled selected value={undefined}>Select post tag</option>
             {tags?.data?.map(tag => 
               <option key={tag.id} value={tag.id}>{ tag.name }</option>
@@ -242,6 +247,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
             onChange={onChange}
             setPostData={setPostData}
             postData={postData}
+            isSubmitting={isSubmitting}
           />
 
           <div className="md:w-1/2 h-full">

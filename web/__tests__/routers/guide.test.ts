@@ -399,7 +399,7 @@ describe("Community Post RPC", () => {
     }
 
     const caller = appRouter.createCaller(ctx)
-    const post = await caller.guides.getAll()
+    const post = await caller.guides.getAll({page:1, pageSize:1})
 
     expect(post).toStrictEqual(expectedData)
   })

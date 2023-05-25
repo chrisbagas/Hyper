@@ -57,21 +57,25 @@ export class GuideService {
     if (!guides) {
       throw Error("Game not found")
     }
-
     return guides.communityPosts
   }
-
-  public static async getAll(prisma: PrismaClient) {
-    return prisma.communityPost.findMany({
-      orderBy: {
-        title: 'desc',
-      },
-      include: {
-        author: true,
-        header: true,
-        game: true,
-      }
-    })
+  
+  public static async getAll(page: number, pageSize: number, prisma: PrismaClient) {
+      const skip = (page - 1) * pageSize;
+      const take = pageSize;
+      
+      return prisma.communityPost.findMany({
+          orderBy: {
+              title: 'desc',
+          },
+          include: {
+              author: true,
+              header: true,
+              game: true,
+          },
+          skip,
+          take,
+      });
   }
 
   public static async updateStatusModerationById(id: string, status: CommunityPostStatus, prisma: PrismaClient) {
