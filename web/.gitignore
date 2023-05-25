@@ -130,3 +130,8 @@ dist
 .pnp.*
 
 sonar-project.properties
+# Sentry Auth Token
+.sentryclirc
+
+# Sentry Auth Token
+.sentryclirc
