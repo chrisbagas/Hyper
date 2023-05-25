@@ -56,7 +56,7 @@ export const GuideContentEditor: React.FC<GuideContentEditorProps> = ({ classNam
       }
       endIndex += 1
     }
-    const newText = text.substring(0, startIndex) + insert + text.substring(startIndex+1)
+    const newText = text.substring(0, startIndex) + insert + text.substring(startIndex)
     finishHandler(newText, startIndex+insert.length, endIndex+insert.length)
   }
 
@@ -91,42 +91,42 @@ export const GuideContentEditor: React.FC<GuideContentEditorProps> = ({ classNam
       </label>
       <div className="flex flex-col h-[536px]">
         <div className="flex flex-wrap h-fit w-full bg-base-1 border border-b-0 border-base-3 rounded-t-lg p-2 gap-1">
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Bold" onClick={() => {
             insertBetween("**")
           }}><FormatBold className="w-5" /></button>
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Italic" onClick={() => {
             insertBetween("*")
           }}><FormatItalic className="w-5" /></button>
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Header 1" onClick={() => {
             insertAtLineStart("# ")
           }}><p className="text-center font-bold text-sm">H1</p></button>
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Header 2" onClick={() => {
             insertAtLineStart("## ")
           }}><p className="text-center font-bold text-sm">H2</p></button>
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Header 3" onClick={() => {
             insertAtLineStart("### ")
           }}><p className="text-center font-bold text-sm">H3</p></button>
           <div className="w-[0.5px] bg-base-3"></div>
-          <button className="flex w-[27px] items-center justify-center transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="flex w-[27px] items-center justify-center transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Insert Link" onClick={() => {
             insertInLine("[title](https://www.example.com)")
           }}><LinkIcon className="w-4" /></button>
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Insert Quote" onClick={() => {
             insertAtLineStart("> ")
           }}><FormatQuote className="w-5" /></button>
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Insert Code Block" onClick={() => {
             insertBetween("\n```\n")
           }}><Code className="w-5" /></button>
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Insert Image" onClick={() => {
             insertInLine(" ![alt text](<image link here>)")
           }}><Image className="w-5" /></button>
           <div className="w-[0.5px] bg-base-3"></div>
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Unordered List" onClick={() => {
             insertAtLineStart("- ")
           }}><FormatListBulleted className="w-5" /></button>
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Ordered List" onClick={() => {
             insertAtLineStart("1. ")
           }}><FormatListNumbered className="w-5" /></button>
-          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90" onClick={() => {
+          <button className="w-[27px] transition ease-out hover:bg-base-2 rounded-sm active:scale-90 tooltip" data-tip="Insert Separator" onClick={() => {
             insertAtNewLine("***\n")
           }}><HorizontalRule className="w-5" /></button>
         </div>
