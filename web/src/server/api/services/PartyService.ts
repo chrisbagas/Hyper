@@ -62,9 +62,9 @@ export class PartyService {
       }
     })
 
-    var valorantId = gameAcc?.gameIdentifier
-    var rankNumber = 0
-    var totalConnect = 0
+    const valorantId = gameAcc?.gameIdentifier
+    let rankNumber = 0
+    let totalConnect = 0
     if (valorantId) {
       totalConnect = 1
       const valorantIdSplit = valorantId.split('#')
@@ -262,9 +262,9 @@ export class PartyService {
 
     console.log(userId, party.gameId)
     console.log(gameAcc)
-    var valorantId = gameAcc?.gameIdentifier
-    var rankNumber = party.totalRank
-    var totalConnect = party.totalConnect
+    const valorantId = gameAcc?.gameIdentifier
+    let rankNumber = party.totalRank
+    let totalConnect = party.totalConnect
     console.log("\n\n\n\n\n\nTES\n\n\n\n"+valorantId+"\n\n\n\n\n\n")
     if (valorantId) {
       if(isJoin){

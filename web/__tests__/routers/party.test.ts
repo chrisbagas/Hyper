@@ -16,6 +16,8 @@ describe("Party RPC", () => {
     gameId: "Valorant",
     partyTitle: "gaming",
     minimumRank: "iron",
+    totalConnect: 1,
+    totalRank: 1,
     partyType: PartyType.Casual,
     partyVisibility: PartyVisibility.Public,
     discordInviteLink: "www.discord.com",
@@ -23,6 +25,15 @@ describe("Party RPC", () => {
       id: "Valorant"
     },
     partyMembers: []
+  }
+
+  const mockGameAcc = {
+    userId: "1",
+    gameId: "Valorant",
+    gameIdentifier: "rostova",
+    statisticsData: null,
+    statisticsLastUpdatedAt: null,
+    createdAt: new Date(),
   }
 
   it("getByGame positive test", async () => {
@@ -283,6 +294,10 @@ describe("Party RPC", () => {
     }
     const caller = appRouter.createCaller(ctx)
 
+    prisma.party.findUnique.mockResolvedValue(
+      mockParty
+    )
+
     prisma.partyMember.delete.mockResolvedValue(
       mockPartyMember
     )
@@ -386,6 +401,14 @@ describe("Party RPC", () => {
       prisma
     }
     const caller = appRouter.createCaller(ctx)
+
+    prisma.party.findUnique.mockResolvedValue(
+      mockParty
+    )
+
+    prisma.gameAccount.findFirst.mockResolvedValue(
+      mockGameAcc
+    )
 
     prisma.partyMember.findFirst.mockResolvedValue(
       mockPartyLeader
