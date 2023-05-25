@@ -38,7 +38,7 @@ const Party: NextPage = () => {
               {userParty
                 ? <></>
                 : <Link href={`/${gameId}/party/create`}>
-                  <button className="btn bg-blue-500 hover:bg-blue-600 normal-case text-lg">
+                  <button className="btn bg-blue-500 hover:bg-blue-600 normal-case text-lg text-white">
                     Create New Party
                     &nbsp;
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -59,7 +59,8 @@ const Party: NextPage = () => {
                     gameId={party.gameId}
                     title={party.partyTitle}
                     partyCapacity={game?.teamCapacity as number}
-                    minimalRank={undefined}
+                    totalRank={party?.totalRank}
+                    totalConnected={party?.totalConnect}
                     visibility={party?.partyVisibility ?? PartyVisibility.Public}
                     type={party?.partyType ?? PartyType.Casual}
                     partyMembers={party.partyMembers}

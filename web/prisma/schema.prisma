@@ -111,6 +111,8 @@ model Party {
   partyVisibility   PartyVisibility?
   discordInviteLink String?
   discordChannelId  String?
+  totalRank         Int
+  totalConnect      Int
   game              Game             @relation(fields: [gameId], references: [id])
   partyMembers      PartyMember[]
 }

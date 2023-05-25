@@ -30,9 +30,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ data, connectAcc }
                     </div>
 
 
-                    <div className="flex flex-row items-center gap-2">
-                        <div className="badge badge-lg border-none text-neutral-0 font-normal bg-yellow-500 text-sm">Content Creator</div>
-                    </div>
 
                 </div>
 
