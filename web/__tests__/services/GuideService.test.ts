@@ -226,7 +226,12 @@ describe("Community Post RPC", () => {
 
     const expectedData = mockedPosts[1]
     const input = "1"
-    prisma.game.findUnique.mockImplementation(mockedPost)
+    prisma.game.findUnique.mockImplementation((input) => {
+      return {
+        ...mockedPost,
+        communityPosts: mockedPosts.filter((item) => item.title.toLowerCase().includes(input.select?.communityPosts?.where?.title?.contains))
+      }
+    })
 
     const post = await GuideService.getAllbyGame(input, mockPrisma, undefined, "bcd")
     expect(post[0]).toStrictEqual(expectedData)
