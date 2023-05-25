@@ -182,8 +182,12 @@ export const guideRouter = createTRPCRouter({
       return GuideService.getAllbyUser(input.gameId, input.userId, ctx.prisma)
     }),
   getAll: publicProcedure
-    .query(async ({ ctx }) => {
-      return GuideService.getAll(ctx.prisma)
+    .input(z.object({
+      page: z.number(),
+      pageSize: z.number(),
+    }))
+    .query(async ({ ctx, input }) => {
+      return GuideService.getAll(input.page, input.pageSize, ctx.prisma )
     }),
   updateStatusModerationById: publicProcedure
   .input(z.object({
