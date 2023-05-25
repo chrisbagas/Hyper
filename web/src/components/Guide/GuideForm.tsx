@@ -5,6 +5,8 @@ import { GuideTopButtonGroup } from "./GuideTopButtonGroup"
 import { EyeIcon, FolderPlusIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline"
 import { ConfirmationModal } from "../shared/ConfirmationModal"
 import { api } from "../../utils/api"
+import { HyperMarkdownParser } from "../shared/HyperMarkdownParser"
+import { GuideContentEditor } from "./GuideContentEditor"
 
 export interface Post {
   type:CommunityPostType|undefined,
@@ -105,7 +107,7 @@ const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChan
           <input 
             type="file"
             id="file"
-            className="file-input file-input-bordered w-full bg-base-2 border-base-3 text-base-4 file:bg-base-1 file:border-0 file:text-base-4"
+            className="file-input file-input-bordered w-full bg-base-2 border-base-3 text-base-4 file:bg-base-1 file:border-0 file:text-base-4 focus:outline-0"
             onChange={onFileUploadChange}
           />
           <label className="label">
@@ -125,7 +127,7 @@ const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChan
               type="text" 
               id="headerUrl"
               placeholder="www.medal.tv/001ojiad0983q09" 
-              className="input input-bordered w-full bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0" 
+              className="input input-bordered w-full bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0 focus:outline-0" 
               value={postData.headerUrl}
               onChange={onChange}
             />
@@ -145,7 +147,7 @@ const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChan
               type="text" 
               id="headerUrl"
               placeholder="Please select attachment type first" 
-              className="input input-bordered w-full disabled:bg-base-1 disabled:placeholder:text-base-4" 
+              className="input input-bordered w-full disabled:bg-base-1 disabled:placeholder:text-base-4 focus:outline-0" 
               disabled
             />
           <label className="label">
@@ -180,7 +182,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
             type="text" 
             id="title"
             placeholder="How to Win a match" 
-            className="input input-bordered w-full bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0" 
+            className="input input-bordered w-full bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0 focus:outline-0" 
             value={postData.title} 
             onChange={onChange}
           />
@@ -191,7 +193,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
             <label className="label">
               <span className="label-text text-neutral-0">Header Attachment Type</span>
             </label>
-            <select id="headerType" className={`select w-full bg-base-2 border-base-3 ${postData.headerType === undefined ? "text-base-4" : "text-neutral-0"}`} value={postData.headerType} onChange={onChange}>
+            <select id="headerType" className={`select w-full bg-base-2 border-base-3 ${postData.headerType === undefined ? "text-base-4" : "text-neutral-0"} focus:outline-0`} value={postData.headerType} onChange={onChange}>
               <option disabled selected value={undefined}>Select header type</option>
               <option value={ContentType.IMAGE}>Image</option>
               <option value={ContentType.VIDEO}>Video</option>
@@ -214,7 +216,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
           <label className="label">
             <span className="label-text text-neutral-0">Select Post Type</span>
           </label>
-          <select id="type" className={`select w-full bg-base-2 border-base-3 ${postData.type === undefined ? "text-base-4" : "text-neutral-0"}`} value={postData.type} onChange={onChange}>
+          <select id="type" className={`select w-full bg-base-2 border-base-3 ${postData.type === undefined ? "text-base-4" : "text-neutral-0"} focus:outline-0`} value={postData.type} onChange={onChange}>
             <option disabled selected value={undefined}>Select post type</option>
             <option value={CommunityPostType.CLIP}>Clip</option>
             <option value={CommunityPostType.GUIDE}>Guide</option>
@@ -225,7 +227,7 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
           <label className="label">
             <span className="label-text text-neutral-0">Select Post Tags</span>
           </label>
-          <select id="tagId" className={`select w-full bg-base-2 border-base-3 ${postData.tagId === undefined ? "text-base-4" : "text-neutral-0"}`} value={postData.tagId} onChange={onChange}>
+          <select id="tagId" className={`select w-full bg-base-2 border-base-3 ${postData.tagId === undefined ? "text-base-4" : "text-neutral-0"} focus:outline-0`} value={postData.tagId} onChange={onChange}>
             <option disabled selected value={undefined}>Select post tag</option>
             {tags?.data?.map(tag => 
               <option key={tag.id} value={tag.id}>{ tag.name }</option>
@@ -233,18 +235,23 @@ export const GuideForm: React.FC<GuideFormProps> = ({ postData, setPostData, err
           </select>
         </div>
 
-        <div className="form-control w-full px-16">
-          <label className="label">
-            <span className="label-text text-neutral-0">Post Content</span>
-          </label>
-          <textarea 
-            id="content"
-            className="textarea bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0" 
-            placeholder="This post contains a match replay and ..."
-            value={postData.content}
+        <div className="flex flex-col md:flex-row md:justify-between px-16 gap-6 md:h-[572px]">
+          <GuideContentEditor
+            className="form-control md:w-1/2 h-full"
+            content={postData.content}
             onChange={onChange}
-          >
-          </textarea>
+            setPostData={setPostData}
+            postData={postData}
+          />
+
+          <div className="md:w-1/2 h-full">
+            <label className="label">
+              <span className="label-text text-neutral-0">Content Live Preview</span>
+            </label>
+            <div className="h-[536px] overflow-y-auto">
+              <HyperMarkdownParser content={postData.content} />
+            </div>
+          </div>
         </div>
         
         <div className="toast">

@@ -16,7 +16,6 @@ discordRouter.post("/create-channel", async (req, res) => {
 discordRouter.put("/user-permission", async (req, res) => {
   try {
     const data = req.body as AddRemoveUserPermissionPayload;
-    console.log(data)
     const validatedData = addRemoveUserPermissionSchema.parse(data)
 
     await discordService.addUserToChannel(validatedData.channelId, validatedData.userId)
