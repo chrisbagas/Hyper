@@ -57,7 +57,10 @@ export class GuideService {
         return guides.communityPosts
     }
 
-    public static async getAll(prisma: PrismaClient) {
+    public static async getAll(page: number, pageSize: number, prisma: PrismaClient) {
+        const skip = (page - 1) * pageSize;
+        const take = pageSize;
+        
         return prisma.communityPost.findMany({
             orderBy: {
                 title: 'desc',
@@ -66,8 +69,10 @@ export class GuideService {
                 author: true,
                 header: true,
                 game: true,
-            }
-        })
+            },
+            skip,
+            take,
+        });
     }
 
     public static async updateStatusModerationById(id: string, status: CommunityPostStatus, prisma: PrismaClient) {
