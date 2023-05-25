@@ -196,7 +196,7 @@ describe("Community Post RPC", () => {
       prisma,
     }
 
-    prisma.communityPost.findUnique.mockResolvedValue({ type: CommunityPostStatus.DRAFT })
+    prisma.communityPost.findUnique.mockResolvedValue({ type: CommunityPostStatus.DRAFT, authorId: "1" })
     prisma.communityPost.update.mockResolvedValue(mockPrismaOutput)
 
     const caller = appRouter.createCaller(ctx)
@@ -229,7 +229,8 @@ describe("Community Post RPC", () => {
 
     prisma.communityPost.findUnique.mockResolvedValue({
       id: "post-1",
-      status: CommunityPostStatus.PUBLISHED
+      status: CommunityPostStatus.PUBLISHED,
+      authorId: "1"
     })
 
     const caller = appRouter.createCaller(ctx)
@@ -289,7 +290,8 @@ describe("Community Post RPC", () => {
 
     prisma.communityPost.findUnique.mockResolvedValue({
       id: "post-1",
-      status: CommunityPostStatus.DRAFT
+      status: CommunityPostStatus.DRAFT,
+      authorId: "1"
     })
     prisma.communityPost.update.mockRejectedValue(new PrismaClientUnknownRequestError("Unknown Error", { clientVersion: "4.9.0" }))
 
@@ -325,7 +327,7 @@ describe("Community Post RPC", () => {
     prisma.communityPost.findUnique.mockResolvedValue({
       id: "post-1",
       status: CommunityPostStatus.DRAFT,
-      userId: randomId2
+      authorId: randomId2
     })
 
     const caller = appRouter.createCaller(ctx)
