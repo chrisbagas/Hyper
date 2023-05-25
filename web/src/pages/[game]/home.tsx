@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ArrowRightIcon } from "@heroicons/react/24/solid";
 import { PartyCard } from "../../components/party/PartyCard";
 import { useSession } from "next-auth/react";
-import { PartyType, PartyVisibility } from "@prisma/client";
+import { ContentType, PartyType, PartyVisibility } from "@prisma/client";
 import { GuideCard } from "../../components/Guide/GuideCard";
 import { PartyPlayerList } from "../../components/party/PartyPlayerList";
 import { PartyDetails } from "../../components/party/PartyDetails";
@@ -123,7 +123,7 @@ export default function Home() {
       <div className="grid xl:grid-cols-2 grid-flow-row gap-8 content-center justify-center items-center my-6 2xl:grid-cols-3">
         {data?.slice(0, 6).map((guide) => {
           return (
-            <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status} gameId={gameId as string} postId={guide.id} guidesLoc="guides" headerUrl={guide.header?.url as string} />
+            <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status} gameId={gameId as string} postId={guide.id} guidesLoc="guides" headerUrl={guide.header?.url as string} headerType={guide.header?.type as ContentType} />
           )
         })}
       </div>
