@@ -3,7 +3,7 @@ import Head from "next/head"
 import { api } from "../../../utils/api"
 import { useRouter } from 'next/router'
 import React, { useState } from "react"
-import { CommunityPostStatus } from "@prisma/client"
+import { CommunityPostStatus, ContentType } from "@prisma/client"
 import { GuideForm, Post } from "../../../components/Guide/GuideForm"
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav"
 
@@ -40,6 +40,12 @@ const CreateGuides: NextPage = () => {
     setIsSubmitting(true)
     if (!post.type || !post.title || !post.content || !post.headerType || !post.headerUrl) {
       setErrorMessage('Please fill in all fields')
+      setIsSubmitting(false)
+      return
+    }
+
+    if (post.headerType === ContentType.VIDEO && post.headerUrl.match(/^https:\/\/(?:www\.)?youtube\.com\/embed\/.+$/) === null) {
+      setErrorMessage('Invalid youtube embed link')
       setIsSubmitting(false)
       return
     }
