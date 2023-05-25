@@ -40,7 +40,7 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
           headerUrl: data.header?.url as string,
           tagId: post.tagId as string,
         })
-        if (data.status === CommunityPostStatus.PUBLISHED) {
+        if (data.status === CommunityPostStatus.PUBLISHED || data.status === CommunityPostStatus.TAKENDOWN) {
           setIsPublished(true)
         }
       },

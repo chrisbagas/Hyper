@@ -95,6 +95,8 @@ const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getSer
         </button>
       </GuideTopButtonGroup>}
 
+      {data.status === CommunityPostStatus.TAKENDOWN && <GuideTopButtonGroup returnUrl={`/${gameId}/your-guides`} className="px-16 pb-6" />}
+
       <GuideContent
         type={data?.type}
         title={data?.title}
