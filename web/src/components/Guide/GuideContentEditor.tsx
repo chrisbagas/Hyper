@@ -9,9 +9,10 @@ interface GuideContentEditorProps {
   content: string,
   setPostData:React.Dispatch<React.SetStateAction<Post>>,
   postData:Post,
+  isSubmitting:boolean,
 }
 
-export const GuideContentEditor: React.FC<GuideContentEditorProps> = ({ className, onChange, content, setPostData, postData }) => {
+export const GuideContentEditor: React.FC<GuideContentEditorProps> = ({ className, onChange, content, setPostData, postData, isSubmitting }) => {
   const textEditorRef = React.useRef<HTMLTextAreaElement>(null)
   const textAreaObject = textEditorRef.current as HTMLTextAreaElement
 
@@ -137,6 +138,7 @@ export const GuideContentEditor: React.FC<GuideContentEditorProps> = ({ classNam
           value={content}
           onChange={onChange}
           ref={textEditorRef}
+          disabled={isSubmitting}
         >
         </textarea>
       </div>
