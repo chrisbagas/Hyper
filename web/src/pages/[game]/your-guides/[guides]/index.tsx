@@ -8,10 +8,10 @@ import { useRouter } from "next/router";
 import { api } from "../../../../utils/api";
 import React, { useState } from "react";
 import { GameDashboardNav } from "../../../../components/shared/GameDashboard/GameDashboardNav";
-import { ssgPrefetchGuidesContent } from "../../../../utils/ssgPrefetch";
+import { ssgPrefetchPrivateGuidesContent } from "../../../../utils/ssgPrefetch";
 import { ConfirmationModal } from "../../../../components/shared/ConfirmationModal";
 
-export const getServerSideProps: GetServerSideProps = ssgPrefetchGuidesContent
+export const getServerSideProps: GetServerSideProps = ssgPrefetchPrivateGuidesContent
 
 const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
@@ -94,6 +94,8 @@ const ShowMyGuides: NextPage = (props: InferGetServerSidePropsType<typeof getSer
           Share This Post <ShareIcon className="w-4" />
         </button>
       </GuideTopButtonGroup>}
+
+      {data.status === CommunityPostStatus.TAKENDOWN && <GuideTopButtonGroup returnUrl={`/${gameId}/your-guides`} className="px-16 pb-6" />}
 
       <GuideContent
         type={data?.type}

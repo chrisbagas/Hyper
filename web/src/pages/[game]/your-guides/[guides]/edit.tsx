@@ -1,15 +1,15 @@
-import { GetServerSideProps, GetServerSidePropsContext, InferGetServerSidePropsType, type NextPage } from "next"
+import { GetServerSideProps, InferGetServerSidePropsType, type NextPage } from "next"
 import Head from "next/head"
 import { api } from "../../../../utils/api"
 import { useRouter } from 'next/router'
 import React, { useState } from "react"
-import { CommunityPostStatus } from "@prisma/client"
+import { CommunityPostStatus, ContentType } from "@prisma/client"
 import { GuideForm, Post } from "../../../../components/Guide/GuideForm"
 import ErrorPage from 'next/error'
 import { GameDashboardNav } from "../../../../components/shared/GameDashboard/GameDashboardNav"
-import { ssgPrefetchGuidesContent } from "../../../../utils/ssgPrefetch"
+import { ssgPrefetchPrivateGuidesContent } from "../../../../utils/ssgPrefetch"
 
-export const getServerSideProps: GetServerSideProps = ssgPrefetchGuidesContent
+export const getServerSideProps: GetServerSideProps = ssgPrefetchPrivateGuidesContent
 
 const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
@@ -40,10 +40,12 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
           headerUrl: data.header?.url as string,
           tagId: post.tagId as string,
         })
-        if (data.status === CommunityPostStatus.PUBLISHED) {
+        if (data.status === CommunityPostStatus.PUBLISHED || data.status === CommunityPostStatus.TAKENDOWN) {
           setIsPublished(true)
         }
-      }
+      },
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false
     })
   const [isPublished, setIsPublished] = useState(false)
 
@@ -75,6 +77,12 @@ const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServe
     setIsSubmitting(true)
     if (!post.type || !post.title || !post.content || !post.headerType || !post.headerUrl) {
       setErrorMessage('Please fill in all fields')
+      setIsSubmitting(false)
+      return
+    }
+
+    if (post.headerType === ContentType.VIDEO && post.headerUrl.match(/^https:\/\/(?:www\.)?youtube\.com\/embed\/.+$/) === null) {
+      setErrorMessage('Invalid youtube embed link')
       setIsSubmitting(false)
       return
     }
