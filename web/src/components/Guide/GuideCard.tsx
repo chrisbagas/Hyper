@@ -27,7 +27,7 @@ export const GuideCard: React.FC<GuideCardProps> = ({ title, username, createdAt
     if (array == null) {
       return "https://www.howtogeek.com/wp-content/uploads/2021/08/YouTube-logo-hero-1.png?height=200p&trim=2,2,2,2&crop=16:9"
     }
-    return "https://img.youtube.com/vi/" + array[1] + "/sddefault.jpg"
+    return `https://img.youtube.com/vi/${array[1]}/sddefault.jpg`
   }
 
   return (
