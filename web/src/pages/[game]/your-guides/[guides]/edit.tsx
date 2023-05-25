@@ -7,9 +7,9 @@ import { CommunityPostStatus, ContentType } from "@prisma/client"
 import { GuideForm, Post } from "../../../../components/Guide/GuideForm"
 import ErrorPage from 'next/error'
 import { GameDashboardNav } from "../../../../components/shared/GameDashboard/GameDashboardNav"
-import { ssgPrefetchGuidesContent } from "../../../../utils/ssgPrefetch"
+import { ssgPrefetchPrivateGuidesContent } from "../../../../utils/ssgPrefetch"
 
-export const getServerSideProps: GetServerSideProps = ssgPrefetchGuidesContent
+export const getServerSideProps: GetServerSideProps = ssgPrefetchPrivateGuidesContent
 
 const EditGuides: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter()
