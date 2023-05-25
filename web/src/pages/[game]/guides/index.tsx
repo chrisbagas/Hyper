@@ -6,6 +6,7 @@ import { api } from "../../../utils/api";
 import { useRouter } from "next/router";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
 import { FunnelIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
+import { ContentType } from "@prisma/client";
 
 
 const Guides: NextPage = () => {
@@ -81,7 +82,7 @@ const Guides: NextPage = () => {
         <div className="grid xl:grid-cols-3 grid-flow-row gap-8 content-center justify-center items-center my-6">
           {data?.map((guide) => {
             return (
-              <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status} gameId={gameId as string} postId={guide.id} guidesLoc="guides" headerUrl={guide.header?.url as string}></GuideCard>
+              <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status} gameId={gameId as string} postId={guide.id} guidesLoc="guides" headerUrl={guide.header?.url as string} headerType={guide.header?.type as ContentType}></GuideCard>
             )
           })}
         </div>

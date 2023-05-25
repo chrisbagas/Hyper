@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { GameDashboardNav } from "../../../components/shared/GameDashboard/GameDashboardNav";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { useGlobalLoader } from "../../../components/shared/Loader";
+import { ContentType } from "@prisma/client";
 
 const Guides: NextPage = () => {
   const router = useRouter()
@@ -37,7 +38,7 @@ const Guides: NextPage = () => {
         <div className="grid xl:grid-cols-3 grid-flow-row gap-8 content-center justify-center items-center my-6">
           {data?.map((guide) => {
             return (
-              <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status} gameId={id as string} postId={guide.id} guidesLoc="your-guides" headerUrl={guide.header?.url as string}></GuideCard>
+              <GuideCard key={guide.id} title={guide.title} username={guide.author.name ?? ''} createdAt={guide.createdAt} content={guide.content ?? ''} status={guide.status} gameId={id as string} postId={guide.id} guidesLoc="your-guides" headerUrl={guide.header?.url as string} headerType={guide.header?.type as ContentType}></GuideCard>
             )
           })}
         </div>

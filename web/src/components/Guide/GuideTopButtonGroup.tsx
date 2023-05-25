@@ -3,7 +3,7 @@ import Link from "next/link"
 import { ArrowLeftIcon } from "@heroicons/react/24/solid"
 
 export interface GuideTopButtonGroupProps {
-  children: React.ReactNode
+  children?: React.ReactNode
   className?: string
   returnUrl: string
 }

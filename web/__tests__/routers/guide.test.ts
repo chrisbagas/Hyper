@@ -4,6 +4,7 @@ import { appRouter } from "../../src/server/api/root";
 import prisma from "../../src/server/__mocks__/db";
 import { CommunityPostType, CommunityPostStatus, ContentType } from "@prisma/client"
 import { PrismaClientUnknownRequestError } from "@prisma/client/runtime";
+import { randomUUID } from "crypto";
 
 vi.mock("../../src/server/db")
 
@@ -195,7 +196,7 @@ describe("Community Post RPC", () => {
       prisma,
     }
 
-    prisma.communityPost.findUnique.mockResolvedValue({ type: CommunityPostStatus.DRAFT })
+    prisma.communityPost.findUnique.mockResolvedValue({ type: CommunityPostStatus.DRAFT, authorId: "1" })
     prisma.communityPost.update.mockResolvedValue(mockPrismaOutput)
 
     const caller = appRouter.createCaller(ctx)
@@ -228,7 +229,8 @@ describe("Community Post RPC", () => {
 
     prisma.communityPost.findUnique.mockResolvedValue({
       id: "post-1",
-      status: CommunityPostStatus.PUBLISHED
+      status: CommunityPostStatus.PUBLISHED,
+      authorId: "1"
     })
 
     const caller = appRouter.createCaller(ctx)
@@ -288,9 +290,45 @@ describe("Community Post RPC", () => {
 
     prisma.communityPost.findUnique.mockResolvedValue({
       id: "post-1",
-      status: CommunityPostStatus.DRAFT
+      status: CommunityPostStatus.DRAFT,
+      authorId: "1"
     })
     prisma.communityPost.update.mockRejectedValue(new PrismaClientUnknownRequestError("Unknown Error", { clientVersion: "4.9.0" }))
+
+    const caller = appRouter.createCaller(ctx)
+
+    await expect(caller.guides.updatePostById(input)).rejects.toThrowError()
+  })
+
+  it("updatePostById should throw error when a user try to update a post owned by another user", async () => {
+    const input = {
+      id: "post-1",
+      type: CommunityPostType.GUIDE,
+      status: CommunityPostStatus.DRAFT,
+      title: "title new",
+      content: "guide new",
+      headerType: ContentType.VIDEO,
+      headerUrl: "url new",
+      gameId: "game-1",
+      tagId: "tag"
+    }
+    const randomId1 = randomUUID()
+    const randomId2 = randomUUID()
+
+    const ctx = {
+      session: {
+        user: {
+          id: randomId1
+        }
+      },
+      prisma,
+    }
+
+    prisma.communityPost.findUnique.mockResolvedValue({
+      id: "post-1",
+      status: CommunityPostStatus.DRAFT,
+      authorId: randomId2
+    })
 
     const caller = appRouter.createCaller(ctx)
 

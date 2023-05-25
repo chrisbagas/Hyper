@@ -1,4 +1,4 @@
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 import { z } from "zod"
 import { TRPCError } from "@trpc/server";
 import { CommunityPostStatus, CommunityPostType, ContentType } from "@prisma/client";
@@ -102,7 +102,7 @@ export const guideRouter = createTRPCRouter({
         })
       }
     }),
-  updatePostById: publicProcedure
+  updatePostById: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -123,6 +123,7 @@ export const guideRouter = createTRPCRouter({
         select: {
           id: true,
           status: true,
+          authorId: true,
         },
       })
       if (!post) {
@@ -135,6 +136,12 @@ export const guideRouter = createTRPCRouter({
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: "You are not allowed to update a published post"
+        })
+      }
+      if (post.authorId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: "You are not allowed to update another user's post"
         })
       }
       try {

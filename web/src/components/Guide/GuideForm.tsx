@@ -126,14 +126,14 @@ const HeaderField: React.FC<HeaderFieldProps> = ({ postData, setPostData, onChan
             <input 
               type="text" 
               id="headerUrl"
-              placeholder="www.medal.tv/001ojiad0983q09" 
+              placeholder="https://www.youtube.com/embed/dQw4w9WgXcQ" 
               className="input input-bordered w-full bg-base-2 border-base-3 placeholder:text-base-4 text-neutral-0 focus:outline-0" 
               value={postData.headerUrl}
               onChange={onChange}
             />
           </label>
           <label className="label">
-            <span className="label-text-alt text-base-5">Only link for the video you uploaded to a video uploading platform</span>
+            <span className="label-text-alt text-base-5">Only support youtube embed. ex:https://youtube.com/embed/(id)</span>
           </label>
         </div>
       )
