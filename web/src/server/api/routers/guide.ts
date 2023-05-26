@@ -51,7 +51,7 @@ export const guideRouter = createTRPCRouter({
         header: data.header
       }
     }),
-    create: publicProcedure
+  create: publicProcedure
     .input(
       z.object({
         type: z.nativeEnum(CommunityPostType),
@@ -175,10 +175,11 @@ export const guideRouter = createTRPCRouter({
   getAllbyGame: publicProcedure
     .input(z.object({
       id: z.string(),
-      tagId: z.string().optional()
+      tagId: z.string().optional(),
+      search: z.string().optional()
     }))
     .query(async ({ ctx, input }) => {
-      return GuideService.getAllbyGame(input.id, ctx.prisma, input.tagId)
+      return GuideService.getAllbyGame(input.id, ctx.prisma, input.tagId, input.search)
     }),
   getAllbyUser: publicProcedure
     .input(z.object({
@@ -197,11 +198,11 @@ export const guideRouter = createTRPCRouter({
       return GuideService.getAll(input.page, input.pageSize, ctx.prisma )
     }),
   updateStatusModerationById: publicProcedure
-  .input(z.object({
-    id: z.string(),
-    status: z.nativeEnum(CommunityPostStatus)
-  }))
-  .mutation(async ({ ctx, input }) => {
-    return GuideService.updateStatusModerationById(input.id, input.status, ctx.prisma)
-  }),
+    .input(z.object({
+      id: z.string(),
+      status: z.nativeEnum(CommunityPostStatus)
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return GuideService.updateStatusModerationById(input.id, input.status, ctx.prisma)
+    }),
 })

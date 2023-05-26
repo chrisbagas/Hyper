@@ -15,8 +15,22 @@ const Guides: NextPage = () => {
   const { data: game } = api.games.getById.useQuery({ id: gameId as string })
   const [tagId, setTagId] = React.useState("")
 
-  const { data } = api.guides.getAllbyGame.useQuery({ id: gameId as string, tagId })
+  const [rawSearch, setRawSearch] = React.useState("")
+  const [search, setSearch] = React.useState("")
+
+  const { data } = api.guides.getAllbyGame.useQuery({ id: gameId as string, tagId, search })
   const tags = api.tag.getAll.useQuery()
+
+  React.useEffect(() => {
+    const searchTimer = setTimeout(() => {
+      setSearch(rawSearch)
+    }, 500)
+
+    return () => clearTimeout(searchTimer)
+  }, [rawSearch])
+
+
+  console.log(search)
 
   return (
     <>
@@ -39,7 +53,9 @@ const Guides: NextPage = () => {
                 className="text-neutral-0 relative m-0 -mr-px block w-[1%] min-w-0 flex-auto rounded-l-lg border border-solid border-base-3 bg-base-2 bg-clip-padding px-3 py-1.5 text-base font-normal outline-none transition duration-300 ease-in-out focus:border-primary focus:shadow-te-primary focus:outline-none"
                 placeholder="Search..."
                 aria-label="Search"
-                aria-describedby="button-addon1" />
+                aria-describedby="button-addon1"
+                onChange={(e) => setRawSearch(e.target.value)}
+              />
               <button
                 className="transition-all duration-300 ease-in-out bg-base-1 hover:bg-base-3 rounded-r-lg text-white px-3"
                 type="button"
