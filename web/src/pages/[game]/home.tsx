@@ -55,7 +55,8 @@ export default function Home() {
                   gameId={userParty.gameId}
                   title={userParty.partyTitle}
                   partyCapacity={userParty.game.teamCapacity}
-                  minimalRank={undefined}
+                  totalRank={userParty?.totalRank}
+                  totalConnected={userParty?.totalConnect}
                   visibility={userParty?.partyVisibility ?? PartyVisibility.Public}
                   type={userParty?.partyType ?? PartyType.Casual}
                   partyMembers={userParty.partyMembers}
@@ -100,7 +101,8 @@ export default function Home() {
                   gameId={party.gameId}
                   title={party.partyTitle}
                   partyCapacity={game?.teamCapacity as number}
-                  minimalRank={undefined}
+                  totalRank={undefined}
+                  totalConnected={undefined}
                   visibility={party?.partyVisibility ?? PartyVisibility.Public}
                   type={party?.partyType ?? PartyType.Casual}
                   partyMembers={party.partyMembers}

@@ -10,7 +10,8 @@ export interface PartyCardData {
   gameId: string,
   title: string,
   partyCapacity: number,
-  minimalRank: string | undefined,
+  totalRank: number | undefined,
+  totalConnected: number | undefined,
   visibility: PartyVisibility,
   type: PartyType,
   partyMembers: (PartyMember & { user: User })[],
@@ -24,6 +25,9 @@ const PartyCard = (props: PartyCardData) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isError, setIsError] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
+  const averageRank = (props.totalConnected && props.totalRank && props.totalConnected > 0)? (
+    Math.floor(props.totalRank / props.totalConnected)
+  ) : 0
 
   async function joinParty(e: any) {
     e.preventDefault()
@@ -33,6 +37,7 @@ const PartyCard = (props: PartyCardData) => {
       partyId: props.partyId,
       gameId: props.gameId
     }
+    
 
     try {
       await partyMutation.mutateAsync(joinPartyDTO).then(() => {
@@ -56,7 +61,9 @@ const PartyCard = (props: PartyCardData) => {
       </div>
     </div>
   )
+
   let i = props.partyMembers.length
+
   while (i < props.partyCapacity) {
     memberAvatars.push(
       <>
@@ -126,13 +133,13 @@ const PartyCard = (props: PartyCardData) => {
           {props.title}
         </h1>
       </div>
-      {props.minimalRank
+      {averageRank
         ? <>
           <div className="flex flex-row">
-            <p className="text-white text-opacity-50 mr-2">
-              Minimal Rank:
+            <p className="text-white text-opacity-50 mr-1">
+              Average Rank:
             </p>
-            {props.minimalRank}
+            <img className="h-6 w-6" src={`https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${ averageRank }/largeicon.png`} />
           </div>
         </>
         : <></>
