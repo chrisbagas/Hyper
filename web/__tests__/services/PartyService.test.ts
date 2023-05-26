@@ -18,6 +18,8 @@ describe("Party Service", () => {
     partyType: PartyType.Casual,
     partyVisibility: PartyVisibility.Public,
     discordInviteLink: "www.discord.com",
+    totalConnect: 1,
+    totalRank: 1,
     partyMembers: [
       {
         userId: "2",
@@ -54,6 +56,8 @@ describe("Party Service", () => {
     partyType: PartyType.Casual,
     partyVisibility: PartyVisibility.Public,
     discordInviteLink: "www.discord.com",
+    totalConnect: 5,
+    totalRank: 20,
     partyMembers: [
       {
         userId: "2",
@@ -116,6 +120,15 @@ describe("Party Service", () => {
         }
       },
     ]
+  }
+
+  const mockGameAcc = {
+    userId: "1",
+    gameId: "Valorant",
+    gameIdentifier: "rostova",
+    statisticsData: null,
+    statisticsLastUpdatedAt: null,
+    createdAt: new Date(),
   }
 
   const createPartyData = {
@@ -278,6 +291,14 @@ describe("Party Service", () => {
   })
 
   it("joinParty positive test", async () => {
+    fetchMocker.mockResponses(
+      [
+        JSON.stringify({
+          
+        }), { status: 200 }
+      ]
+    )
+
     prisma.party.findUnique.mockResolvedValue(
       mockParty
     )
@@ -402,11 +423,16 @@ describe("Party Service", () => {
       mockPartyMember
     )
 
+    prisma.party.findUnique.mockResolvedValue(
+      mockParty
+    )
+
     const partyMember = await PartyService.leaveParty(
       prisma,
       {
         userId: mockPartyMember.userId,
-        partyId: mockPartyMember.partyId
+        partyId: mockPartyMember.partyId,
+
       }
     )
 
@@ -518,6 +544,16 @@ describe("Party Service", () => {
     prisma.partyMember.findUnique.mockResolvedValue(
       mockPartyMember
     )
+
+    prisma.party.findUnique.mockResolvedValue(
+      mockParty
+    
+    )
+
+    prisma.gameAccount.findFirst.mockResolvedValue(
+      mockGameAcc
+    )
+  
 
     prisma.partyMember.delete.mockResolvedValue(
       mockPartyMember

@@ -1,5 +1,6 @@
-import { PrismaClient, PartyType, PartyVisibility, PartyMemberLevel } from "@prisma/client"
+import { PrismaClient, PartyType, PartyVisibility, PartyMemberLevel, Party } from "@prisma/client"
 import { env } from "../../../env.mjs"
+import { PlayerStatisticsService } from "./PlayerStatisticsService"
 
 export interface CreatePartyData {
   userId: string,
@@ -54,11 +55,32 @@ export class PartyService {
   }
 
   public static async createParty(prisma: PrismaClient, data: CreatePartyData, userId: string) {
+    const gameAcc = await prisma.gameAccount.findFirst({
+      where: {
+        userId: userId,
+        gameId: data.gameId
+      }
+    })
+
+    const valorantId = gameAcc?.gameIdentifier
+    let rankNumber = 0
+    let totalConnect = 0
+    if (valorantId) {
+      totalConnect = 1
+      const valorantIdSplit = valorantId.split('#')
+      const valorantUsername = valorantIdSplit[0]
+      const valorantTagline = valorantIdSplit[1]
+      const valorantMmrData = await PlayerStatisticsService.getValorantMMRData(valorantUsername, valorantTagline)
+      rankNumber = valorantMmrData.data.current_data.currenttier 
+    }
+    
     const newParty = await prisma.party.create({
       data: {
         gameId: data.gameId,
         partyTitle: data.partyTitle,
         partyType: data.partyType,
+        totalConnect: totalConnect,
+        totalRank: rankNumber,
         partyVisibility: data.partyVisibility,
       }
     })
@@ -140,7 +162,9 @@ export class PartyService {
         partyTitle: true,
         partyType: true,
         partyVisibility: true,
-        discordInviteLink: true
+        discordInviteLink: true,
+        totalRank: true,
+        totalConnect: true,
       }
     })
   }
@@ -158,7 +182,7 @@ export class PartyService {
   }
 
   public static async joinParty(prisma: PrismaClient, data: JoinPartyData) {
-    const partyPromise = prisma.party.findUnique({
+    const partyPromise = await prisma.party.findUnique({
       where: {
         id: data.partyId
       },
@@ -166,6 +190,7 @@ export class PartyService {
         partyMembers: true
       }
     })
+    await this.updatePartyWithRank(prisma,partyPromise,data.userId,true)
 
     const userPromise = prisma.user.findUnique({
       where: {
@@ -227,7 +252,65 @@ export class PartyService {
     })
   }
 
+  public static async updatePartyWithRank (prisma: PrismaClient, party: any,userId: string, isJoin:boolean){
+    const gameAcc = await prisma.gameAccount.findFirst({
+      where: {
+        userId: userId,
+        gameId: party.gameId
+      }
+    })
+
+    console.log(userId, party.gameId)
+    console.log(gameAcc)
+    const valorantId = gameAcc?.gameIdentifier
+    let rankNumber = party.totalRank
+    let totalConnect = party.totalConnect
+    console.log("\n\n\n\n\n\nTES\n\n\n\n"+valorantId+"\n\n\n\n\n\n")
+    if (valorantId) {
+      if(isJoin){
+        totalConnect = totalConnect + 1
+        const valorantIdSplit = valorantId.split('#')
+        const valorantUsername = valorantIdSplit[0]
+        const valorantTagline = valorantIdSplit[1]
+        const valorantMmrData = await PlayerStatisticsService.getValorantMMRData(valorantUsername, valorantTagline)
+        rankNumber = rankNumber + valorantMmrData.data.current_data.currenttier
+      } else{
+        totalConnect = totalConnect - 1
+        const valorantIdSplit = valorantId.split('#')
+        const valorantUsername = valorantIdSplit[0]
+        const valorantTagline = valorantIdSplit[1]
+        const valorantMmrData = await PlayerStatisticsService.getValorantMMRData(valorantUsername, valorantTagline)
+        rankNumber = rankNumber - valorantMmrData.data.current_data.currenttier
+      }
+       
+
+      const updateParty = await prisma.party.update({
+        where: {
+          id: party.id
+        },
+        data: { 
+          totalRank: rankNumber,
+          totalConnect: totalConnect
+        }
+      })
+    }
+  }
+
   public static async leaveParty(prisma: PrismaClient, data: LeavePartyData) {
+
+    const partyPromise = await prisma.party.findUnique({
+      where: {
+        id: data.partyId
+      },
+      include: {
+        partyMembers: true
+      }
+    })
+
+    await this.updatePartyWithRank(prisma,partyPromise,data.userId,false)
+    
+
+    
     return prisma.partyMember.delete({
       where: {
         userId_partyId: {
@@ -300,6 +383,17 @@ export class PartyService {
     if (partyLeader.level !== PartyMemberLevel.leader || partyMember.level !== PartyMemberLevel.member) {
       throw Error("Error: you are unauthorized to kick this person")
     }
+
+    const partyPromise = await prisma.party.findUnique({
+      where: {
+        id: data.partyId
+      },
+      include: {
+        partyMembers: true
+      }
+    })
+
+    await this.updatePartyWithRank(prisma,partyPromise,data.memberUserId,false)
 
     return prisma.partyMember.delete({
       where: {
