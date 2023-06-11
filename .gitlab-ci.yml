@@ -18,7 +18,7 @@ cache-web-packages:
       policy: push
   script:
     - cd web/
-    - yarn
+    - yarn install --cache-folder .yarn-cache
   only:
     refs:
       - push
@@ -34,12 +34,37 @@ test_web:
       paths:
         - web/.yarn-cache/
       policy: pull
+  only:
+    - staging
+    - merge_requests
+    - main
   artifacts:
     paths:
       - web/coverage/
     expire_in: 1 day
   script:
     - cd web/
+    - yarn install --cache-folder .yarn-cache
+    - yarn test:no-watch
+
+test_discord:
+  stage: test
+  cache:
+    - key:
+        files:
+          - discord/yarn.lock
+      paths:
+        - discord/.yarn-cache/
+  only:
+    - staging
+    - merge_requests
+    - main
+  artifacts:
+    paths:
+      - discord/coverage/
+    expire_in: 1 day
+  script:
+    - cd discord/
     - yarn install --cache-folder .yarn-cache
     - yarn test:no-watch
 
